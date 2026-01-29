@@ -1,187 +1,308 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>RuangSejarah</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
-      background: linear-gradient(135deg,#fefce8,#dcfce7);
-      color:#1f2937;
-    }
-    header{
-      padding:20px;
-      text-align:center;
-      background:#14532d;
-      color:white;
-    }
-    main{
-      padding:20px;
-      max-width:900px;
-      margin:auto;
-    }
-    .card{
-      background:white;
-      padding:20px;
-      border-radius:12px;
-      margin-bottom:20px;
-      box-shadow:0 10px 25px rgba(0,0,0,.08);
-    }
-    button{
-      padding:10px 16px;
-      border:none;
-      border-radius:8px;
-      background:#166534;
-      color:white;
-      cursor:pointer;
-      margin-top:10px;
-    }
-    button.secondary{
-      background:#4b5563;
-    }
-    textarea, input, select{
-      width:100%;
-      padding:10px;
-      margin-top:6px;
-      border-radius:8px;
-      border:1px solid #d1d5db;
-      box-sizing:border-box;
-    }
-    .hidden{ display:none; }
-    .scenario{
-      padding:15px;
-      border-left:4px solid #166534;
-      background:#f0fdf4;
-      margin-bottom:15px;
-      border-radius:8px;
-    }
-    small{ color:#6b7280; }
-  </style>
+<meta charset="UTF-8">
+<title>RuangSejarah</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+  background:linear-gradient(135deg,#fefce8,#dcfce7);
+  color:#1f2937;
+}
+header{
+  background:#14532d;
+  color:white;
+  padding:20px;
+  text-align:center;
+}
+main{
+  max-width:1000px;
+  margin:auto;
+  padding:20px;
+}
+.card{
+  background:white;
+  border-radius:14px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+button{
+  padding:10px 16px;
+  border:none;
+  border-radius:10px;
+  background:#166534;
+  color:white;
+  cursor:pointer;
+  margin-top:10px;
+}
+button.secondary{ background:#4b5563; }
+.hidden{ display:none; }
+.option{
+  border:1px solid #d1d5db;
+  border-radius:10px;
+  padding:12px;
+  margin-top:10px;
+  cursor:pointer;
+}
+.option:hover{ background:#f0fdf4; }
+.stats{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.stat{
+  background:#f0fdf4;
+  padding:10px;
+  border-radius:10px;
+  flex:1;
+  text-align:center;
+}
+textarea,input{
+  width:100%;
+  padding:10px;
+  margin-top:6px;
+  border-radius:8px;
+  border:1px solid #d1d5db;
+}
+small{ color:#6b7280; }
+</style>
 </head>
-<body>
 
+<body>
 <header>
-  <h1>🏛️ RuangSejarah</h1>
-  <p>Pembelajaran Sejarah Indonesia (1800–2000)</p>
+<h1>🏛️ RuangSejarah</h1>
+<p>Game Naratif Sejarah Indonesia (1800–1998)</p>
 </header>
 
 <main>
 
-  <!-- PILIH MODE -->
-  <div class="card" id="home">
-    <h2>Pilih Peran</h2>
-    <button onclick="openAdmin()">👩‍🏫 Guru Sejarah</button>
-    <button class="secondary" onclick="openStudent()">🧑‍🎓 Murid</button>
-  </div>
+<div class="card" id="home">
+<h2>Pilih Mode</h2>
+<button onclick="startStudent()">🧑‍🎓 Murid</button>
+<button class="secondary" onclick="openAdmin()">👩‍🏫 Guru</button>
+</div>
 
-  <!-- ADMIN -->
-  <div class="card hidden" id="admin">
-    <h2>Mode Guru (Admin)</h2>
+<div class="card hidden" id="student">
+<h2 id="eventTitle"></h2>
+<p id="eventDesc"></p>
 
-    <label>Rentang Tahun</label>
-    <select id="yearRange">
-      <option>1800–1850</option>
-      <option>1851–1900</option>
-      <option>1901–1945</option>
-      <option>1946–1965</option>
-      <option>1966–1998</option>
-      <option>1999–2000</option>
-    </select>
+<div class="stats">
+  <div class="stat">🧠 Moral<br><b id="moral"></b></div>
+  <div class="stat">📦 Logistik<br><b id="logistik"></b></div>
+  <div class="stat">🌍 Dukungan<br><b id="support"></b></div>
+</div>
 
-    <label>Judul Skenario</label>
-    <input id="title" placeholder="Contoh: Agresi Militer Belanda II">
+<div id="options"></div>
 
-    <label>Deskripsi Skenario</label>
-    <textarea id="desc" rows="4" placeholder="Ceritakan situasi sejarahnya..."></textarea>
+<div id="reflection" class="hidden">
+  <h3>✍️ Jelaskan alasan pilihanmu</h3>
+  <textarea id="reason" rows="4" placeholder="Minimal 50 kata..."></textarea>
+  <button onclick="submitAnswer()">Kirim Jawaban</button>
+</div>
+</div>
 
-    <label>Pertanyaan Reflektif</label>
-    <textarea id="question" rows="3" placeholder="Apa sikapmu dan alasannya?"></textarea>
-
-    <label>Minimal Jumlah Kata</label>
-    <input type="number" id="minWords" value="50">
-
-    <button onclick="saveScenario()">💾 Simpan Skenario</button>
-    <button class="secondary" onclick="backHome()">⬅ Kembali</button>
-
-    <p><small>* Data tersimpan di browser (localStorage)</small></p>
-  </div>
-
-  <!-- STUDENT -->
-  <div class="card hidden" id="student">
-    <h2>Mode Murid</h2>
-    <p><strong>Petunjuk:</strong> Jawablah dengan pemikiran sendiri. Hindari jawaban umum.</p>
-
-    <div id="scenarioList"></div>
-
-    <button class="secondary" onclick="backHome()">⬅ Kembali</button>
-  </div>
+<div class="card hidden" id="admin">
+<h2>Rekap Jawaban Murid</h2>
+<div id="adminData"></div>
+<button class="secondary" onclick="backHome()">⬅ Kembali</button>
+</div>
 
 </main>
 
 <script>
-  const home = document.getElementById('home');
-  const admin = document.getElementById('admin');
-  const student = document.getElementById('student');
-  const scenarioList = document.getElementById('scenarioList');
+const events = [
+{
+  title:"Perang Diponegoro (1825–1830)",
+  desc:"Perlawanan besar rakyat Jawa terhadap Belanda akibat ketidakadilan dan campur tangan kolonial.",
+  options:[
+    {text:"Perang terbuka besar-besaran", effect:{m:-10,l:-15,s:5},
+     outcome:"Pasukan besar membuat perlawanan terlihat kuat, tetapi korban meningkat drastis."},
+    {text:"Perang gerilya jangka panjang", effect:{m:15,l:-5,s:10},
+     outcome:"Perlawanan bertahan lama, Belanda kelelahan, rakyat makin solid."}
+  ]
+},
+{
+  title:"Tanam Paksa",
+  desc:"Kebijakan kolonial yang memaksa rakyat menanam tanaman ekspor.",
+  options:[
+    {text:"Melawan secara terbuka", effect:{m:-10,l:-10,s:5},
+     outcome:"Penindasan meningkat, tapi kesadaran kolektif tumbuh."},
+    {text:"Bertahan sambil mencari celah ekonomi", effect:{m:5,l:10,s:-5},
+     outcome:"Rakyat bertahan hidup, tapi penderitaan tetap terjadi."}
+  ]
+},
+{
+  title:"Budi Utomo (1908)",
+  desc:"Awal pergerakan nasional berbasis pendidikan.",
+  options:[
+    {text:"Fokus pendidikan elite", effect:{m:5,l:0,s:10},
+     outcome:"Kesadaran tumbuh di kalangan terdidik."},
+    {text:"Perluas ke rakyat luas", effect:{m:10,l:-5,s:5},
+     outcome:"Gerakan meluas tapi sulit dikendalikan."}
+  ]
+},
+{
+  title:"Sumpah Pemuda (1928)",
+  desc:"Ikrar persatuan bangsa Indonesia.",
+  options:[
+    {text:"Persatuan budaya dan bahasa", effect:{m:15,l:0,s:10},
+     outcome:"Identitas nasional semakin kuat."},
+    {text:"Fokus politik melawan kolonial", effect:{m:10,l:-5,s:5},
+     outcome:"Tekanan kolonial meningkat."}
+  ]
+},
+{
+  title:"Pendudukan Jepang",
+  desc:"Masa pendudukan militer Jepang di Indonesia.",
+  options:[
+    {text:"Kerja sama terbatas", effect:{m:-5,l:10,s:-5},
+     outcome:"Logistik terbantu, tapi penderitaan tetap besar."},
+    {text:"Perlawanan diam-diam", effect:{m:10,l:-10,s:5},
+     outcome:"Semangat rakyat terjaga, risiko tinggi."}
+  ]
+},
+{
+  title:"Proklamasi 1945",
+  desc:"Pernyataan kemerdekaan Indonesia.",
+  options:[
+    {text:"Proklamasi segera", effect:{m:20,l:-5,s:15},
+     outcome:"Moral nasional melonjak, dunia mulai memperhatikan."},
+    {text:"Menunggu kondisi aman", effect:{m:-5,l:5,s:-5},
+     outcome:"Risiko kehilangan momentum."}
+  ]
+},
+{
+  title:"Agresi Militer Belanda I & II",
+  desc:"Upaya Belanda merebut kembali Indonesia.",
+  options:[
+    {text:"Gerilya nasional", effect:{m:15,l:-10,s:10},
+     outcome:"RI bertahan, tekanan internasional naik."},
+    {text:"Negosiasi diplomatik", effect:{m:5,l:0,s:15},
+     outcome:"Konflik mereda, tapi wilayah terancam."}
+  ]
+},
+{
+  title:"Demokrasi Liberal",
+  desc:"Masa politik tidak stabil pasca kemerdekaan.",
+  options:[
+    {text:"Kebebasan partai penuh", effect:{m:5,l:-5,s:5},
+     outcome:"Demokrasi hidup, tapi pemerintahan lemah."},
+    {text:"Pembatasan politik", effect:{m:-5,l:5,s:-5},
+     outcome:"Stabilitas naik, kebebasan turun."}
+  ]
+},
+{
+  title:"G30S 1965",
+  desc:"Peristiwa politik besar yang mengubah arah negara.",
+  options:[
+    {text:"Pendekatan militer", effect:{m:-10,l:5,s:-10},
+     outcome:"Stabilitas cepat, trauma nasional."},
+    {text:"Pendekatan hukum", effect:{m:5,l:-5,s:5},
+     outcome:"Proses lambat, legitimasi meningkat."}
+  ]
+},
+{
+  title:"Orde Baru",
+  desc:"Masa stabilitas dan pembangunan dengan kontrol ketat.",
+  options:[
+    {text:"Stabilitas & pembangunan", effect:{m:5,l:15,s:5},
+     outcome:"Ekonomi tumbuh, kebebasan terbatas."},
+    {text:"Dorong kebebasan politik", effect:{m:10,l:-10,s:-5},
+     outcome:"Tekanan pemerintah meningkat."}
+  ]
+},
+{
+  title:"Reformasi 1998",
+  desc:"Krisis ekonomi dan tuntutan perubahan.",
+  options:[
+    {text:"Tekanan rakyat besar-besaran", effect:{m:15,l:-10,s:10},
+     outcome:"Perubahan cepat, ketidakstabilan sementara."},
+    {text:"Transisi bertahap", effect:{m:5,l:0,s:5},
+     outcome:"Lebih stabil, perubahan lambat."}
+  ]
+}
+];
 
-  function openAdmin(){
-    home.classList.add('hidden');
-    admin.classList.remove('hidden');
+let index = 0;
+let stats = JSON.parse(localStorage.getItem("stats")) || {m:50,l:50,s:50};
+let answers = JSON.parse(localStorage.getItem("answers")) || [];
+
+function startStudent(){
+  home.classList.add("hidden");
+  student.classList.remove("hidden");
+  loadEvent();
+}
+
+function loadEvent(){
+  if(index >= events.length){
+    alert("Semua event selesai!");
+    localStorage.setItem("answers",JSON.stringify(answers));
+    return;
   }
+  const e = events[index];
+  eventTitle.innerText = e.title;
+  eventDesc.innerText = e.desc;
+  moral.innerText = stats.m;
+  logistik.innerText = stats.l;
+  support.innerText = stats.s;
 
-  function openStudent(){
-    home.classList.add('hidden');
-    student.classList.remove('hidden');
-    loadScenarios();
+  options.innerHTML = "";
+  reflection.classList.add("hidden");
+
+  e.options.forEach((o,i)=>{
+    const div = document.createElement("div");
+    div.className="option";
+    div.innerText=o.text;
+    div.onclick=()=>chooseOption(o);
+    options.appendChild(div);
+  });
+}
+
+let chosen;
+
+function chooseOption(o){
+  chosen = o;
+  stats.m += o.effect.m;
+  stats.l += o.effect.l;
+  stats.s += o.effect.s;
+  alert(o.outcome);
+  reflection.classList.remove("hidden");
+}
+
+function submitAnswer(){
+  const reason = document.getElementById("reason").value;
+  if(reason.split(" ").length < 50){
+    alert("Minimal 50 kata.");
+    return;
   }
+  answers.push({
+    event:events[index].title,
+    choice:chosen.text,
+    reason:reason,
+    stats:{...stats}
+  });
+  index++;
+  localStorage.setItem("stats",JSON.stringify(stats));
+  loadEvent();
+}
 
-  function backHome(){
-    admin.classList.add('hidden');
-    student.classList.add('hidden');
-    home.classList.remove('hidden');
-  }
+function openAdmin(){
+  home.classList.add("hidden");
+  admin.classList.remove("hidden");
+  adminData.innerHTML = answers.map(a=>`
+    <p><b>${a.event}</b><br>
+    Pilihan: ${a.choice}<br>
+    Alasan: ${a.reason}</p>
+    <hr>
+  `).join("");
+}
 
-  function saveScenario(){
-    const data = {
-      year: yearRange.value,
-      title: title.value,
-      desc: desc.value,
-      question: question.value,
-      minWords: minWords.value
-    };
-
-    let scenarios = JSON.parse(localStorage.getItem('ruangsejarah')) || [];
-    scenarios.push(data);
-    localStorage.setItem('ruangsejarah', JSON.stringify(scenarios));
-
-    alert("Skenario berhasil disimpan!");
-    title.value = desc.value = question.value = "";
-  }
-
-  function loadScenarios(){
-    scenarioList.innerHTML = "";
-    let scenarios = JSON.parse(localStorage.getItem('ruangsejarah')) || [];
-
-    if(scenarios.length === 0){
-      scenarioList.innerHTML = "<p><em>Belum ada skenario dari guru.</em></p>";
-      return;
-    }
-
-    scenarios.forEach((s, i) => {
-      const div = document.createElement('div');
-      div.className = "scenario";
-      div.innerHTML = `
-        <strong>${s.title}</strong><br>
-        <small>${s.year}</small>
-        <p>${s.desc}</p>
-        <p><em>${s.question}</em></p>
-        <textarea rows="4" placeholder="Jawabanmu... (min ${s.minWords} kata)"></textarea>
-      `;
-      scenarioList.appendChild(div);
-    });
-  }
+function backHome(){
+  location.reload();
+}
 </script>
 
 </body>
