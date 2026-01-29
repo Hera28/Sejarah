@@ -19,40 +19,37 @@
         button { padding: 12px; background: var(--ink); color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 5px; width: 100%; }
         input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid var(--ink); border-radius: 4px; font-family: inherit; }
         .opt-btn { background: white; color: var(--ink); text-align: left; border: 2px solid var(--ink); margin-bottom: 8px; font-weight: normal; }
-        .admin-scroll { overflow-x: auto; max-height: 500px; margin-top: 1rem; }
+        .admin-scroll { overflow-x: auto; max-height: 500px; margin-top: 1rem; border: 1px solid #ccc; }
         table { width: 100%; border-collapse: collapse; background: white; font-size: 0.85rem; min-width: 700px; }
         th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
         th { background: var(--ink); color: white; position: sticky; top: 0; }
-        .btn-kick { background: var(--danger); width: auto; font-size: 0.7rem; padding: 5px 10px; }
-        .btn-edit { background: #f39c12; width: auto; font-size: 0.7rem; padding: 5px 10px; margin-right: 5px; }
+        .btn-kick { background: var(--danger) !important; width: auto !important; padding: 5px 10px !important; }
+        .btn-edit { background: #f39c12 !important; width: auto !important; padding: 5px 10px !important; margin-right: 5px; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>RUANGSEJARAH</h1>
-</header>
+<header><h1>RUANGSEJARAH</h1></header>
 
 <main>
     <div id="scr-login" class="card">
         <h2 style="text-align:center;">Registrasi Komandan</h2>
-        <input type="text" id="in-name" placeholder="Nama Lengkap...">
-        <input type="text" id="in-class" placeholder="Kelas...">
+        <input type="text" id="in-name" placeholder="Nama Lengkap..." autocomplete="off">
         <button id="btn-reg">MASUK SIMULASI ⮕</button>
-        <p style="text-align:center;"><a href="#" id="link-admin" style="color:var(--gold); font-size:0.8rem; text-decoration:none;">Mode Guru</a></p>
+        <p style="text-align:center;"><a href="#" id="link-admin" style="color:var(--gold); font-size:0.8rem;">Mode Guru</a></p>
     </div>
 
     <div id="scr-wait" class="card hidden">
-        <h2 style="text-align:center;">WAITING ROOM</h2>
-        <div style="text-align:center; font-size: 3rem;">📡</div>
-        <p style="text-align:center;">Unit <b><span id="lbl-myname"></span></b> telah terhubung ke server.</p>
-        <p style="text-align:center; font-style: italic;">Menunggu instruksi Guru untuk memulai...</p>
+        <h2 style="text-align:center;">MENUNGGU KOMANDO</h2>
+        <div style="text-align:center; font-size: 3rem; animation: pulse 1s infinite;">📡</div>
+        <p style="text-align:center;">Unit <b id="lbl-myname"></b> tersambung.</p>
+        <p id="wait-msg" style="text-align:center; color: var(--gold);">Mengunduh data misi...</p>
     </div>
 
     <div id="scr-kicked" class="card hidden">
         <h2 style="color:var(--danger); text-align:center;">AKSES DICABUT</h2>
-        <p style="text-align:center;">Anda telah dikeluarkan dari sesi oleh Guru.</p>
-        <button onclick="location.reload()">KEMBALI KE AWAL</button>
+        <p style="text-align:center;">Anda telah dikeluarkan oleh Guru.</p>
+        <button onclick="location.reload()">KEMBALI</button>
     </div>
 
     <div id="scr-game" class="card hidden">
@@ -66,7 +63,7 @@
         <div id="opt-container"></div>
         <div id="ref-box" class="hidden">
             <hr><p><b>Alasan Strategis:</b></p>
-            <textarea id="ref-input" rows="3" placeholder="Jelaskan pilihan Anda..."></textarea>
+            <textarea id="ref-input" rows="3"></textarea>
             <button id="btn-submit-turn">KIRIM DATA ⮕</button>
         </div>
     </div>
@@ -77,10 +74,9 @@
             <button id="btn-start-global" style="background:#2d6a4f;">MULAI GAME</button>
             <button id="btn-reset-global" style="background:var(--gold);">RESET SEMUA</button>
         </div>
-        
         <div class="admin-scroll">
             <table>
-                <thead><tr><th>Nama</th><th>Progres</th><th>Statistik</th><th>Moderasi</th></tr></thead>
+                <thead><tr><th>Nama</th><th>Misi</th><th>Statistik</th><th>Moderasi</th></tr></thead>
                 <tbody id="monitor-body"></tbody>
             </table>
         </div>
@@ -89,16 +85,13 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
-    import { getDatabase, ref, set, update, onValue } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
+    import { getDatabase, ref, set, update, onValue, remove } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyAclyNf8Dy69UD0X9IwuNo4QH3BfAzmfZY",
         authDomain: "sejarah-game.firebaseapp.com",
         projectId: "sejarah-game",
         databaseURL: "https://sejarah-game-default-rtdb.asia-southeast1.firebasedatabase.app",
-        storageBucket: "sejarah-game.firebasestorage.app",
-        messagingSenderId: "1045111080150",
-        appId: "1:1045111080150:web:5c065dec17c5902c03f577"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -112,32 +105,40 @@
         document.getElementById(id).classList.remove('hidden');
     };
 
-    // LOGIKA MURID
+    // --- LOGIKA MURID ---
     document.getElementById('btn-reg').onclick = () => {
         const n = document.getElementById('in-name').value.trim();
         if(!n) return alert("Nama wajib diisi!");
-        pData.id = n.replace(/\s+/g, '_'); // ID tanpa spasi
+        pData.id = n.replace(/\s+/g, '_');
         pData.name = n;
         set(ref(db, 'players/' + pData.id), { name: pData.name, m:50, l:50, s:50, cur:0, status: 'ALIVE' });
         document.getElementById('lbl-myname').innerText = pData.name;
         showScreen('scr-wait');
     };
 
-    const loadTurn = () => {
-        if(pData.cur >= missions.length) {
-            document.getElementById('scr-game').innerHTML = "<h2 style='text-align:center;'>MISI SELESAI</h2><p style='text-align:center;'>Anda telah menyelesaikan seluruh sejarah.</p>";
+    const renderTurn = () => {
+        // PERBAIKAN: Cek apakah misi sudah terunduh
+        if (missions.length === 0) {
+            alert("Misi belum dimuat dari server. Tunggu sebentar.");
             return;
         }
+
+        if(pData.cur >= missions.length) {
+            document.getElementById('scr-game').innerHTML = "<h2 style='text-align:center;'>MISI SELESAI</h2>";
+            return;
+        }
+        
         const ev = missions[pData.cur];
-        document.getElementById('ev-title').innerText = `${ev.t}: ${ev.title}`;
+        document.getElementById('ev-title').innerText = `${ev.t || ''}: ${ev.title}`;
         document.getElementById('ev-desc').innerText = ev.desc;
         const cont = document.getElementById('opt-container');
         cont.innerHTML = "";
+        
         ev.options.forEach(o => {
             const b = document.createElement('button');
             b.className = 'opt-btn'; b.innerText = o.text;
             b.onclick = () => {
-                pData.m += parseInt(o.m); pData.l += parseInt(o.l); pData.s += parseInt(o.s);
+                pData.m += parseInt(o.m || 0); pData.l += parseInt(o.l || 0); pData.s += parseInt(o.s || 0);
                 ['v-m','v-l','v-s'].forEach((id,i) => document.getElementById(id).innerText = [pData.m,pData.l,pData.s][i]);
                 cont.innerHTML = "";
                 document.getElementById('ref-box').classList.remove('hidden');
@@ -148,36 +149,57 @@
 
     document.getElementById('btn-submit-turn').onclick = () => {
         pData.cur++;
-        update(ref(db, 'players/' + pData.id), { m: pData.m, l: pData.l, s: pData.s, cur: pData.cur, lastRef: document.getElementById('ref-input').value });
-        document.getElementById('ref-input').value = "";
+        update(ref(db, 'players/' + pData.id), { m: pData.m, l: pData.l, s: pData.s, cur: pData.cur });
         document.getElementById('ref-box').classList.add('hidden');
-        loadTurn();
+        renderTurn();
     };
 
-    // LOGIKA ADMIN
-    document.getElementById('link-admin').onclick = () => { if(prompt("Sandi:") === "GuruSejarah") showScreen('scr-admin'); };
+    // --- LOGIKA ADMIN (EXPOSE KE WINDOW AGAR TOMBOL BISA PANGGIL) ---
+    document.getElementById('link-admin').onclick = (e) => {
+        e.preventDefault();
+        if(prompt("Sandi:") === "GuruSejarah") showScreen('scr-admin');
+    };
+
     document.getElementById('btn-start-global').onclick = () => update(ref(db, '/'), { gameStatus: 'PLAYING' });
-    document.getElementById('btn-reset-global').onclick = () => { if(confirm("Reset semua?")) set(ref(db, '/'), { gameStatus: 'WAITING', players: {} }); };
-
-    window.kickPlayer = (id) => { if(confirm("Kick murid ini?")) update(ref(db, 'players/' + id), { status: 'KICKED' }); };
-    window.editPlayer = (id) => { 
-        const n = prompt("Ganti Nama:", id); 
-        if(n) update(ref(db, 'players/' + id), { name: n }); 
+    document.getElementById('btn-reset-global').onclick = () => {
+        if(confirm("Reset semua data?")) set(ref(db, '/'), { gameStatus: 'WAITING', players: {} });
     };
 
-    // SYNC
-    onValue(ref(db, 'missions'), snap => { if(snap.exists()) missions = snap.val(); });
-    onValue(ref(db, 'gameStatus'), snap => {
-        if(snap.val() === 'PLAYING' && !document.getElementById('scr-wait').classList.contains('hidden')) {
-            showScreen('scr-game'); loadTurn();
+    // Tombol Kick & Edit diekspos ke global window
+    window.kickPlayer = (id) => {
+        if(confirm("Kick murid ini?")) update(ref(db, 'players/' + id), { status: 'KICKED' });
+    };
+
+    window.editPlayer = (id) => {
+        const n = prompt("Ganti Nama Murid:", id);
+        if(n) update(ref(db, 'players/' + id), { name: n });
+    };
+
+    // --- SINKRONISASI ---
+    onValue(ref(db, 'missions'), snap => {
+        if(snap.exists()) {
+            missions = snap.val();
+            document.getElementById('wait-msg').innerText = "Data misi siap. Menunggu Guru...";
         }
     });
+
+    onValue(ref(db, 'gameStatus'), snap => {
+        if(snap.val() === 'PLAYING' && !document.getElementById('scr-wait').classList.contains('hidden')) {
+            showScreen('scr-game');
+            renderTurn();
+        }
+    });
+
     onValue(ref(db, 'players'), snap => {
         const players = snap.val(); if(!players) return;
+        
+        // Cek status diri sendiri
         if(pData.id && players[pData.id]) {
             if(players[pData.id].status === 'KICKED') showScreen('scr-kicked');
             document.getElementById('lbl-myname').innerText = players[pData.id].name;
         }
+
+        // Dashboard Guru
         const tbody = document.getElementById('monitor-body');
         if(tbody) {
             tbody.innerHTML = Object.keys(players).map(id => `
@@ -186,8 +208,8 @@
                     <td>Misi ${players[id].cur}</td>
                     <td>${players[id].m}/${players[id].l}/${players[id].s}</td>
                     <td>
-                        <button class="btn-edit" onclick="editPlayer('${id}')">Edit</button>
-                        <button class="btn-kick" onclick="kickPlayer('${id}')">Kick</button>
+                        <button class="btn-edit" onclick="window.editPlayer('${id}')">Edit</button>
+                        <button class="btn-kick" onclick="window.kickPlayer('${id}')">Kick</button>
                     </td>
                 </tr>
             `).join('');
