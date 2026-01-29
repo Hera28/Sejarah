@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>RUANGSEJARAH</title>
+    <title>RUANGSEJARAH - FLEXIBLE COMMAND</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Oswald:wght@600&display=swap');
@@ -18,21 +18,21 @@
         }
 
         header { 
-            background: #1e293b; color: white; padding: 25px; 
+            background: #1e293b; color: white; padding: 20px; 
             text-align: center; border-bottom: 6px solid var(--accent);
         }
-        header h1 { font-family: 'Oswald', sans-serif; margin: 0; font-size: 2.5rem; letter-spacing: 3px; }
+        header h1 { font-family: 'Oswald', sans-serif; margin: 0; font-size: 2.2rem; letter-spacing: 2px; }
 
-        main { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        main { max-width: 800px; margin: 30px auto; padding: 0 15px; }
 
         .card { 
-            background: #fffefb; border-radius: 4px; padding: 40px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 2px solid var(--ink);
-            border-right: 12px solid var(--accent); position: relative;
+            background: #fffefb; border-radius: 4px; padding: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5); border: 2px solid var(--ink);
+            border-right: 10px solid var(--accent); position: relative;
         }
 
-        .form-group { margin-bottom: 25px; }
-        input[type="text"] {
+        /* PERBAIKAN INPUT NAMA (LEBIH BESAR) */
+        input[type="text"], textarea {
             width: 100%; padding: 18px; font-size: 1.2rem; border: 3px solid var(--ink);
             border-radius: 0; font-family: inherit; box-sizing: border-box; background: #fff;
         }
@@ -44,98 +44,104 @@
         }
         button:hover { background: var(--accent); }
 
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
-        .stat-box { background: #f1f5f9; padding: 15px; border: 2px solid var(--ink); text-align: center; }
-        .stat-box b { font-size: 1.5rem; display: block; color: var(--accent); }
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; }
+        .stat-box { background: #f1f5f9; padding: 10px; border: 2px solid var(--ink); text-align: center; }
+        .stat-box b { font-size: 1.4rem; display: block; }
 
-        .army-container { display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px; margin: 30px 0; }
+        /* ARMY GRID */
+        .army-container { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin: 20px 0; }
         .dot { 
             width: 100%; aspect-ratio: 1; background: var(--soldier-off); border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; font-size: 11px;
+            display: flex; align-items: center; justify-content: center; font-size: 10px;
             font-weight: bold; border: 1px solid #94a3b8; color: #64748b;
         }
-        .dot.active { background: var(--soldier-on); color: white; border-color: #166534; box-shadow: 0 0 10px rgba(34, 197, 94, 0.4); }
-        .dot.me { border: 3px solid var(--accent); animation: glow 1.5s infinite; }
+        .dot.active { background: var(--soldier-on); color: white; border-color: #166534; }
+        .dot.me { border: 3px solid var(--accent); animation: pulse 1s infinite; }
 
-        @keyframes glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         .hidden { display: none !important; }
 
-        /* Admin Styles */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.8rem; }
-        th { background: var(--ink); color: white; padding: 10px; }
-        td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        /* ADMIN UI */
+        .admin-btn-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.75rem; }
+        th { background: var(--ink); color: white; padding: 8px; }
+        td { border: 1px solid #ddd; padding: 6px; text-align: center; }
         
-        /* Modal Laporan */
-        .report-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 999; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .report-card { background: white; width: 100%; max-width: 600px; max-height: 85vh; overflow-y: auto; padding: 30px; border-radius: 4px; border-top: 10px solid var(--ink); }
-        .log-item { border-bottom: 1px dashed #ccc; padding: 12px 0; }
-        .log-item b { color: var(--accent); font-size: 0.9rem; }
+        /* OVERLAY REPORT */
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .modal-inner { background: white; width: 100%; max-width: 600px; max-height: 80vh; overflow-y: auto; padding: 25px; border-radius: 4px; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>RUANGSEJARAH</h1>
-    <div style="letter-spacing: 4px; font-size: 0.7rem;">SISTEM EVALUASI STRATEGIS v27</div>
+    <div style="font-size: 0.6rem; letter-spacing: 3px; opacity: 0.7;">KOMANDO STRATEGIS NASIONAL</div>
 </header>
 
 <main>
     <div id="scr-login" class="card">
         <h2 style="text-align:center; margin-top:0;">REGISTRASI UNIT</h2>
-        <div class="form-group">
-            <input type="text" id="in-name" placeholder="NAMA LENGKAP..." autocomplete="off">
-        </div>
-        <button id="btn-reg">AKTIFKAN UNIT ⮕KOMANDAN UTAMA</button>
-        <p style="text-align:center;"><a href="#" id="link-admin" style="color:var(--accent); font-size:0.8rem; text-decoration:none;"></a></p>
+        <input type="text" id="in-name" placeholder="MASUKKAN NAMA LENGKAP..." autocomplete="off">
+        <button id="btn-reg" style="margin-top:20px;">AKTIFKAN UNIT ⮕</button>
+        <p style="text-align:center; margin-top:20px;">
+            <a href="#" id="link-admin" style="color:var(--accent); font-size:0.8rem; text-decoration:none; border-bottom:1px solid;">MASUK OTORITAS GURU</a>
+        </p>
     </div>
 
     <div id="scr-wait" class="card hidden">
         <h2 style="text-align:center;">BARAK PERSIAPAN</h2>
         <div class="army-container" id="army-grid"></div>
-        <p style="text-align:center; color:#64748b;" id="lbl-wait">Menunggu perintah serangan...</p>
-        <div style="background:#f1f5f9; padding:15px; text-align:center; font-weight:bold; border:1px solid #ddd;">
-            KODE UNIT: <span id="display-name" style="color:var(--accent)">--</span>
+        <p style="text-align:center; color:#64748b;" id="lbl-status">Sinkronisasi data...</p>
+        <div style="background:#f1f5f9; padding:10px; text-align:center; border:1px solid #ddd;">
+            KODE UNIT: <span id="display-name" style="color:var(--accent); font-weight:bold;">--</span>
         </div>
     </div>
 
     <div id="scr-game" class="card hidden">
         <div class="stat-grid">
             <div class="stat-box"><small>MORAL</small><b id="v-m">50</b></div>
-            <div class="stat-box"><small>SUPLAI</small><b id="b-l">50</b></div>
+            <div class="stat-box"><small>SUPLAI</small><b id="v-l">50</b></div>
             <div class="stat-box"><small>DUKUNGAN</small><b id="v-s">50</b></div>
         </div>
-        <h3 id="ev-title" style="color:var(--accent); margin-top:0;"></h3>
-        <p id="ev-desc" style="line-height:1.6; min-height:80px;"></p>
+        <div id="prog-text" style="font-size:0.7rem; color:var(--accent); margin-bottom:5px; font-weight:bold;"></div>
+        <h3 id="ev-title" style="margin-top:0;"></h3>
+        <p id="ev-desc" style="line-height:1.5; min-height:80px;"></p>
         <div id="opt-container"></div>
         
         <div id="ref-box" class="hidden">
             <p><b>JUSTIFIKASI KEPUTUSAN:</b></p>
-            <textarea id="ref-input" style="width:100%; height:80px; padding:10px; font-family:inherit; border:2px solid var(--ink);" placeholder="Mengapa Anda mengambil langkah ini?"></textarea>
+            <textarea id="ref-input" rows="3" placeholder="Mengapa Anda memilih ini?"></textarea>
             <button id="btn-submit-turn" style="margin-top:15px;">KIRIM LAPORAN</button>
         </div>
     </div>
 
     <div id="scr-admin" class="card hidden">
-        <h2 style="margin-top:0;">KONTROL OTORITAS</h2>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
-            <button id="btn-start-global" style="background:#16a34a;">MULAI GAME</button>
-            <button id="btn-reset-global" style="background:#dc2626;">RESET TOTAL</button>
+        <h2 style="margin-top:0;">KONTROL GURU</h2>
+        <div class="admin-btn-group">
+            <div class="btn-row">
+                <button id="btn-start-25" style="background:#0284c7;">MULAI (25 MISI)</button>
+                <button id="btn-start-60" style="background:#16a34a;">MULAI (60 MISI)</button>
+            </div>
+            <button id="btn-reset-global" style="background:#dc2626;">RESET & KICK SEMUA</button>
         </div>
         <div style="overflow-x:auto;">
             <table>
                 <thead>
-                    <tr><th>UNIT</th><th>PROGRESS</th><th>M/L/S</th><th>AKSI</th></tr>
+                    <tr><th>NAMA</th><th>MISI</th><th>STATUS</th><th>AKSI</th></tr>
                 </thead>
                 <tbody id="monitor-body"></tbody>
             </table>
         </div>
+        <button onclick="showScreen('scr-login')" style="margin-top:20px; background:#64748b;">KEMBALI KE LOGIN</button>
     </div>
 </main>
 
-<div id="scr-report" class="report-overlay hidden">
-    <div class="report-card">
-        <h2 id="rep-unit-name" style="margin-top:0; border-bottom: 3px solid var(--ink);">LAPORAN DETAIL</h2>
-        <div id="rep-list"></div>
+<div id="scr-report" class="overlay hidden">
+    <div class="modal-inner">
+        <h2 id="rep-name" style="margin-top:0; border-bottom: 4px solid var(--ink);"></h2>
+        <div id="rep-list" style="margin-top:15px;"></div>
         <button onclick="document.getElementById('scr-report').classList.add('hidden')" style="margin-top:20px;">TUTUP</button>
     </div>
 </div>
@@ -156,7 +162,7 @@
 
     let pData = { id:"", name:"", m:50, l:50, s:50, cur:0, history:[] };
     let missions = [];
-    let allPlayersData = {};
+    let allPlayers = {};
 
     const showScreen = (id) => {
         document.querySelectorAll('main > div').forEach(d => d.classList.add('hidden'));
@@ -166,34 +172,32 @@
     // --- MURID ---
     document.getElementById('btn-reg').onclick = () => {
         const n = document.getElementById('in-name').value.trim().toUpperCase();
-        if(!n) return alert("NAMA TIDAK BOLEH KOSONG!");
+        if(!n) return alert("NAMA WAJIB DIISI!");
         pData.id = n.replace(/\s+/g, '_') + '_' + Math.floor(1000 + Math.random() * 9000);
         pData.name = n;
-        set(ref(db, 'players/' + pData.id), { name: n, m:50, l:50, s:50, cur:0, status:'ALIVE', history:[] });
+        set(ref(db, 'players/' + pData.id), { ...pData, status:'ALIVE' });
         document.getElementById('display-name').innerText = n;
         showScreen('scr-wait');
     };
 
     const renderTurn = () => {
         if(pData.cur >= missions.length) {
-            document.getElementById('scr-game').innerHTML = "<h2 style='text-align:center'>MISI SELESAI</h2><p style='text-align:center'>Laporan akhir Anda telah diarsipkan oleh Guru.</p>";
+            document.getElementById('scr-game').innerHTML = "<h2 style='text-align:center'>OPERASI SELESAI</h2><p style='text-align:center'>Anda telah menyelesaikan seluruh misi. Laporan Anda telah tersimpan.</p>";
             return;
         }
         const ev = missions[pData.cur];
-        document.getElementById('ev-title').innerText = `${ev.t}: ${ev.title}`;
+        document.getElementById('prog-text').innerText = `MISI ${pData.cur + 1} / ${missions.length}`;
+        document.getElementById('ev-title').innerText = ev.title;
         document.getElementById('ev-desc').innerText = ev.desc;
         const cont = document.getElementById('opt-container');
         cont.innerHTML = "";
-
         ev.options.forEach(o => {
             const b = document.createElement('button');
             b.style = "background:white; color:var(--ink); border:2px solid var(--ink); margin-bottom:10px; text-align:left;";
             b.innerText = "◈ " + o.text;
             b.onclick = () => {
                 pData.m += o.m; pData.l += o.l; pData.s += o.s;
-                document.getElementById('v-m').innerText = pData.m;
-                document.getElementById('b-l').innerText = pData.l;
-                document.getElementById('v-s').innerText = pData.s;
+                ['v-m','v-l','v-s'].forEach((id,i) => document.getElementById(id).innerText = [pData.m,pData.l,pData.s][i]);
                 cont.innerHTML = ""; document.getElementById('ref-box').classList.remove('hidden');
             };
             cont.appendChild(b);
@@ -201,16 +205,10 @@
     };
 
     document.getElementById('btn-submit-turn').onclick = () => {
-        const reason = document.getElementById('ref-input').value;
-        const log = { year: missions[pData.cur].t, title: missions[pData.cur].title, reason: reason };
-        if(!pData.history) pData.history = [];
-        pData.history.push(log);
+        const res = document.getElementById('ref-input').value;
+        pData.history.push({ step: pData.cur+1, year: missions[pData.cur].t, reason: res || "No justification" });
         pData.cur++;
-        
-        update(ref(db, 'players/' + pData.id), { 
-            m: pData.m, l: pData.l, s: pData.s, cur: pData.cur, history: pData.history 
-        });
-        
+        update(ref(db, 'players/' + pData.id), pData);
         document.getElementById('ref-input').value = "";
         document.getElementById('ref-box').classList.add('hidden');
         renderTurn();
@@ -219,42 +217,43 @@
     // --- ADMIN ---
     document.getElementById('link-admin').onclick = (e) => {
         e.preventDefault();
-        if(prompt("SANDI OTORITAS:") === "sejarah") showScreen('scr-admin');
+        if(prompt("SANDI GURU:") === "sejarah") showScreen('scr-admin');
     };
 
-    document.getElementById('btn-start-global').onclick = () => {
+    const generateMissions = (count) => {
         const m = [];
-        for(let i=1; i<=25; i++) {
+        for(let i=1; i<=count; i++) {
             m.push({
-                t: 1945 + i, title: `KRISIS TAHUN ${1945+i}`,
-                desc: `Sebuah konflik meletus di sektor selatan. Rakyat meminta perlindungan, namun stok amunisi menipis.`,
+                t: 1945 + i, title: `OPERASI TAHUN ${1945+i}`,
+                desc: `Sebuah situasi krusial muncul di perbatasan. Bagaimana tindakan strategis Anda?`,
                 options: [
-                    {text: "Utamakan Diplomasi Rakyat", m:10, l:-10, s:15},
-                    {text: "Serangan Militer Terpadu", m:-5, l:15, s:0}
+                    {text: "Dukungan Rakyat (Stat +)", m:10, l:-5, s:10},
+                    {text: "Mobilisasi Pasukan (Stat +)", m:-5, l:15, s:5}
                 ]
             });
         }
         set(ref(db, 'missions'), m);
         set(ref(db, 'gameStatus'), 'PLAYING');
+        alert(`${count} Misi Berhasil Diaktifkan!`);
     };
 
+    document.getElementById('btn-start-25').onclick = () => generateMissions(25);
+    document.getElementById('btn-start-60').onclick = () => generateMissions(60);
+
     document.getElementById('btn-reset-global').onclick = () => {
-        if(confirm("HAPUS SELURUH DATA?")) {
+        if(confirm("RESET DAN KICK SEMUA PEMAIN?")) {
             set(ref(db, 'players'), null);
             set(ref(db, 'gameStatus'), 'WAITING');
         }
     };
 
-    window.kickPlayer = (id) => { if(confirm("Hapus unit ini?")) remove(ref(db, 'players/' + id)); };
-    
+    window.kickPlayer = (id) => { if(confirm("Hapus pemain ini?")) remove(ref(db, 'players/' + id)); };
     window.viewReport = (id) => {
-        const p = allPlayersData[id];
-        document.getElementById('rep-unit-name').innerText = "LAPORAN: " + p.name;
-        const list = document.getElementById('rep-list');
-        list.innerHTML = p.history ? p.history.map((h, i) => `
-            <div class="log-item">
-                <b>[MISI ${i+1}] ${h.year} - ${h.title}</b><br>
-                <span>"${h.reason || 'Tidak ada justifikasi'}"</span>
+        const p = allPlayers[id];
+        document.getElementById('rep-name').innerText = "LAPORAN: " + p.name;
+        document.getElementById('rep-list').innerHTML = p.history ? p.history.map(h => `
+            <div style="border-bottom:1px dashed #ccc; padding:10px 0;">
+                <b>MISI ${h.step} (${h.year}):</b><br><i>"${h.reason}"</i>
             </div>
         `).join('') : "Belum ada laporan.";
         document.getElementById('scr-report').classList.remove('hidden');
@@ -270,12 +269,9 @@
 
     onValue(ref(db, 'players'), snap => {
         const players = snap.val() || {};
-        allPlayersData = players;
-
-        // Kick logic
+        allPlayers = players;
         if(pData.id && !players[pData.id]) { pData.id = ""; showScreen('scr-login'); return; }
 
-        // Grid Update
         const grid = document.getElementById('army-grid');
         grid.innerHTML = "";
         const ids = Object.keys(players);
@@ -288,15 +284,14 @@
             grid.appendChild(d);
         }
 
-        // Admin Table
         const tbody = document.getElementById('monitor-body');
         if(tbody) tbody.innerHTML = ids.map(id => `
             <tr>
                 <td>${players[id].name}</td>
-                <td>${players[id].cur}/25</td>
-                <td>${players[id].m}/${players[id].l}/${players[id].s}</td>
+                <td>${players[id].cur}/${missions.length}</td>
+                <td>${players[id].cur === missions.length ? 'SELESAI' : 'BERMAIN'}</td>
                 <td>
-                    <button onclick="window.viewReport('${id}')" style="background:#0ea5e9; padding:5px; font-size:9px; width:auto; margin-bottom:2px;">DETAIL</button>
+                    <button onclick="window.viewReport('${id}')" style="background:#0ea5e9; padding:5px; font-size:9px; width:auto;">LOG</button>
                     <button onclick="window.kickPlayer('${id}')" style="background:red; padding:5px; font-size:9px; width:auto;">KICK</button>
                 </td>
             </tr>`).join('');
