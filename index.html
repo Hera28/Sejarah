@@ -2,84 +2,100 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>RUANGSEJARAH - GLOBAL POWERS v33</title>
+    <title>RUANGSEJARAH - LEADERBOARD v34</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Oswald:wght@600&display=swap');
-        :root { --bg: #0f172a; --card: #fffefb; --accent: #e11d48; --ink: #1e293b; --soldier-on: #22c55e; }
+        :root { --bg: #0f172a; --card: #fffefb; --accent: #e11d48; --ink: #1e293b; --gold: #f59e0b; }
         body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Courier Prime', monospace; }
-        header { background: #1e293b; color: white; padding: 20px; text-align: center; border-bottom: 6px solid var(--accent); }
-        header h1 { font-family: 'Oswald', sans-serif; margin: 0; }
-        main { max-width: 800px; margin: 30px auto; padding: 0 15px; }
-        .card { background: var(--card); padding: 35px; border: 2px solid var(--ink); border-right: 12px solid var(--accent); position: relative; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .stat-box { background: #f1f5f9; padding: 10px; border: 2px solid var(--ink); text-align: center; }
-        .stat-box b { font-size: 1.5rem; display: block; color: var(--accent); }
-        input, textarea { width: 100%; padding: 15px; border: 3px solid var(--ink); box-sizing: border-box; font-family: inherit; margin-top: 10px; }
-        button { width: 100%; padding: 18px; background: var(--ink); color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        header { background: #1e293b; color: white; padding: 15px; text-align: center; border-bottom: 5px solid var(--accent); }
+        main { max-width: 900px; margin: 20px auto; padding: 0 15px; display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
+        
+        /* Mobile Responsive for Grid */
+        @media (max-width: 850px) { main { grid-template-columns: 1fr; } .side-panel { order: 2; } }
+
+        .card { background: var(--card); padding: 25px; border: 2px solid var(--ink); border-right: 10px solid var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
+        .stat-box { background: #f1f5f9; padding: 8px; border: 1px solid var(--ink); text-align: center; }
+        .stat-box b { font-size: 1.2rem; display: block; color: var(--accent); }
+        
+        /* LEADERBOARD STYLE */
+        .side-panel { background: #1e293b; color: white; padding: 15px; border-radius: 4px; border: 2px solid var(--gold); }
+        .rank-item { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #334155; font-size: 0.8rem; }
+        .rank-item.top { color: var(--gold); font-weight: bold; }
+        
+        button { width: 100%; padding: 15px; background: var(--ink); color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; text-transform: uppercase; }
         button:hover { background: var(--accent); }
-        .intervention-tag { background: #fef08a; color: #854d0e; padding: 5px 10px; font-weight: bold; font-size: 0.8rem; display: inline-block; margin-bottom: 10px; border: 1px solid #854d0e; }
+        .intervention-tag { background: #fef08a; color: #854d0e; padding: 5px; font-weight: bold; font-size: 0.7rem; margin-bottom: 10px; border: 1px solid #854d0e; }
         .hidden { display: none !important; }
-        .army-container { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin: 20px 0; }
-        .dot { width: 100%; aspect-ratio: 1; background: #cbd5e1; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; }
-        .dot.active { background: var(--soldier-on); color: white; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.7rem; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        textarea { width: 100%; padding: 10px; border: 2px solid var(--ink); font-family: inherit; margin-top: 10px; box-sizing: border-box; }
+        
+        .army-container { display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px; margin-top: 10px; }
+        .dot { aspect-ratio: 1; background: #475569; border-radius: 50%; font-size: 8px; display: flex; align-items: center; justify-content: center; color: white; }
+        .dot.active { background: #22c55e; }
+        .dot.me { border: 2px solid var(--accent); animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>RUANGSEJARAH</h1>
-    <div style="font-size: 0.6rem; letter-spacing: 3px; opacity: 0.8;">GLOBAL INTERVENTION SYSTEM v33</div>
+    <h1 style="font-family: 'Oswald'; margin:0;">RUANGSEJARAH</h1>
+    <div style="font-size: 0.6rem; letter-spacing: 2px;">NATIONAL STABILITY RANKING SYSTEM v34</div>
 </header>
 
 <main>
-    <div id="scr-login" class="card">
-        <h2 style="text-align:center; margin-top:0;">UNIT REGISTRATION</h2>
-        <input type="text" id="in-name" placeholder="MASUKKAN NAMA...">
-        <button id="btn-reg">START MISSION ⮕</button>
-        <p style="text-align:center;"><a href="#" id="link-admin" style="color:var(--accent); font-size:0.8rem; text-decoration:none;">OTORITAS GURU</a></p>
-    </div>
+    <section>
+        <div id="scr-login" class="card">
+            <h3>REGISTRASI KOMANDAN</h3>
+            <input type="text" id="in-name" placeholder="NAMA LENGKAP..." style="width:100%; padding:15px; border:2px solid #1e293b;">
+            <button id="btn-reg">AKTIFKAN UNIT ⮕</button>
+            <p style="text-align:center;"><a href="#" id="link-admin" style="color:var(--accent); font-size:0.7rem;">OTORITAS GURU</a></p>
+        </div>
 
-    <div id="scr-wait" class="card hidden">
-        <h2 style="text-align:center;">BARAK PERSIAPAN</h2>
-        <div class="army-container" id="army-grid"></div>
-        <p style="text-align:center;">UNIT: <span id="display-name" style="color:var(--accent); font-weight:bold;">--</span></p>
-    </div>
+        <div id="scr-wait" class="card hidden">
+            <h3 style="margin-top:0;">BARAK PERSIAPAN (40 SLOT)</h3>
+            <div class="army-container" id="army-grid"></div>
+            <p style="text-align:center; font-size:0.8rem; margin-top:20px;">MENUNGGU INSTRUKSI PUSAT...</p>
+        </div>
 
-    <div id="scr-game" class="card hidden">
-        <div class="stat-grid">
-            <div class="stat-box"><small>MORAL</small><b id="v-m">50</b></div>
-            <div class="stat-box"><small>SUPLAI</small><b id="v-l">50</b></div>
-            <div class="stat-box"><small>DUKUNGAN</small><b id="v-s">50</b></div>
+        <div id="scr-game" class="card hidden">
+            <div class="stat-grid">
+                <div class="stat-box"><small>MORAL</small><b id="v-m">50</b></div>
+                <div class="stat-box"><small>SUPLAI</small><b id="v-l">50</b></div>
+                <div class="stat-box"><small>DUKUNGAN</small><b id="v-s">50</b></div>
+            </div>
+            <div id="intervention-area"></div>
+            <h4 id="ev-title" style="margin:0; color:var(--accent);"></h4>
+            <p id="ev-desc" style="font-size:0.9rem; line-height:1.4;"></p>
+            <div id="opt-container"></div>
+            <div id="ref-box" class="hidden">
+                <textarea id="ref-input" rows="3" placeholder="Alasan strategis Anda..."></textarea>
+                <button id="btn-submit-turn">KIRIM LAPORAN</button>
+            </div>
         </div>
-        <div id="intervention-area"></div>
-        <div id="prog-text" style="font-size:0.7rem; color:var(--accent); font-weight:bold;"></div>
-        <h3 id="ev-title" style="margin-top:0;"></h3>
-        <p id="ev-desc" style="line-height:1.5;"></p>
-        <div id="opt-container"></div>
-        <div id="ref-box" class="hidden">
-            <textarea id="ref-input" rows="3" placeholder="Tuliskan alasan strategis Anda..."></textarea>
-            <button id="btn-submit-turn">KIRIM LAPORAN</button>
-        </div>
-    </div>
 
-    <div id="scr-admin" class="card hidden">
-        <h2>PANEL KONTROL GURU</h2>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-            <button id="btn-start-25" style="background:#0284c7;">25 MISI</button>
-            <button id="btn-start-60" style="background:#16a34a;">60 MISI</button>
-            <button id="btn-reset" style="background:red; grid-column: span 2;">RESET ALL</button>
+        <div id="scr-admin" class="card hidden">
+            <h3>KONTROL GURU</h3>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+                <button id="btn-start-25" style="background:#0284c7; font-size:0.7rem;">25 MISI</button>
+                <button id="btn-start-60" style="background:#16a34a; font-size:0.7rem;">60 MISI</button>
+            </div>
+            <button id="btn-reset" style="background:red;">RESET SEMUA DATA</button>
+            <div style="overflow-y:auto; max-height:200px; margin-top:10px; font-size:0.7rem; border:1px solid #ccc;">
+                <table id="admin-table" style="width:100%; border-collapse:collapse;">
+                    <tbody id="monitor-body"></tbody>
+                </table>
+            </div>
         </div>
-        <div style="overflow-x:auto;">
-            <table id="monitor-table">
-                <thead><tr><th>NAMA</th><th>MISI</th><th>TAG</th><th>AKSI</th></tr></thead>
-                <tbody id="monitor-body"></tbody>
-            </table>
+    </section>
+
+    <aside class="side-panel">
+        <h3 style="font-family:'Oswald'; border-bottom:2px solid var(--gold); margin-top:0;">🏆 PERINGKAT</h3>
+        <div id="leaderboard-list">
+            <p style="font-size:0.7rem; opacity:0.5;">Sinkronisasi...</p>
         </div>
-        <button onclick="location.reload()" style="background:#64748b;">LOGOUT</button>
-    </div>
+    </aside>
 </main>
 
 <script type="module">
@@ -96,94 +112,66 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    let pData = { id:"", name:"", m:50, l:50, s:50, cur:0, history:[], r_count:0, m_count:0, tag:"NETRAL", lastIntervention: "" };
+    let pData = { id:"", name:"", m:50, l:50, s:50, cur:0, history:[], r_count:0, m_count:0, stability:50 };
     let missions = [];
 
     const showScreen = (id) => {
-        document.querySelectorAll('main > div').forEach(d => d.classList.add('hidden'));
+        document.querySelectorAll('main section > div').forEach(d => d.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
     };
 
-    // --- LOGIC INTERVENSI ---
+    // --- GAME LOGIC ---
     const checkIntervention = () => {
-        let interv = null;
-        const roll = Math.random();
-
-        // 1. Kondisi Darurat (USSR datang jika suplai kritis)
-        if(pData.l <= 15) {
-            interv = {
-                name: "UNI SOVIET (USSR)",
-                desc: "Kami melihat Anda kekurangan suplai. Kami tawarkan bantuan logistik penuh hingga 50, namun Anda harus membatasi hubungan dengan Barat.",
-                opt: [
-                    { text: "Terima Bantuan USSR (L=50, S-20)", m:0, l:50, s:-20, fixL: true, tag: "BLOK_TIMUR" },
-                    { text: "Tolak & Cari Jalan Lain", m:5, l:0, s:0 }
-                ]
-            };
-        } 
-        // 2. Random Intervensi (AS/UK/Belanda/Jepang) muncul di misi 5, 12, 18, dsb.
-        else if (roll < 0.2 && pData.cur > 2) {
-            const types = [
-                { name: "AMERIKA SERIKAT (AS)", desc: "AS menawarkan dana pembangunan dan dukungan Moral jika Anda setuju dengan sistem demokrasi terbuka.", opt: [{text: "Terima AS (M+25, S+10, L-10)", m:25, l:-10, s:10, tag: "BLOK_BARAT"}]},
-                { name: "BELANDA", desc: "Belanda menawarkan kerja sama administrasi lama, namun rakyat mungkin curiga ini adalah penjajahan kembali.", opt: [{text: "Terima Belanda (L+20, S-25)", m:-10, l:20, s:-25, tag: "BELANDA_FRIEND"}]},
-                { name: "JEPANG", desc: "Jepang menawarkan teknologi militer rahasia, namun menuntut kontrol atas sektor energi Anda.", opt: [{text: "Terima Jepang (L+15, M-15)", m:-15, l:15, s:10, tag: "JEPANG"}]}
+        if(pData.l <= 10) return { name: "UNI SOVIET", desc: "Suplai Anda kritis! Kami kirim logistik darurat sekarang.", opt: [{text: "TERIMA USSR (SUPLAI KE 50)", fixL:50, s:-20}] };
+        if(Math.random() < 0.15 && pData.cur > 3) {
+            const list = [
+                {name:"AS/UK", desc:"Menawarkan dukungan Moral untuk stabilitas.", opt:[{text:"TERIMA BARAT (M+20, L-10)", m:20, l:-10}]},
+                {name:"BELANDA", desc:"Belanda ingin 'membantu' administrasi kota.", opt:[{text:"TERIMA BELANDA (L+15, S-20)", l:15, s:-20}]},
+                {name:"JEPANG", desc:"Menawarkan senjata, tapi moral warga turun.", opt:[{text:"TERIMA JEPANG (L+10, M-20)", l:10, m:-20}]}
             ];
-            interv = types[Math.floor(Math.random() * types.length)];
-            interv.opt.push({text: "Abaikan Intervensi Luar", m:0, l:0, s:0});
+            return list[Math.floor(Math.random()*list.length)];
         }
-        return interv;
+        return null;
     };
 
     const renderTurn = () => {
         if(pData.cur >= missions.length && missions.length > 0) {
-            document.getElementById('scr-game').innerHTML = "<h2>SIMULASI SELESAI</h2>";
+            document.getElementById('scr-game').innerHTML = "<h3>OPERASI SELESAI</h3><p>Terima kasih, Komandan.</p>";
             return;
         }
+        const intv = checkIntervention();
+        const ev = missions[pData.cur];
+        const cont = document.getElementById('opt-container');
+        cont.innerHTML = "";
 
-        const intArea = document.getElementById('intervention-area');
-        intArea.innerHTML = "";
-        const interv = checkIntervention();
-
-        let currentEv = missions[pData.cur];
-        
-        if(interv) {
-            intArea.innerHTML = `<div class="intervention-tag">🚨 INTERVENSI: ${interv.name}</div>`;
-            document.getElementById('ev-title').innerText = `TAWARAN DARI ${interv.name}`;
-            document.getElementById('ev-desc').innerText = interv.desc;
-            
-            const cont = document.getElementById('opt-container');
-            cont.innerHTML = "";
-            interv.opt.forEach(o => {
-                const b = document.createElement('button');
-                b.innerText = "◈ " + o.text;
-                b.onclick = () => {
-                    if(o.fixL) pData.l = 50; else pData.l += o.l;
-                    pData.m += o.m; pData.s += o.s;
-                    if(o.tag) pData.lastIntervention = o.tag;
-                    updateStats();
-                    cont.innerHTML = ""; document.getElementById('ref-box').classList.remove('hidden');
+        if(intv) {
+            document.getElementById('intervention-area').innerHTML = `<div class="intervention-tag">🚨 INTERVENSI ${intv.name}</div>`;
+            document.getElementById('ev-title').innerText = "TAWARAN KHUSUS";
+            document.getElementById('ev-desc').innerText = intv.desc;
+            intv.opt.forEach(o => {
+                const b = document.createElement('button'); b.innerText = "◈ " + o.text;
+                b.onclick = () => { 
+                    if(o.fixL) pData.l = o.fixL; else pData.l += (o.l||0);
+                    pData.m += (o.m||0); pData.s += (o.s||0);
+                    finishChoice();
                 };
                 cont.appendChild(b);
             });
         } else {
-            document.getElementById('ev-title').innerText = currentEv.title;
-            document.getElementById('ev-desc').innerText = currentEv.desc;
-            const cont = document.getElementById('opt-container');
-            cont.innerHTML = "";
-            currentEv.options.forEach(o => {
-                const b = document.createElement('button');
-                b.innerText = "◈ " + o.text;
-                b.onclick = () => {
-                    pData.m += o.m; pData.l += o.l; pData.s += o.s;
-                    updateStats();
-                    cont.innerHTML = ""; document.getElementById('ref-box').classList.remove('hidden');
-                };
+            document.getElementById('intervention-area').innerHTML = "";
+            document.getElementById('ev-title').innerText = ev.title;
+            document.getElementById('ev-desc').innerText = "Tahun " + ev.t + ": Apa langkah strategis Anda?";
+            ev.options.forEach(o => {
+                const b = document.createElement('button'); b.innerText = "◈ " + o.text;
+                b.onclick = () => { pData.m+=o.m; pData.l+=o.l; pData.s+=o.s; finishChoice(); };
                 cont.appendChild(b);
             });
         }
-        document.getElementById('prog-text').innerText = `MISSION ${pData.cur+1}/${missions.length}`;
     };
 
-    const updateStats = () => {
+    const finishChoice = () => {
+        document.getElementById('opt-container').innerHTML = "";
+        document.getElementById('ref-box').classList.remove('hidden');
         document.getElementById('v-m').innerText = pData.m;
         document.getElementById('v-l').innerText = pData.l;
         document.getElementById('v-s').innerText = pData.s;
@@ -193,14 +181,8 @@
         const res = document.getElementById('ref-input').value.toLowerCase();
         if(res.includes("rakyat")) pData.r_count++;
         if(res.includes("militer")) pData.m_count++;
-
-        // ML Logic Misi 1-10
-        if(pData.cur === 10) {
-            if(pData.r_count >= 3) { pData.tag = "POPULIS"; pData.s += 15; }
-            else if(pData.m_count >= 3) { pData.tag = "MILITAN"; pData.l += 15; }
-        }
-
-        pData.history.push({ step: pData.cur+1, reason: res || "---" });
+        pData.stability = Math.round((pData.m + pData.l + pData.s) / 3);
+        pData.history.push({ step: pData.cur+1, reason: res });
         pData.cur++;
         update(ref(db, 'players/' + pData.id), pData);
         document.getElementById('ref-input').value = "";
@@ -208,45 +190,59 @@
         renderTurn();
     };
 
-    // --- REG & ADMIN ---
+    // --- ADMIN & CORE ---
     document.getElementById('btn-reg').onclick = () => {
         const n = document.getElementById('in-name').value.trim().toUpperCase();
         if(!n) return;
-        pData.id = n.replace(/\s+/g, '_') + '_' + Math.floor(1000+Math.random()*9000);
+        pData.id = n.replace(/\s+/g,'_') + '_' + Math.floor(1000+Math.random()*9000);
         pData.name = n;
         set(ref(db, 'players/' + pData.id), pData);
-        document.getElementById('display-name').innerText = n;
         showScreen('scr-wait');
     };
 
     document.getElementById('link-admin').onclick = () => { if(prompt("PASS:")==="sejarah") showScreen('scr-admin'); };
 
-    const genMissions = (num) => {
+    const startMissions = (num) => {
         const m = [];
-        for(let i=1; i<=num; i++) m.push({ t:1945+i, title:`OPERASI TAHUN ${1945+i}`, desc:`Bagaimana Anda menangani gejolak internal di tahun ini?`, options:[{text:"Fokus Diplomasi",m:10,l:0,s:10},{text:"Fokus Keamanan",m:0,l:10,s:5}] });
+        for(let i=1;i<=num;i++) m.push({t:1945+i, title:`MISI ${i}`, options:[{text:"Opsi Rakyat",m:10,l:-5,s:10},{text:"Opsi Militer",m:-5,l:15,s:0}]});
         set(ref(db, 'missions'), m);
         set(ref(db, 'gameStatus'), 'START_' + Date.now());
     };
-    document.getElementById('btn-start-25').onclick = () => genMissions(25);
-    document.getElementById('btn-start-60').onclick = () => genMissions(60);
+    document.getElementById('btn-start-25').onclick = () => startMissions(25);
+    document.getElementById('btn-start-60').onclick = () => startMissions(60);
     document.getElementById('btn-reset').onclick = () => { set(ref(db, 'players'), null); set(ref(db, 'gameStatus'), 'WAIT'); };
 
     // --- SYNC ---
     onValue(ref(db, 'missions'), s => missions = s.val() || []);
     onValue(ref(db, 'gameStatus'), s => { if(s.val()?.startsWith('START') && pData.id) { showScreen('scr-game'); renderTurn(); } });
-    onValue(ref(db, 'players'), s => {
-        const players = s.val() || {};
-        const grid = document.getElementById('army-grid'); grid.innerHTML = "";
-        const tbody = document.getElementById('monitor-body'); if(tbody) tbody.innerHTML = "";
-        Object.keys(players).forEach(id => {
-            const p = players[id];
-            const d = document.createElement('div'); d.className = 'dot active'; d.innerText = p.name.substring(0,2);
+    
+    onValue(ref(db, 'players'), snap => {
+        const players = snap.val() || {};
+        const pArray = Object.values(players).sort((a,b) => b.stability - a.stability);
+        
+        // Update Leaderboard
+        const lb = document.getElementById('leaderboard-list');
+        lb.innerHTML = pArray.slice(0, 40).map((p, i) => `
+            <div class="rank-item ${i<3?'top':''}">
+                <span>${i+1}. ${p.name.substring(0,12)}</span>
+                <span>${p.stability}%</span>
+            </div>
+        `).join('');
+
+        // Update Grid (40 Slots)
+        const grid = document.getElementById('army-grid');
+        grid.innerHTML = "";
+        const allIds = Object.keys(players);
+        for(let i=0; i<40; i++){
+            const d = document.createElement('div');
+            d.className = 'dot' + (allIds[i]?' active':'') + (allIds[i]===pData.id?' me':'');
+            d.innerText = allIds[i] ? players[allIds[i]].name.substring(0,2) : i+1;
             grid.appendChild(d);
-            if(tbody) {
-                const tr = `<tr><td>${p.name}</td><td>${p.cur}</td><td style="color:red">${p.tag}</td><td><button onclick="alert('${p.lastIntervention || 'None'}')">REL</button></td></tr>`;
-                tbody.innerHTML += tr;
-            }
-        });
+        }
+
+        // Update Admin Table
+        const tbody = document.getElementById('monitor-body');
+        if(tbody) tbody.innerHTML = pArray.map(p => `<tr><td>${p.name}</td><td>${p.cur}</td><td>${p.stability}%</td></tr>`).join('');
     });
 </script>
 </body>
