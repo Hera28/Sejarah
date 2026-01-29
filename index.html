@@ -2,105 +2,57 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>RUANGSEJARAH RPG v13 - Unified Command</title>
+    <title>RUANGSEJARAH</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Crimson+Text:wght@400;700&display=swap');
-        
-        :root { 
-            --ink: #003049; --paper: #fdf0d5; --gold: #c1121f; --wood: #669bbc;
-            --shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-        body { 
-            margin: 0; font-family: 'Crimson Text', serif; background: #121212; color: var(--ink);
-            line-height: 1.4; overflow-x: hidden;
-        }
-
-        header { 
-            background: var(--ink); color: white; padding: 1rem; text-align: center;
-            font-family: 'Special Elite'; border-bottom: 4px solid var(--gold);
-            position: sticky; top: 0; z-index: 100;
-        }
-
-        main { width: 100%; max-width: 900px; margin: 0 auto; padding: 1rem; }
-
-        .card { 
-            background: var(--paper); padding: 1.5rem; border: 3px solid var(--ink);
-            box-shadow: 8px 8px 0 var(--gold); border-radius: 4px; margin-bottom: 2rem;
-        }
-
-        /* RESPONSIVE TEXT */
-        h1 { font-size: clamp(1.2rem, 5vw, 1.8rem); margin: 0; }
-        h2 { font-family: 'Special Elite'; font-size: clamp(1.1rem, 4vw, 1.5rem); }
-        p { font-size: clamp(1rem, 3vw, 1.25rem); }
-
-        /* STATS BAR */
-        .stat-grid { 
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 1rem 0;
-        }
-        .stat-box { 
-            background: rgba(255,255,255,0.7); padding: 0.8rem; text-align: center; 
-            border: 2px solid var(--ink); border-radius: 4px;
-        }
+        :root { --ink: #003049; --paper: #fdf0d5; --gold: #c1121f; --danger: #d62828; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Crimson Text', serif; background: #121212; color: var(--ink); }
+        header { background: var(--ink); color: white; padding: 1rem; text-align: center; font-family: 'Special Elite'; border-bottom: 4px solid var(--gold); }
+        main { max-width: 900px; margin: 0 auto; padding: 1rem; }
+        .card { background: var(--paper); padding: 1.5rem; border: 3px solid var(--ink); box-shadow: 8px 8px 0 var(--gold); border-radius: 4px; margin-bottom: 2rem; }
+        .hidden { display: none !important; }
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1rem; }
+        .stat-box { background: rgba(255,255,255,0.7); padding: 0.8rem; text-align: center; border: 2px solid var(--ink); border-radius: 4px; }
         .stat-box b { font-size: 1.4rem; color: var(--gold); font-family: 'Special Elite'; }
-
-        /* INTERFACE ELEMENTS */
-        input, textarea { 
-            width: 100%; padding: 12px; margin: 10px 0; border: 2px solid var(--ink);
-            border-radius: 4px; font-size: 1rem; font-family: inherit;
-        }
-        
-        button { 
-            width: 100%; padding: 1rem; background: var(--ink); color: white;
-            border: none; border-radius: 4px; font-weight: bold; font-size: 1rem;
-            cursor: pointer; transition: 0.2s; touch-action: manipulation;
-        }
-        button:active { transform: scale(0.98); background: var(--gold); }
-
-        .opt-btn { 
-            background: white; color: var(--ink); text-align: left;
-            margin-bottom: 10px; border: 2px solid var(--ink); padding: 1rem;
-        }
-
-        /* ADMIN DASHBOARD */
-        .admin-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        table { width: 100%; border-collapse: collapse; background: white; font-size: 0.8rem; min-width: 600px; }
+        button { padding: 12px; background: var(--ink); color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 5px; width: 100%; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid var(--ink); border-radius: 4px; font-family: inherit; }
+        .opt-btn { background: white; color: var(--ink); text-align: left; border: 2px solid var(--ink); margin-bottom: 8px; font-weight: normal; }
+        .admin-scroll { overflow-x: auto; max-height: 500px; margin-top: 1rem; }
+        table { width: 100%; border-collapse: collapse; background: white; font-size: 0.85rem; min-width: 700px; }
         th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
         th { background: var(--ink); color: white; position: sticky; top: 0; }
-
-        .hidden { display: none !important; }
-        
-        @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
-        .loading-icon { font-size: 3rem; animation: pulse 1.5s infinite; text-align: center; }
+        .btn-kick { background: var(--danger); width: auto; font-size: 0.7rem; padding: 5px 10px; }
+        .btn-edit { background: #f39c12; width: auto; font-size: 0.7rem; padding: 5px 10px; margin-right: 5px; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>RUANGSEJARAH RPG v13</h1>
-    <div style="font-size: 0.7rem; letter-spacing: 1px;">SISTEM KOMANDO NASIONAL TERPADU</div>
+    <h1>RUANGSEJARAH</h1>
 </header>
 
 <main>
     <div id="scr-login" class="card">
         <h2 style="text-align:center;">Registrasi Komandan</h2>
-        <label>Identitas Lengkap:</label>
-        <input type="text" id="in-name" placeholder="Nama Komandan..." autocomplete="off">
-        <input type="text" id="in-class" placeholder="Divisi/Kelas..." autocomplete="off">
-        <button id="btn-reg">AKTIFKAN UNIT ⮕</button>
-        <p style="text-align:center; font-size: 0.8rem; margin-top: 2rem;">
-            <a href="#" id="link-admin" style="color:var(--gold); text-decoration:none;">Mode Guru (Otoritas Pusat)</a>
-        </p>
+        <input type="text" id="in-name" placeholder="Nama Lengkap...">
+        <input type="text" id="in-class" placeholder="Kelas...">
+        <button id="btn-reg">MASUK SIMULASI ⮕</button>
+        <p style="text-align:center;"><a href="#" id="link-admin" style="color:var(--gold); font-size:0.8rem; text-decoration:none;">Mode Guru</a></p>
     </div>
 
     <div id="scr-wait" class="card hidden">
-        <h2 style="text-align:center;">MENUNGGU SINKRONISASI</h2>
-        <div class="loading-icon">📡</div>
-        <p style="text-align:center;">Halo <b><span id="lbl-myname"></span></b>, Unit Anda sedang dalam antrean <b>40 Komandan</b>.</p>
-        <p style="text-align:center; font-style: italic;">Simulasi akan dimulai otomatis saat Guru memberikan instruksi.</p>
+        <h2 style="text-align:center;">WAITING ROOM</h2>
+        <div style="text-align:center; font-size: 3rem;">📡</div>
+        <p style="text-align:center;">Unit <b><span id="lbl-myname"></span></b> telah terhubung ke server.</p>
+        <p style="text-align:center; font-style: italic;">Menunggu instruksi Guru untuk memulai...</p>
+    </div>
+
+    <div id="scr-kicked" class="card hidden">
+        <h2 style="color:var(--danger); text-align:center;">AKSES DICABUT</h2>
+        <p style="text-align:center;">Anda telah dikeluarkan dari sesi oleh Guru.</p>
+        <button onclick="location.reload()">KEMBALI KE AWAL</button>
     </div>
 
     <div id="scr-game" class="card hidden">
@@ -109,29 +61,26 @@
             <div class="stat-box">SUPLAI<br><b id="v-l">50</b></div>
             <div class="stat-box">DUKUNGAN<br><b id="v-s">50</b></div>
         </div>
-        <h3 id="ev-title" style="color:var(--gold); font-family:'Special Elite'; margin-top:0;"></h3>
+        <h3 id="ev-title" style="color:var(--gold); font-family:'Special Elite';"></h3>
         <p id="ev-desc"></p>
         <div id="opt-container"></div>
-        
         <div id="ref-box" class="hidden">
-            <hr>
-            <p><b>Laporan Analisis Tim:</b></p>
-            <textarea id="ref-input" rows="3" placeholder="Jelaskan alasan strategis pilihan Anda..."></textarea>
-            <button id="btn-submit-turn">KIRIM LAPORAN KE PUSAT ⮕</button>
+            <hr><p><b>Alasan Strategis:</b></p>
+            <textarea id="ref-input" rows="3" placeholder="Jelaskan pilihan Anda..."></textarea>
+            <button id="btn-submit-turn">KIRIM DATA ⮕</button>
         </div>
     </div>
 
     <div id="scr-admin" class="card hidden">
-        <h2>Intelligence Dashboard (Guru)</h2>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom: 1rem;">
-            <button id="btn-start-global" style="background:#2d6a4f;">MULAI SEMUA</button>
-            <button id="btn-reset-global" style="background:var(--gold);">RESET DATA</button>
+        <h2>Panel Guru</h2>
+        <div style="display:flex; gap:10px;">
+            <button id="btn-start-global" style="background:#2d6a4f;">MULAI GAME</button>
+            <button id="btn-reset-global" style="background:var(--gold);">RESET SEMUA</button>
         </div>
+        
         <div class="admin-scroll">
             <table>
-                <thead>
-                    <tr><th>Komandan</th><th>Kelas</th><th>M/L/S</th><th>Progres</th><th>Analisis Terakhir</th></tr>
-                </thead>
+                <thead><tr><th>Nama</th><th>Progres</th><th>Statistik</th><th>Moderasi</th></tr></thead>
                 <tbody id="monitor-body"></tbody>
             </table>
         </div>
@@ -155,108 +104,94 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    const timeline = [
-        { t:"1808", title:"Jalan Raya Pos", desc:"Daendels memerintahkan pembangunan Anyer-Panarukan. Rakyat dipaksa kerja rodi tanpa henti.", options:[{text:"Gerilya Sabotase",m:20,l:-15,s:10},{text:"Kooperasi Terpaksa",m:-10,l:20,s:0},{text:"Evakuasi ke Hutan",m:5,l:-5,s:0}]},
-        { t:"1830", title:"Tanam Paksa", desc:"Setiap desa wajib menyisihkan 20% lahan untuk tanaman ekspor Belanda.", options:[{text:"Bakar Gudang Tebu",m:25,l:-20,s:15},{text:"Suap Pejabat Desa",m:-5,l:15,s:-10},{text:"Tanam Padi Rahasia",m:10,l:10,s:5}]},
-        // ... (Tambahkan 16 misi lainnya di sini sesuai v12)
-        { t:"1998", title:"Reformasi", desc:"Gelombang demonstrasi menuntut Soeharto mundur. Ekonomi sedang runtuh.", options:[{text:"Dukung Gerakan Moral",m:30,l:-10,s:30},{text:"Amankan Stok Pangan",m:-5,l:30,s:-5}]}
-    ];
+    let pData = { id:"", name:"", m:50, l:50, s:50, cur:0 };
+    let missions = [];
 
-    let pData = { name:"", m:50, l:50, s:50, cur:0, lastRef: "" };
-
-    function showScreen(id) {
+    const showScreen = (id) => {
         document.querySelectorAll('.card').forEach(s => s.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
-        window.scrollTo(0,0);
-    }
+    };
 
-    // REGISTRASI
+    // LOGIKA MURID
     document.getElementById('btn-reg').onclick = () => {
-        pData.name = document.getElementById('in-name').value.trim();
-        const kls = document.getElementById('in-class').value.trim();
-        if(!pData.name || !kls) return alert("Mohon lengkapi data!");
-        
-        set(ref(db, 'players/' + pData.name), { name: pData.name, kelas: kls, m:50, l:50, s:50, cur:0, lastRef: "Siap bertugas" });
+        const n = document.getElementById('in-name').value.trim();
+        if(!n) return alert("Nama wajib diisi!");
+        pData.id = n.replace(/\s+/g, '_'); // ID tanpa spasi
+        pData.name = n;
+        set(ref(db, 'players/' + pData.id), { name: pData.name, m:50, l:50, s:50, cur:0, status: 'ALIVE' });
         document.getElementById('lbl-myname').innerText = pData.name;
         showScreen('scr-wait');
     };
 
-    // GAME ENGINE
-    function loadTurn() {
-        if(pData.cur >= timeline.length) {
-            document.getElementById('scr-game').innerHTML = "<h2 style='text-align:center;'>SIMULASI SELESAI</h2><p style='text-align:center;'>Laporan akhir Anda telah diarsipkan oleh Pusat Komando.</p>";
+    const loadTurn = () => {
+        if(pData.cur >= missions.length) {
+            document.getElementById('scr-game').innerHTML = "<h2 style='text-align:center;'>MISI SELESAI</h2><p style='text-align:center;'>Anda telah menyelesaikan seluruh sejarah.</p>";
             return;
         }
-        const ev = timeline[pData.cur];
+        const ev = missions[pData.cur];
         document.getElementById('ev-title').innerText = `${ev.t}: ${ev.title}`;
         document.getElementById('ev-desc').innerText = ev.desc;
         const cont = document.getElementById('opt-container');
         cont.innerHTML = "";
-        
         ev.options.forEach(o => {
             const b = document.createElement('button');
-            b.className = 'opt-btn';
-            b.innerText = o.text;
+            b.className = 'opt-btn'; b.innerText = o.text;
             b.onclick = () => {
-                pData.m += o.m; pData.l += o.l; pData.s += o.s;
-                document.getElementById('v-m').innerText = pData.m;
-                document.getElementById('v-l').innerText = pData.l;
-                document.getElementById('v-s').innerText = pData.s;
+                pData.m += parseInt(o.m); pData.l += parseInt(o.l); pData.s += parseInt(o.s);
+                ['v-m','v-l','v-s'].forEach((id,i) => document.getElementById(id).innerText = [pData.m,pData.l,pData.s][i]);
                 cont.innerHTML = "";
                 document.getElementById('ref-box').classList.remove('hidden');
             };
             cont.appendChild(b);
         });
-    }
+    };
 
     document.getElementById('btn-submit-turn').onclick = () => {
-        const refVal = document.getElementById('ref-input').value;
-        if(!refVal) return alert("Berikan analisis strategis Anda!");
-        
         pData.cur++;
-        update(ref(db, 'players/' + pData.name), { 
-            m: pData.m, l: pData.l, s: pData.s, cur: pData.cur, lastRef: refVal 
-        });
-        
+        update(ref(db, 'players/' + pData.id), { m: pData.m, l: pData.l, s: pData.s, cur: pData.cur, lastRef: document.getElementById('ref-input').value });
         document.getElementById('ref-input').value = "";
         document.getElementById('ref-box').classList.add('hidden');
         loadTurn();
     };
 
-    // ADMIN CONTROLS
-    document.getElementById('link-admin').onclick = (e) => {
-        e.preventDefault();
-        if(prompt("Sandi Otoritas:") === "GuruSejarah") showScreen('scr-admin');
-    };
-    
+    // LOGIKA ADMIN
+    document.getElementById('link-admin').onclick = () => { if(prompt("Sandi:") === "GuruSejarah") showScreen('scr-admin'); };
     document.getElementById('btn-start-global').onclick = () => update(ref(db, '/'), { gameStatus: 'PLAYING' });
-    document.getElementById('btn-reset-global').onclick = () => {
-        if(confirm("Hapus semua data kelas?")) {
-            set(ref(db, '/'), { gameStatus: 'WAITING', players: {} });
-            location.reload();
-        }
+    document.getElementById('btn-reset-global').onclick = () => { if(confirm("Reset semua?")) set(ref(db, '/'), { gameStatus: 'WAITING', players: {} }); };
+
+    window.kickPlayer = (id) => { if(confirm("Kick murid ini?")) update(ref(db, 'players/' + id), { status: 'KICKED' }); };
+    window.editPlayer = (id) => { 
+        const n = prompt("Ganti Nama:", id); 
+        if(n) update(ref(db, 'players/' + id), { name: n }); 
     };
 
-    // SYNC LISTENERS
-    onValue(ref(db, 'gameStatus'), (snap) => {
+    // SYNC
+    onValue(ref(db, 'missions'), snap => { if(snap.exists()) missions = snap.val(); });
+    onValue(ref(db, 'gameStatus'), snap => {
         if(snap.val() === 'PLAYING' && !document.getElementById('scr-wait').classList.contains('hidden')) {
             showScreen('scr-game'); loadTurn();
         }
     });
-
-    onValue(ref(db, 'players'), (snap) => {
-        const players = snap.val();
+    onValue(ref(db, 'players'), snap => {
+        const players = snap.val(); if(!players) return;
+        if(pData.id && players[pData.id]) {
+            if(players[pData.id].status === 'KICKED') showScreen('scr-kicked');
+            document.getElementById('lbl-myname').innerText = players[pData.id].name;
+        }
         const tbody = document.getElementById('monitor-body');
-        if(!tbody || !players) return;
-        tbody.innerHTML = Object.values(players).map(p => `
-            <tr>
-                <td><b>${p.name}</b></td>
-                <td>${p.kelas}</td>
-                <td>${p.m}|${p.l}|${p.s}</td>
-                <td>Misi ${p.cur}</td>
-                <td style="color:#666; font-style:italic">"${p.lastRef}"</td>
-            </tr>
-        `).join('');
+        if(tbody) {
+            tbody.innerHTML = Object.keys(players).map(id => `
+                <tr>
+                    <td>${players[id].name}</td>
+                    <td>Misi ${players[id].cur}</td>
+                    <td>${players[id].m}/${players[id].l}/${players[id].s}</td>
+                    <td>
+                        <button class="btn-edit" onclick="editPlayer('${id}')">Edit</button>
+                        <button class="btn-kick" onclick="kickPlayer('${id}')">Kick</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
     });
 </script>
 </body>
