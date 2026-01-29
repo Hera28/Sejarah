@@ -2,358 +2,385 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>RuangSejarah RPG - Perjuangan Wilayah</title>
+  <title>RuangSejarah RPG v3 - Peta Strategis</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
-      --primary: #064e3b;
-      --accent: #059669;
-      --bg: #f0fdf4;
-      --danger: #be123c;
-      --gold: #d97706;
+      --primary: #1a2e1a;
+      --paper: #f4ece0;
+      --ink: #2c1e14;
+      --accent: #b22222;
+      --gold: #d4af37;
     }
     body {
       margin: 0;
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: var(--bg);
-      color: #1f2937;
+      font-family: 'Georgia', serif;
+      background: #2c3e50;
+      color: var(--ink);
     }
     header {
       background: var(--primary);
-      color: white;
-      padding: 30px 20px;
+      color: var(--gold);
+      padding: 20px;
       text-align: center;
-      border-bottom: 5px solid var(--gold);
+      border-bottom: 4px solid var(--gold);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
-    main { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+    main { max-width: 1100px; margin: 20px auto; padding: 0 15px; }
+    
     .card {
-      background: white;
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-      border: 1px solid #e5e7eb;
+      background: var(--paper);
+      border: 2px solid #dcd1c1;
+      border-radius: 8px;
+      padding: 25px;
+      box-shadow: inset 0 0 50px rgba(0,0,0,0.1), 10px 10px 20px rgba(0,0,0,0.3);
+      position: relative;
     }
-    .stats-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      margin: 20px 0;
+
+    /* PETA VISUAL */
+    .map-container {
+      width: 100%;
+      height: 250px;
+      background: #a3c1ad;
+      border: 5px solid var(--primary);
+      margin: 15px 0;
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
     }
-    .stat-box {
-      padding: 15px;
-      border-radius: 15px;
-      text-align: center;
-      background: #f8fafc;
-      border: 2px solid #f1f5f9;
+    .island-shape {
+      position: absolute;
+      background: #e3d5b8;
+      border: 2px solid #8b7355;
+      border-radius: 50%;
+    }
+    .marker {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #444;
+      border: 2px solid white;
+      border-radius: 50%;
+      cursor: pointer;
       transition: 0.3s;
     }
-    .stat-box b { font-size: 1.5rem; display: block; }
-    .stat-alert { font-size: 0.75rem; font-weight: bold; margin-top: 5px; }
+    .marker:hover { transform: scale(1.5); background: var(--accent); }
+    .marker.active { background: var(--accent); box-shadow: 0 0 15px var(--accent); width: 16px; height: 16px; z-index: 10; }
+    .marker-label { position: absolute; font-size: 10px; font-weight: bold; top: 18px; left: -10px; width: 60px; }
 
-    .map-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 10px;
-      margin-bottom: 25px;
-    }
-    .city-node {
-      padding: 15px;
-      border-radius: 12px;
+    /* STATS */
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 15px 0; }
+    .stat-card {
+      padding: 10px;
       text-align: center;
-      cursor: pointer;
-      background: #64748b;
-      color: white;
-      font-weight: bold;
-      border: 3px solid transparent;
+      border: 2px solid #8b7355;
+      background: rgba(255,255,255,0.5);
     }
-    .city-node.active { border-color: var(--gold); background: var(--accent) !important; transform: scale(1.05); }
-    .city-node:hover { opacity: 0.9; }
+    .stat-card b { font-size: 20px; color: var(--accent); }
+    .threshold-msg { font-size: 11px; font-style: italic; min-height: 15px; color: #555; }
 
+    /* UI ELEMENTS */
     button {
-      padding: 14px 24px;
-      border: none;
-      border-radius: 12px;
+      padding: 12px 24px;
       background: var(--primary);
-      color: white;
-      font-weight: bold;
+      color: var(--gold);
+      border: 1px solid var(--gold);
       cursor: pointer;
-      font-size: 1rem;
+      font-weight: bold;
+      text-transform: uppercase;
     }
-    button.secondary { background: #4b5563; }
-    .option-card {
-      border: 2px solid #f1f5f9;
+    button:hover { background: #2d4d2d; }
+    .option-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
       padding: 15px;
-      border-radius: 12px;
-      margin-top: 10px;
+      margin: 10px 0;
+      background: #fff;
+      border: 1px solid #ccc;
       cursor: pointer;
       transition: 0.2s;
     }
-    .option-card:hover { border-color: var(--accent); background: #f0fdf4; }
+    .option-btn:hover { background: #fdf5e6; border-color: var(--accent); }
     .hidden { display: none; }
-    textarea { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #cbd5e1; margin-top: 10px; box-sizing: border-box; }
+    textarea { width: 100%; padding: 10px; border: 1px solid #8b7355; background: #fffcf5; box-sizing: border-box; }
     
-    /* City Colors */
-    .batavia { background: #ca8a04; } .yogya { background: #166534; } .surabaya { background: #991b1b; }
-    .bandung { background: #1e40af; } .medan { background: #5b21b6; } .manado { background: #0891b2; }
+    #admin-settings {
+      background: #e8f4f8;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #aad;
+    }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>🏛️ RuangSejarah RPG: Perjuangan Wilayah</h1>
-  <p>Pilih Basis Perjuanganmu dan Tentukan Nasib Bangsa</p>
+  <h1>🏛️ RUANGSEJARAH RPG v3</h1>
+  <p>Strategi Naratif Indonesia (1800–2000)</p>
 </header>
 
 <main>
   <div id="home" class="card">
-    <h2>Selamat Datang, Komandan</h2>
-    <p>Silakan masuk sebagai murid untuk memulai simulasi atau guru untuk melihat rekap.</p>
-    <button onclick="showTeamSelection()">🧑‍🎓 Mulai Simulasi (Murid)</button>
-    <button class="secondary" onclick="promptAdmin()">👩‍🏫 Panel Guru</button>
-  </div>
-
-  <div id="teamSelect" class="card hidden">
-    <h2>Pilih Basis Perjuangan (Tim)</h2>
-    <p>Setiap wilayah memiliki tantangan dan event unik nantinya.</p>
-    <div class="map-grid" id="teamGrid"></div>
-    <div id="teamInfo" style="margin-top:20px; font-style: italic;"></div>
-    <button id="btnConfirmTeam" class="hidden" onclick="startSim()">Konfirmasi & Mulai Perjuangan ⮕</button>
-  </div>
-
-  <div id="gameScreen" class="card hidden">
-    <div id="statusBadges" style="margin-bottom: 10px;"></div>
-    <h2 id="evTitle"></h2>
-    <p id="evDesc"></p>
-
-    <div class="stats-container">
-      <div class="stat-box" id="box-moral">🧠 Moral<br><b id="st-moral">50</b><div class="stat-alert" id="msg-moral"></div></div>
-      <div class="stat-box" id="box-logistik">📦 Logistik<br><b id="st-logistik">50</b><div class="stat-alert" id="msg-logistik"></div></div>
-      <div class="stat-box" id="box-support">🌍 Dukungan<br><b id="st-support">50</b><div class="stat-alert" id="msg-support"></div></div>
-    </div>
-
-    <div id="mapVisual" class="map-grid"></div>
-
-    <div id="optionsArea"></div>
-
-    <div id="reflectionArea" class="hidden">
-      <h3>✍️ Lembar Refleksi Strategi</h3>
-      <textarea id="refInput" rows="4" placeholder="Jelaskan mengapa pilihan ini penting bagi tim Anda..."></textarea>
-      <button onclick="nextStep()">Kirim & Lanjutkan ⮕</button>
+    <h2 style="text-align:center">Pilih Peran</h2>
+    <div style="display:flex; justify-content:center; gap:20px; padding:40px 0;">
+      <button onclick="initGame()">🧑‍🎓 Masuk Sebagai Murid</button>
+      <button style="background:#555" onclick="authAdmin()">👩‍🏫 Panel Guru</button>
     </div>
   </div>
 
-  <div id="adminPanel" class="card hidden">
-    <h2>📊 Rekapitulasi Jawaban Murid</h2>
-    <div id="adminContent"></div>
-    <button class="secondary" onclick="location.reload()">Keluar</button>
+  <div id="team-selection" class="card hidden">
+    <h2>Pilih Wilayah Perjuangan</h2>
+    <p>Klik titik di peta untuk memilih basis tim Anda:</p>
+    <div class="map-container" id="selection-map"></div>
+    <div id="team-detail" style="margin-top:15px; font-weight:bold; color:var(--accent)"></div>
+    <div style="margin-top:20px">
+      <button id="start-btn" class="hidden" onclick="beginSimulation()">Konfirmasi Wilayah ⮕</button>
+    </div>
+  </div>
+
+  <div id="sim-screen" class="card hidden">
+    <div class="stats-row">
+      <div class="stat-card">🧠 Moral<br><b id="st-moral">50</b><div class="threshold-msg" id="msg-moral"></div></div>
+      <div class="stat-card">📦 Logistik<br><b id="st-logistik">50</b><div class="threshold-msg" id="msg-logistik"></div></div>
+      <div class="stat-card">🌍 Dukungan<br><b id="st-support">50</b><div class="threshold-msg" id="msg-support"></div></div>
+    </div>
+
+    <div class="map-container" id="sim-map"></div>
+
+    <div id="event-box">
+      <h3 id="ev-title"></h3>
+      <p id="ev-desc"></p>
+      <div id="options-container"></div>
+    </div>
+
+    <div id="reflection-box" class="hidden">
+      <hr>
+      <p><strong>Kenapa Anda mengambil keputusan ini?</strong> (Jelaskan strategi Anda)</p>
+      <textarea id="ref-text" rows="3"></textarea>
+      <button style="margin-top:10px" onclick="commitTurn()">Simpan & Lanjut Peristiwa ⮕</button>
+    </div>
+  </div>
+
+  <div id="admin-panel" class="card hidden">
+    <h2>👩‍🏫 Dashboard Guru</h2>
+    <div id="admin-settings">
+      <strong>⚙️ Pengaturan Global:</strong><br>
+      <label><input type="checkbox" id="mode-krisis"> <b>Mode Krisis:</b> (Semua pengurangan stat +5 lebih berat)</label><br>
+      <label><input type="checkbox" id="mode-makmur"> <b>Mode Makmur:</b> (Mulai dengan Stat +20)</label>
+    </div>
+    <div id="rekap-data" style="max-height:300px; overflow-y:auto; background:white; padding:10px; border:1px solid #ccc;"></div>
+    <br>
+    <button onclick="location.reload()">Keluar Panel</button>
   </div>
 </main>
 
 <script>
-// --- DATA ---
-const cities = [
-  { id: 'batavia', name: 'Batavia', class: 'batavia', desc: 'Pusat politik dan birokrasi. Bonus: Akses informasi cepat.' },
-  { id: 'yogya', name: 'Yogyakarta', class: 'yogya', desc: 'Ibukota perjuangan. Bonus: Semangat moral tinggi.' },
-  { id: 'surabaya', name: 'Surabaya', class: 'surabaya', desc: 'Kota pahlawan. Bonus: Kekuatan tempur rakyat.' },
-  { id: 'bandung', name: 'Bandung', class: 'bandung', desc: 'Lautan api. Bonus: Taktik bumi hangus.' },
-  { id: 'medan', name: 'Medan', class: 'medan', desc: 'Front Area. Bonus: Ketahanan wilayah utara.' },
-  { id: 'manado', name: 'Manado', class: 'manado', desc: 'Penjaga Timur. Bonus: Dukungan maritim & udara.' }
+// --- CONFIG DATA ---
+const teamList = [
+  { id:'batavia', name:'Batavia', x:25, y:70, desc:'Pusat birokrasi. Bonus: Support Dunia +10.' },
+  { id:'yogya', name:'Yogyakarta', x:35, y:75, desc:'Kota Perjuangan. Bonus: Moral +10.' },
+  { id:'surabaya', name:'Surabaya', x:45, y:75, desc:'Pusat Militansi. Bonus: Logistik +10.' },
+  { id:'bandung', name:'Bandung', x:28, y:75, desc:'Pusat Intelektual. Bonus: Diplomasi Fleksibel.' },
+  { id:'medan', name:'Medan', x:10, y:30, desc:'Gerbang Sumatera. Bonus: Ketahanan Wilayah.' },
+  { id:'manado', name:'Manado', x:75, y:35, desc:'Benteng Timur. Bonus: Kekuatan Maritim.' }
 ];
 
-const generalEvents = [
-  { title: "Perang Diponegoro (1825)", desc: "Pihak kolonial melanggar batas tanah leluhur. Rakyat menanti komando Anda.", options: [
-    { text: "Gerilya Hutan", effect: { m: 10, l: -10, s: 5 }, out: "Belanda frustasi, tapi suplai menipis." },
-    { text: "Diplomasi Keraton", effect: { m: -5, l: 5, s: 15 }, out: "Dukungan luar negeri naik, tapi rakyat merasa kecewa." }
+const mainEvents = [
+  { id:1, title:"Perang Diponegoro (1825)", desc:"Belanda membangun jalan di atas makam leluhur. Apa sikap tim Anda?", options:[
+    { text:"Perang Gerilya", m:15, l:-10, s:5, out:"Rakyat bersatu, tapi sumber daya menipis." },
+    { text:"Diplomasi Terbuka", m:-10, l:5, s:15, out:"Dunia luar simpati, tapi moral rakyat jatuh." }
   ]},
-  { title: "Tanam Paksa (1830)", desc: "Rakyat dipaksa menanam kopi dan nila. Kelaparan mengancam.", options: [
-    { text: "Sembunyikan Hasil Panen", effect: { m: 15, l: 5, s: -10 }, out: "Rakyat kenyang, tapi hukuman kolonial kejam." },
-    { text: "Ajukan Petisi ke Ratu Belanda", effect: { m: -5, l: -5, s: 20 }, out: "Dunia mulai mendengar kekejaman di Hindia." }
+  { id:2, title:"Era Tanam Paksa", desc:"Pemerintah Kolonial mewajibkan 20% lahan untuk ekspor.", options:[
+    { text:"Sabotase Produksi", m:10, l:-5, s:-10, out:"Rakyat tidak kelaparan, tapi patroli diperketat." },
+    { text:"Ikuti Prosedur & Kumpulkan Dana", m:-5, l:15, s:5, out:"Logistik meningkat, namun penderitaan fisik berat." }
   ]},
-  { title: "Sumpah Pemuda (1928)", desc: "Kongres pemuda sedang berlangsung. Apa pesan utama tim Anda?", options: [
-    { text: "Satu Bahasa, Satu Bangsa", effect: { m: 25, l: 0, s: 10 }, out: "Persatuan meledak! Identitas nasional terbentuk." },
-    { text: "Otonomi Wilayah Terlebih Dahulu", effect: { m: 5, l: 10, s: -5 }, out: "Logistik lokal aman, tapi persatuan agak rapuh." }
+  { id:3, title:"Sumpah Pemuda (1928)", desc:"Kongres berlangsung. Fokus utama tim Anda adalah...", options:[
+    { text:"Persatuan Identitas Nasional", m:20, l:0, s:10, out:"Lahir kesadaran baru sebagai bangsa Indonesia." },
+    { text:"Fokus Kemajuan Ekonomi Lokal", m:5, l:10, s:-5, out:"Ekonomi daerah kuat, tapi nasionalisme melambat." }
   ]}
 ];
 
-const teamSpecialEvents = {
-  'batavia': { title: "Spesial Batavia: Volksraad", desc: "Anda memiliki kursi di Dewan Rakyat. Gunakan untuk politik?", options: [
-    { text: "Interupsi Kebijakan Pajak", effect: { m: 10, l: 10, s: 5 }, out: "Belanda tertekan secara legal." },
-    { text: "Boikot Dewan", effect: { m: 15, l: -5, s: 10 }, out: "Rakyat bangga, posisi politik hilang." }
+const specialEvents = {
+  'manado': { title:"Spesial Manado: Peristiwa Merah Putih", desc:"Tentara NICA mengancam kedaulatan di Sulut.", options:[
+    { text:"Rebut Tangsi Putih", m:20, l:5, s:-5, out:"Manado membuktikan kesetiaan pada RI!" },
+    { text:"Aksi Demonstrasi Massa", m:10, l:-5, s:15, out:"Dunia mengecam tindakan NICA." }
   ]},
-  'manado': { title: "Spesial Manado: Peristiwa Merah Putih", desc: "Tentara NICA mencoba menurunkan bendera di Tangsi Putih.", options: [
-    { text: "Serbu Tangsi Putih", effect: { m: 20, l: 5, s: -5 }, out: "Bendera berkibar! Semangat Timur membara." },
-    { text: "Negosiasi Penyerahan Senjata", effect: { m: 5, l: 15, s: 10 }, out: "Senjata didapat tanpa pertumpahan darah." }
+  'batavia': { title:"Spesial Batavia: Aksi Mahasiswa", desc:"Terjadi demonstrasi besar di jantung ibukota.", options:[
+    { text:"Mobilisasi Massa", m:15, l:-10, s:10, out:"Pusat pemerintahan terguncang." },
+    { text:"Negosiasi di Belakang Layar", m:5, l:10, s:-5, out:"Stabilitas terjaga, perubahan lambat." }
   ]}
-  // Kota lain bisa ditambahkan polanya sama
+  // Tambahan kota lainnya bisa disisipkan di sini
 };
 
-// --- LOGIC ---
-let state = {
+// --- GAME LOGIC ---
+let gameData = {
   team: null,
   moral: 50,
   logistik: 50,
   support: 50,
+  currentIdx: 0,
   logs: [],
-  currentEv: 0,
-  isSpecialDone: false
+  isSpecialTriggered: false,
+  specialAt: Math.floor(Math.random() * 2) + 1 // Muncul setelah event ke-1 atau ke-2
 };
 
-function showTeamSelection() {
+function drawMap(containerId, isActive = false) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '<div class="island-shape" style="width:200px; height:80px; top:60%; left:10%;"></div>' + 
+                        '<div class="island-shape" style="width:100px; height:150px; top:10%; left:5%;"></div>' +
+                        '<div class="island-shape" style="width:80px; height:80px; top:30%; left:70%;"></div>';
+  
+  teamList.forEach(t => {
+    const marker = document.createElement('div');
+    marker.className = `marker ${isActive && gameData.team === t.id ? 'active' : ''}`;
+    marker.style.left = t.x + "%";
+    marker.style.top = t.y + "%";
+    marker.innerHTML = `<div class="marker-label">${t.name}</div>`;
+    
+    if(!isActive) {
+      marker.onclick = () => {
+        document.querySelectorAll('.marker').forEach(m => m.classList.remove('active'));
+        marker.classList.add('active');
+        gameData.team = t.id;
+        document.getElementById('team-detail').innerText = `${t.name}: ${t.desc}`;
+        document.getElementById('start-btn').classList.remove('hidden');
+      };
+    }
+    container.appendChild(marker);
+  });
+}
+
+function initGame() {
   document.getElementById('home').classList.add('hidden');
-  document.getElementById('teamSelect').classList.remove('hidden');
-  const grid = document.getElementById('teamGrid');
-  cities.forEach(c => {
-    const div = document.createElement('div');
-    div.className = `city-node ${c.class}`;
-    div.innerText = c.name;
-    div.onclick = () => {
-      document.querySelectorAll('.city-node').forEach(n => n.classList.remove('active'));
-      div.classList.add('active');
-      state.team = c.id;
-      document.getElementById('teamInfo').innerText = c.desc;
-      document.getElementById('btnConfirmTeam').classList.remove('hidden');
-    };
-    grid.appendChild(div);
-  });
+  document.getElementById('team-selection').classList.remove('hidden');
+  drawMap('selection-map');
 }
 
-function startSim() {
-  document.getElementById('teamSelect').classList.add('hidden');
-  document.getElementById('gameScreen').classList.remove('hidden');
-  renderMap();
-  loadEvent();
+function beginSimulation() {
+  // Cek Admin Settings
+  if(document.getElementById('mode-makmur').checked) {
+    gameData.moral = 70; gameData.logistik = 70; gameData.support = 70;
+  }
+  
+  document.getElementById('team-selection').classList.add('hidden');
+  document.getElementById('sim-screen').classList.remove('hidden');
+  updateUI();
+  nextEvent();
 }
 
-function renderMap() {
-  const map = document.getElementById('mapVisual');
-  map.innerHTML = '';
-  cities.forEach(c => {
-    const div = document.createElement('div');
-    div.className = `city-node ${c.class} ${state.team === c.id ? 'active' : ''}`;
-    div.innerText = c.name;
-    map.appendChild(div);
-  });
-}
-
-function loadEvent() {
+function nextEvent() {
   let ev;
-  // Cek apakah ada event spesial tim di awal
-  if (!state.isSpecialDone && teamSpecialEvents[state.team]) {
-    ev = teamSpecialEvents[state.team];
-    state.isSpecialDone = true;
-  } else if (state.currentEv < generalEvents.length) {
-    ev = generalEvents[state.currentEv];
+  
+  // Logic Random Special Event
+  if (!gameData.isSpecialTriggered && gameData.currentIdx === gameData.specialAt && specialEvents[gameData.team]) {
+    ev = specialEvents[gameData.team];
+    gameData.isSpecialTriggered = true;
+  } else if (gameData.currentIdx < mainEvents.length) {
+    ev = mainEvents[gameData.currentIdx];
+    gameData.currentIdx++;
   } else {
     finishGame();
     return;
   }
 
-  document.getElementById('evTitle').innerText = ev.title;
-  document.getElementById('evDesc').innerText = ev.desc;
-  document.getElementById('optionsArea').innerHTML = '';
-  document.getElementById('reflectionArea').classList.add('hidden');
+  renderEvent(ev);
+}
 
-  ev.options.forEach((o, i) => {
-    const btn = document.createElement('div');
-    btn.className = 'option-card';
-    btn.innerHTML = `<strong>${o.text}</strong>`;
-    btn.onclick = () => selectOption(o);
-    document.getElementById('optionsArea').appendChild(btn);
+function renderEvent(ev) {
+  document.getElementById('ev-title').innerText = ev.title;
+  document.getElementById('ev-desc').innerText = ev.desc;
+  document.getElementById('options-container').innerHTML = '';
+  document.getElementById('reflection-box').classList.add('hidden');
+  document.getElementById('ref-text').value = '';
+
+  ev.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<b>${opt.text}</b>`;
+    btn.onclick = () => selectOption(opt);
+    document.getElementById('options-container').appendChild(btn);
   });
+  drawMap('sim-map', true);
 }
 
 function selectOption(opt) {
-  state.moral += opt.effect.m;
-  state.logistik += opt.effect.l;
-  state.support += opt.effect.s;
+  let krisis = document.getElementById('mode-krisis').checked ? 5 : 0;
   
-  document.getElementById('evDesc').innerHTML = `💡 <b>Hasil:</b> ${opt.out}`;
-  document.getElementById('optionsArea').innerHTML = '';
-  document.getElementById('reflectionArea').classList.remove('hidden');
+  // Hitung Stat
+  gameData.moral += (opt.m < 0 ? opt.m - krisis : opt.m);
+  gameData.logistik += (opt.l < 0 ? opt.l - krisis : opt.l);
+  gameData.support += (opt.s < 0 ? opt.s - krisis : opt.s);
+
+  document.getElementById('ev-desc').innerHTML = `💡 <b>HASIL:</b> ${opt.out}`;
+  document.getElementById('options-container').innerHTML = '';
+  document.getElementById('reflection-box').classList.remove('hidden');
   
-  state.lastChoice = opt.text;
-  updateStatsUI();
+  gameData.lastTemp = { title: document.getElementById('ev-title').innerText, choice: opt.text };
+  updateUI();
 }
 
-function updateStatsUI() {
-  const keys = ['moral', 'logistik', 'support'];
-  keys.forEach(k => {
-    const val = state[k];
-    const el = document.getElementById(`st-${k}`);
-    const msg = document.getElementById(`msg-${k}`);
-    const box = document.getElementById(`box-${k}`);
-    el.innerText = val;
+function commitTurn() {
+  const ref = document.getElementById('ref-text').value;
+  if(ref.length < 5) return alert("Berikan refleksi singkat!");
 
-    // Logic Threshold
-    if (val <= 30) {
-      msg.innerText = "⚠️ KRITIS: Rakyat mulai menyerah!";
-      msg.style.color = "red";
-      box.style.borderColor = "red";
-    } else if (val >= 100) {
-      msg.innerText = "🌟 LEGENDARIS: Kekuatan Tak Terbendung!";
-      msg.style.color = "green";
-      box.style.borderColor = "gold";
-    } else {
-      msg.innerText = "";
-      box.style.borderColor = "#f1f5f9";
-    }
+  gameData.logs.push({
+    event: gameData.lastTemp.title,
+    choice: gameData.lastTemp.choice,
+    reflection: ref
   });
+
+  // Simpan permanen ke localStorage agar Guru bisa lihat
+  let history = JSON.parse(localStorage.getItem('sejarah_v3') || "[]");
+  history.push({ team: gameData.team, time: new Date().toLocaleTimeString(), data: gameData.logs });
+  localStorage.setItem('sejarah_v3', JSON.stringify(history));
+
+  nextEvent();
 }
 
-function nextStep() {
-  const ref = document.getElementById('refInput').value;
-  if(ref.length < 10) return alert("Berikan refleksi yang lebih panjang.");
-  
-  state.logs.push({
-    ev: document.getElementById('evTitle').innerText,
-    choice: state.lastChoice,
-    ref: ref,
-    stats: {m: state.moral, l: state.logistik, s: state.support}
+function updateUI() {
+  const stats = ['moral', 'logistik', 'support'];
+  stats.forEach(s => {
+    const val = gameData[s];
+    document.getElementById(`st-${s}`).innerText = val;
+    const msg = document.getElementById(`msg-${s}`);
+    
+    if(val <= 30) msg.innerText = "⚠️ KRISIS!";
+    else if(val >= 100) msg.innerText = "🌟 LEGENDARIS!";
+    else msg.innerText = "";
   });
-
-  // Simpan ke localstorage untuk guru
-  let allData = JSON.parse(localStorage.getItem('ruangSejarah_db') || "[]");
-  allData.push({team: state.team, logs: state.logs});
-  localStorage.setItem('ruangSejarah_db', JSON.stringify(allData));
-
-  state.currentEv++;
-  loadEvent();
 }
 
 function finishGame() {
-  document.getElementById('evTitle').innerText = "🏁 Perjuangan Selesai";
-  document.getElementById('evDesc').innerText = `Tim ${state.team.toUpperCase()} telah menyelesaikan simulasi. Bagaimana nasib Indonesia di tanganmu?`;
-  document.getElementById('optionsArea').innerHTML = `<button onclick="location.reload()">Main Lagi</button>`;
+  document.getElementById('event-box').innerHTML = `<h3>🏁 Simulasi Selesai!</h3><p>Anda telah mengukir sejarah dengan tim ${gameData.team.toUpperCase()}. Skor Akhir - Moral: ${gameData.moral}, Logistik: ${gameData.logistik}, Support: ${gameData.support}.</p>`;
+  document.getElementById('reflection-box').innerHTML = '<button onclick="location.reload()">Main Lagi</button>';
 }
 
-// --- ADMIN ---
-function promptAdmin() {
-  const pw = prompt("Masukkan Kata Sandi Guru:");
-  if (pw === "Sejarah123") {
+// --- ADMIN LOGIC ---
+function authAdmin() {
+  const pass = prompt("Sandi Guru:");
+  if(pass === "Sejarah123") {
     document.getElementById('home').classList.add('hidden');
-    document.getElementById('adminPanel').classList.remove('hidden');
-    renderAdmin();
+    document.getElementById('admin-panel').classList.remove('hidden');
+    renderRekap();
   } else {
     alert("Sandi Salah!");
   }
 }
 
-function renderAdmin() {
-  const data = JSON.parse(localStorage.getItem('ruangSejarah_db') || "[]");
-  const cont = document.getElementById('adminContent');
-  if(data.length === 0) return cont.innerHTML = "Belum ada data.";
+function renderRekap() {
+  const history = JSON.parse(localStorage.getItem('sejarah_v3') || "[]");
+  const cont = document.getElementById('rekap-data');
+  if(history.length === 0) return cont.innerHTML = "Belum ada jawaban murid.";
   
-  cont.innerHTML = data.map((d, i) => `
-    <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px; border-radius:10px;">
-      <strong>Murid #${i+1} - Tim: ${d.team}</strong>
-      <ul>
-        ${d.logs.map(l => `<li>${l.ev}: <i>${l.choice}</i><br><small>${l.ref}</small></li>`).join('')}
-      </ul>
+  cont.innerHTML = history.reverse().map(h => `
+    <div style="border-bottom:1px solid #ccc; padding:10px;">
+      <b>Tim: ${h.team}</b> (${h.time})<br>
+      ${h.data.map(d => `• ${d.event}: <i>${d.choice}</i><br> &nbsp; R: ${d.reflection}`).join('<br>')}
     </div>
   `).join('');
 }
-
-updateStatsUI();
 </script>
+
 </body>
 </html>
