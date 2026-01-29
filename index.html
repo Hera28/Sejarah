@@ -2,396 +2,358 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>RuangSejarah RPG - Strategi Naratif</title>
+  <title>RuangSejarah RPG - Perjuangan Wilayah</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
-      --primary: #14532d;
-      --primary-light: #166534;
-      --accent: #16a34a;
-      --bg: #fefce8;
-      --card-bg: #ffffff;
-      --text: #1f2937;
+      --primary: #064e3b;
+      --accent: #059669;
+      --bg: #f0fdf4;
+      --danger: #be123c;
+      --gold: #d97706;
     }
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, var(--bg), #dcfce7);
-      color: var(--text);
-      min-height: 100vh;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: #1f2937;
     }
     header {
       background: var(--primary);
       color: white;
       padding: 30px 20px;
       text-align: center;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border-bottom: 5px solid var(--gold);
     }
-    main {
-      max-width: 900px;
-      margin: 30px auto;
-      padding: 0 20px;
-    }
+    main { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
     .card {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 25px;
-      margin-bottom: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-      border: 1px solid rgba(0,0,0,0.05);
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      border: 1px solid #e5e7eb;
     }
-    h2 { color: var(--primary); margin-top: 0; }
-    button {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 10px;
-      background: var(--primary-light);
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin: 5px;
-    }
-    button:hover { background: var(--accent); transform: translateY(-2px); }
-    button.secondary { background: #4b5563; }
-    .hidden { display: none; }
-    .map {
+    .stats-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
       margin: 20px 0;
     }
-    .city {
-      padding: 12px;
-      border-radius: 8px;
+    .stat-box {
+      padding: 15px;
+      border-radius: 15px;
       text-align: center;
-      font-size: 0.85rem;
-      font-weight: bold;
-      color: white;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+      background: #f8fafc;
+      border: 2px solid #f1f5f9;
+      transition: 0.3s;
     }
-    .green { background: #16a34a; }
-    .yellow { background: #facc15; color:#000; }
-    .red { background: #dc2626; }
-    .gray { background: #6b7280; }
-    .stats {
-      display: flex;
+    .stat-box b { font-size: 1.5rem; display: block; }
+    .stat-alert { font-size: 0.75rem; font-weight: bold; margin-top: 5px; }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 10px;
-      margin: 20px 0;
+      margin-bottom: 25px;
     }
-    .stat {
-      background: #f0fdf4;
+    .city-node {
       padding: 15px;
       border-radius: 12px;
-      flex: 1;
       text-align: center;
-      border: 1px solid #dcfce7;
-    }
-    .stat b { font-size: 1.2rem; color: var(--primary); }
-    .option {
-      border: 2px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 15px;
-      margin-top: 12px;
       cursor: pointer;
-      transition: all 0.2s;
+      background: #64748b;
+      color: white;
+      font-weight: bold;
+      border: 3px solid transparent;
     }
-    .option:hover {
-      border-color: var(--accent);
-      background: #f0fdf4;
+    .city-node.active { border-color: var(--gold); background: var(--accent) !important; transform: scale(1.05); }
+    .city-node:hover { opacity: 0.9; }
+
+    button {
+      padding: 14px 24px;
+      border: none;
+      border-radius: 12px;
+      background: var(--primary);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1rem;
     }
-    textarea {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 10px;
-      border: 2px solid #d1d5db;
-      box-sizing: border-box;
-      font-family: inherit;
-    }
-    #adminData { max-height: 400px; overflow-y: auto; }
-    .log-item {
+    button.secondary { background: #4b5563; }
+    .option-card {
+      border: 2px solid #f1f5f9;
       padding: 15px;
-      border-bottom: 1px solid #eee;
+      border-radius: 12px;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: 0.2s;
     }
+    .option-card:hover { border-color: var(--accent); background: #f0fdf4; }
+    .hidden { display: none; }
+    textarea { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #cbd5e1; margin-top: 10px; box-sizing: border-box; }
+    
+    /* City Colors */
+    .batavia { background: #ca8a04; } .yogya { background: #166534; } .surabaya { background: #991b1b; }
+    .bandung { background: #1e40af; } .medan { background: #5b21b6; } .manado { background: #0891b2; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>🏛️ RuangSejarah RPG</h1>
-  <p>Simulasi Strategi Perjalanan Bangsa Indonesia (1800–2000)</p>
+  <h1>🏛️ RuangSejarah RPG: Perjuangan Wilayah</h1>
+  <p>Pilih Basis Perjuanganmu dan Tentukan Nasib Bangsa</p>
 </header>
 
 <main>
-  <div class="card" id="home">
-    <h2>Selamat Datang, Pemimpin</h2>
-    <p>Pilih peranmu untuk memulai simulasi sejarah.</p>
-    <div style="margin-top: 20px;">
-      <button onclick="startStudent()">🧑‍🎓 Mulai Perjalanan (Murid)</button>
-      <button class="secondary" onclick="openAdmin()">👩‍🏫 Lihat Rekap (Guru)</button>
+  <div id="home" class="card">
+    <h2>Selamat Datang, Komandan</h2>
+    <p>Silakan masuk sebagai murid untuk memulai simulasi atau guru untuk melihat rekap.</p>
+    <button onclick="showTeamSelection()">🧑‍🎓 Mulai Simulasi (Murid)</button>
+    <button class="secondary" onclick="promptAdmin()">👩‍🏫 Panel Guru</button>
+  </div>
+
+  <div id="teamSelect" class="card hidden">
+    <h2>Pilih Basis Perjuangan (Tim)</h2>
+    <p>Setiap wilayah memiliki tantangan dan event unik nantinya.</p>
+    <div class="map-grid" id="teamGrid"></div>
+    <div id="teamInfo" style="margin-top:20px; font-style: italic;"></div>
+    <button id="btnConfirmTeam" class="hidden" onclick="startSim()">Konfirmasi & Mulai Perjuangan ⮕</button>
+  </div>
+
+  <div id="gameScreen" class="card hidden">
+    <div id="statusBadges" style="margin-bottom: 10px;"></div>
+    <h2 id="evTitle"></h2>
+    <p id="evDesc"></p>
+
+    <div class="stats-container">
+      <div class="stat-box" id="box-moral">🧠 Moral<br><b id="st-moral">50</b><div class="stat-alert" id="msg-moral"></div></div>
+      <div class="stat-box" id="box-logistik">📦 Logistik<br><b id="st-logistik">50</b><div class="stat-alert" id="msg-logistik"></div></div>
+      <div class="stat-box" id="box-support">🌍 Dukungan<br><b id="st-support">50</b><div class="stat-alert" id="msg-support"></div></div>
+    </div>
+
+    <div id="mapVisual" class="map-grid"></div>
+
+    <div id="optionsArea"></div>
+
+    <div id="reflectionArea" class="hidden">
+      <h3>✍️ Lembar Refleksi Strategi</h3>
+      <textarea id="refInput" rows="4" placeholder="Jelaskan mengapa pilihan ini penting bagi tim Anda..."></textarea>
+      <button onclick="nextStep()">Kirim & Lanjutkan ⮕</button>
     </div>
   </div>
 
-  <div class="card hidden" id="student">
-    <h2 id="eventTitle"></h2>
-    <p id="eventDesc"></p>
-
-    <div class="map" id="map"></div>
-
-    <div class="stats">
-      <div class="stat">🧠 Moral<br><b id="moral">50</b></div>
-      <div class="stat">📦 Logistik<br><b id="logistik">50</b></div>
-      <div class="stat">🌍 Dukungan<br><b id="support">50</b></div>
-    </div>
-
-    <div id="options"></div>
-
-    <div id="reflection" class="hidden">
-      <hr>
-      <h3>✍️ Refleksi Strategi</h3>
-      <p>Mengapa kamu mengambil keputusan tersebut? Jelaskan dampaknya terhadap perjuangan.</p>
-      <textarea id="reason" rows="4" placeholder="Tulis alasanmu di sini..."></textarea>
-      <button onclick="submitAnswer()">Lanjutkan Peristiwa ⮕</button>
-    </div>
-  </div>
-
-  <div class="card hidden" id="admin">
-    <h2>📊 Rekap Jawaban Murid</h2>
-    <div id="adminData"></div>
-    <br>
-    <button class="secondary" onclick="backHome()">⬅ Kembali ke Menu</button>
+  <div id="adminPanel" class="card hidden">
+    <h2>📊 Rekapitulasi Jawaban Murid</h2>
+    <div id="adminContent"></div>
+    <button class="secondary" onclick="location.reload()">Keluar</button>
   </div>
 </main>
 
 <script>
-// --- DATA KONFIGURASI ---
+// --- DATA ---
 const cities = [
-  { name: "Batavia", cohesion: "yellow" },
-  { name: "Yogyakarta", cohesion: "green" },
-  { name: "Surabaya", cohesion: "red" },
-  { name: "Bandung", cohesion: "green" },
-  { name: "Medan", cohesion: "gray" }
+  { id: 'batavia', name: 'Batavia', class: 'batavia', desc: 'Pusat politik dan birokrasi. Bonus: Akses informasi cepat.' },
+  { id: 'yogya', name: 'Yogyakarta', class: 'yogya', desc: 'Ibukota perjuangan. Bonus: Semangat moral tinggi.' },
+  { id: 'surabaya', name: 'Surabaya', class: 'surabaya', desc: 'Kota pahlawan. Bonus: Kekuatan tempur rakyat.' },
+  { id: 'bandung', name: 'Bandung', class: 'bandung', desc: 'Lautan api. Bonus: Taktik bumi hangus.' },
+  { id: 'medan', name: 'Medan', class: 'medan', desc: 'Front Area. Bonus: Ketahanan wilayah utara.' },
+  { id: 'manado', name: 'Manado', class: 'manado', desc: 'Penjaga Timur. Bonus: Dukungan maritim & udara.' }
 ];
 
-const events = [
-  {
-    title: "Perang Diponegoro (1825–1830)",
-    desc: "Belanda memasang patok jalan di atas tanah leluhur Pangeran Diponegoro. Rakyat marah. Apa strategimu?",
-    options: [
-      { text: "Perang terbuka besar-besaran", effect: { m: -10, l: -15, s: 5 }, outcome: "Pasukan besar terlihat kuat, namun korban jiwa sangat tinggi dan logistik cepat habis." },
-      { text: "Perang gerilya jangka panjang", effect: { m: 15, l: -5, s: 10 }, outcome: "Belanda kelelahan menghadapi taktik 'hit and run'. Rakyat semakin solid mendukungmu." }
-    ]
-  },
-  {
-    title: "Kebijakan Tanam Paksa (Cultuurstelsel)",
-    desc: "Gubernur Van den Bosch mewajibkan penanaman komoditas ekspor. Rakyat menderita kelaparan.",
-    options: [
-      { text: "Melawan secara terbuka", effect: { m: -10, l: -10, s: 5 }, outcome: "Penindasan militer meningkat, namun benih perlawanan mulai tersebar di daerah lain." },
-      { text: "Bertahan sambil mencari celah ekonomi", effect: { m: 5, l: 10, s: -5 }, outcome: "Rakyat perlahan membangun kekuatan ekonomi rahasia meski penderitaan fisik tetap ada." }
-    ]
-  },
-  {
-    title: "Kebangkitan Nasional (Budi Utomo 1908)",
-    desc: "Kesadaran nasional mulai tumbuh. Bagaimana arah organisasi ini?",
-    options: [
-      { text: "Fokus pendidikan kaum elite", effect: { m: 5, l: 0, s: 10 }, outcome: "Lahir intelektual baru yang mampu berdiplomasi dengan Belanda." },
-      { text: "Perluas gerakan ke rakyat jelata", effect: { m: 15, l: -5, s: 5 }, outcome: "Dukungan massa besar, namun pengawasan intelijen Belanda (PID) semakin ketat." }
-    ]
-  },
-  {
-    title: "Sumpah Pemuda (1928)",
-    desc: "Para pemuda berkumpul untuk menyatukan identitas. Apa fokus utamanya?",
-    options: [
-      { text: "Persatuan budaya dan bahasa", effect: { m: 20, l: 0, s: 10 }, outcome: "Identitas 'Indonesia' lahir. Rakyat merasa memiliki bangsa yang satu." },
-      { text: "Fokus aksi politik radikal", effect: { m: 10, l: -10, s: 5 }, outcome: "Banyak tokoh ditangkap dan diasingkan ke Digul, namun semangat tak padam." }
-    ]
-  },
-  {
-    title: "Pendudukan Jepang (1942)",
-    desc: "Jepang datang mengusir Belanda dengan janji 'Saudara Tua'.",
-    options: [
-      { text: "Kerja sama (Kooperasi) demi kemerdekaan", effect: { m: -5, l: 15, s: -5 }, outcome: "Tokoh nasional mendapat panggung politik, namun rakyat menderita akibat Romusha." },
-      { text: "Gerakan bawah tanah (Non-kooperasi)", effect: { m: 10, l: -10, s: 10 }, outcome: "Jaringan pejuang tetap terjaga, meski risiko hukuman mati mengintai." }
-    ]
-  },
-  {
-    title: "Proklamasi 1945",
-    desc: "Kekosongan kekuasaan terjadi setelah Jepang menyerah pada Sekutu.",
-    options: [
-      { text: "Proklamasi segera tanpa izin Jepang", effect: { m: 25, l: -5, s: 20 }, outcome: "Dunia terkejut! Semangat rakyat membara untuk mempertahankan kemerdekaan." },
-      { text: "Menunggu diskusi PPKI", effect: { m: -10, l: 5, s: -5 }, outcome: "Risiko dianggap pemberian Jepang, namun transisi kekuasaan lebih minim konflik fisik." }
-    ]
-  },
-  {
-    title: "Agresi Militer Belanda",
-    desc: "Belanda kembali datang ingin berkuasa. Yogyakarta jatuh.",
-    options: [
-      { text: "Gerilya Nasional (Sudirman)", effect: { m: 20, l: -15, s: 10 }, outcome: "Dunia melihat bahwa RI masih ada. Belanda frustasi mengejar pasukan gerilya." },
-      { text: "Diplomasi Meja Perundingan", effect: { m: 5, l: 5, s: 20 }, outcome: "Konflik bersenjata berkurang, kedaulatan mulai diakui secara internasional." }
-    ]
-  },
-  {
-    title: "Demokrasi Liberal (1950-an)",
-    desc: "Kabinet berganti dengan cepat. Politik sangat dinamis namun tidak stabil.",
-    options: [
-      { text: "Kebebasan multipartai penuh", effect: { m: 10, l: -10, s: 5 }, outcome: "Demokrasi sangat hidup, namun pembangunan ekonomi terhambat pertikaian politik." },
-      { text: "Satu komando kepemimpinan", effect: { m: -10, l: 10, s: -5 }, outcome: "Stabilitas terjaga, namun kritik mulai dibungkam." }
-    ]
-  },
-  {
-    title: "G30S & Transisi 1965",
-    desc: "Terjadi gejolak politik hebat yang mengancam persatuan.",
-    options: [
-      { text: "Pendekatan keamanan militer", effect: { m: -15, l: 10, s: -10 }, outcome: "Ketertiban kembali pulih dengan cepat, namun meninggalkan luka sejarah yang dalam." },
-      { text: "Pendekatan rekonsiliasi hukum", effect: { m: 10, l: -5, s: 10 }, outcome: "Proses jauh lebih lama, namun legitimasi moral negara tetap terjaga." }
-    ]
-  },
-  {
-    title: "Era Orde Baru",
-    desc: "Fokus pada stabilitas nasional dan pembangunan ekonomi (Pelita).",
-    options: [
-      { text: "Utamakan pertumbuhan ekonomi", effect: { m: 5, l: 20, s: 5 }, outcome: "Indonesia swasembada pangan, namun kesenjangan mulai terasa." },
-      { text: "Utamakan demokratisasi", effect: { m: 15, l: -15, s: -10 }, outcome: "Suara rakyat terdengar, namun risiko instabilitas ekonomi meningkat." }
-    ]
-  },
-  {
-    title: "Reformasi 1998",
-    desc: "Krisis moneter melanda. Mahasiswa turun ke jalan menuntut perubahan.",
-    options: [
-      { text: "Mendukung transformasi total", effect: { m: 20, l: -10, s: 15 }, outcome: "Era baru dimulai. Kebebasan berpendapat dibuka lebar-lebar." },
-      { text: "Transisi bertahap melalui sistem", effect: { m: 5, l: 5, s: 5 }, outcome: "Situasi lebih terkendali, namun perubahan dirasa terlalu lambat oleh rakyat." }
-    ]
-  }
+const generalEvents = [
+  { title: "Perang Diponegoro (1825)", desc: "Pihak kolonial melanggar batas tanah leluhur. Rakyat menanti komando Anda.", options: [
+    { text: "Gerilya Hutan", effect: { m: 10, l: -10, s: 5 }, out: "Belanda frustasi, tapi suplai menipis." },
+    { text: "Diplomasi Keraton", effect: { m: -5, l: 5, s: 15 }, out: "Dukungan luar negeri naik, tapi rakyat merasa kecewa." }
+  ]},
+  { title: "Tanam Paksa (1830)", desc: "Rakyat dipaksa menanam kopi dan nila. Kelaparan mengancam.", options: [
+    { text: "Sembunyikan Hasil Panen", effect: { m: 15, l: 5, s: -10 }, out: "Rakyat kenyang, tapi hukuman kolonial kejam." },
+    { text: "Ajukan Petisi ke Ratu Belanda", effect: { m: -5, l: -5, s: 20 }, out: "Dunia mulai mendengar kekejaman di Hindia." }
+  ]},
+  { title: "Sumpah Pemuda (1928)", desc: "Kongres pemuda sedang berlangsung. Apa pesan utama tim Anda?", options: [
+    { text: "Satu Bahasa, Satu Bangsa", effect: { m: 25, l: 0, s: 10 }, out: "Persatuan meledak! Identitas nasional terbentuk." },
+    { text: "Otonomi Wilayah Terlebih Dahulu", effect: { m: 5, l: 10, s: -5 }, out: "Logistik lokal aman, tapi persatuan agak rapuh." }
+  ]}
 ];
 
-// --- LOGIKA PERMAINAN ---
-let currentIndex = 0;
-let stats = { moral: 50, logistik: 50, support: 50 };
-let studentLogs = JSON.parse(localStorage.getItem('sejarahLogs')) || [];
-let tempChoice = "";
+const teamSpecialEvents = {
+  'batavia': { title: "Spesial Batavia: Volksraad", desc: "Anda memiliki kursi di Dewan Rakyat. Gunakan untuk politik?", options: [
+    { text: "Interupsi Kebijakan Pajak", effect: { m: 10, l: 10, s: 5 }, out: "Belanda tertekan secara legal." },
+    { text: "Boikot Dewan", effect: { m: 15, l: -5, s: 10 }, out: "Rakyat bangga, posisi politik hilang." }
+  ]},
+  'manado': { title: "Spesial Manado: Peristiwa Merah Putih", desc: "Tentara NICA mencoba menurunkan bendera di Tangsi Putih.", options: [
+    { text: "Serbu Tangsi Putih", effect: { m: 20, l: 5, s: -5 }, out: "Bendera berkibar! Semangat Timur membara." },
+    { text: "Negosiasi Penyerahan Senjata", effect: { m: 5, l: 15, s: 10 }, out: "Senjata didapat tanpa pertumpahan darah." }
+  ]}
+  // Kota lain bisa ditambahkan polanya sama
+};
 
-function startStudent() {
-  currentIndex = 0;
-  stats = { moral: 50, logistik: 50, support: 50 };
+// --- LOGIC ---
+let state = {
+  team: null,
+  moral: 50,
+  logistik: 50,
+  support: 50,
+  logs: [],
+  currentEv: 0,
+  isSpecialDone: false
+};
+
+function showTeamSelection() {
   document.getElementById('home').classList.add('hidden');
-  document.getElementById('student').classList.remove('hidden');
-  renderMap();
-  showEvent();
-}
-
-function renderMap() {
-  const mapContainer = document.getElementById('map');
-  mapContainer.innerHTML = '';
+  document.getElementById('teamSelect').classList.remove('hidden');
+  const grid = document.getElementById('teamGrid');
   cities.forEach(c => {
     const div = document.createElement('div');
-    div.className = `city ${c.cohesion}`;
+    div.className = `city-node ${c.class}`;
     div.innerText = c.name;
-    mapContainer.appendChild(div);
+    div.onclick = () => {
+      document.querySelectorAll('.city-node').forEach(n => n.classList.remove('active'));
+      div.classList.add('active');
+      state.team = c.id;
+      document.getElementById('teamInfo').innerText = c.desc;
+      document.getElementById('btnConfirmTeam').classList.remove('hidden');
+    };
+    grid.appendChild(div);
   });
 }
 
-function showEvent() {
-  if (currentIndex >= events.length) {
+function startSim() {
+  document.getElementById('teamSelect').classList.add('hidden');
+  document.getElementById('gameScreen').classList.remove('hidden');
+  renderMap();
+  loadEvent();
+}
+
+function renderMap() {
+  const map = document.getElementById('mapVisual');
+  map.innerHTML = '';
+  cities.forEach(c => {
+    const div = document.createElement('div');
+    div.className = `city-node ${c.class} ${state.team === c.id ? 'active' : ''}`;
+    div.innerText = c.name;
+    map.appendChild(div);
+  });
+}
+
+function loadEvent() {
+  let ev;
+  // Cek apakah ada event spesial tim di awal
+  if (!state.isSpecialDone && teamSpecialEvents[state.team]) {
+    ev = teamSpecialEvents[state.team];
+    state.isSpecialDone = true;
+  } else if (state.currentEv < generalEvents.length) {
+    ev = generalEvents[state.currentEv];
+  } else {
     finishGame();
     return;
   }
 
-  const ev = events[currentIndex];
-  document.getElementById('eventTitle').innerText = ev.title;
-  document.getElementById('eventDesc').innerText = ev.desc;
-  document.getElementById('options').classList.remove('hidden');
-  document.getElementById('reflection').classList.add('hidden');
-  document.getElementById('reason').value = "";
+  document.getElementById('evTitle').innerText = ev.title;
+  document.getElementById('evDesc').innerText = ev.desc;
+  document.getElementById('optionsArea').innerHTML = '';
+  document.getElementById('reflectionArea').classList.add('hidden');
+
+  ev.options.forEach((o, i) => {
+    const btn = document.createElement('div');
+    btn.className = 'option-card';
+    btn.innerHTML = `<strong>${o.text}</strong>`;
+    btn.onclick = () => selectOption(o);
+    document.getElementById('optionsArea').appendChild(btn);
+  });
+}
+
+function selectOption(opt) {
+  state.moral += opt.effect.m;
+  state.logistik += opt.effect.l;
+  state.support += opt.effect.s;
   
-  const optContainer = document.getElementById('options');
-  optContainer.innerHTML = '';
+  document.getElementById('evDesc').innerHTML = `💡 <b>Hasil:</b> ${opt.out}`;
+  document.getElementById('optionsArea').innerHTML = '';
+  document.getElementById('reflectionArea').classList.remove('hidden');
   
-  ev.options.forEach((opt, idx) => {
-    const div = document.createElement('div');
-    div.className = 'option';
-    div.innerText = opt.text;
-    div.onclick = () => selectOption(idx);
-    optContainer.appendChild(div);
+  state.lastChoice = opt.text;
+  updateStatsUI();
+}
+
+function updateStatsUI() {
+  const keys = ['moral', 'logistik', 'support'];
+  keys.forEach(k => {
+    const val = state[k];
+    const el = document.getElementById(`st-${k}`);
+    const msg = document.getElementById(`msg-${k}`);
+    const box = document.getElementById(`box-${k}`);
+    el.innerText = val;
+
+    // Logic Threshold
+    if (val <= 30) {
+      msg.innerText = "⚠️ KRITIS: Rakyat mulai menyerah!";
+      msg.style.color = "red";
+      box.style.borderColor = "red";
+    } else if (val >= 100) {
+      msg.innerText = "🌟 LEGENDARIS: Kekuatan Tak Terbendung!";
+      msg.style.color = "green";
+      box.style.borderColor = "gold";
+    } else {
+      msg.innerText = "";
+      box.style.borderColor = "#f1f5f9";
+    }
+  });
+}
+
+function nextStep() {
+  const ref = document.getElementById('refInput').value;
+  if(ref.length < 10) return alert("Berikan refleksi yang lebih panjang.");
+  
+  state.logs.push({
+    ev: document.getElementById('evTitle').innerText,
+    choice: state.lastChoice,
+    ref: ref,
+    stats: {m: state.moral, l: state.logistik, s: state.support}
   });
 
-  updateStats();
-}
+  // Simpan ke localstorage untuk guru
+  let allData = JSON.parse(localStorage.getItem('ruangSejarah_db') || "[]");
+  allData.push({team: state.team, logs: state.logs});
+  localStorage.setItem('ruangSejarah_db', JSON.stringify(allData));
 
-function selectOption(idx) {
-  const choice = events[currentIndex].options[idx];
-  tempChoice = choice.text;
-
-  // Update Stats
-  stats.moral += choice.effect.m;
-  stats.logistik += choice.effect.l;
-  stats.support += choice.effect.s;
-
-  // Update UI
-  document.getElementById('eventDesc').innerHTML = `<strong>Hasil:</strong> ${choice.outcome}`;
-  document.getElementById('options').classList.add('hidden');
-  document.getElementById('reflection').classList.remove('hidden');
-  updateStats();
-}
-
-function submitAnswer() {
-  const reasonText = document.getElementById('reason').value;
-  if (reasonText.trim().length < 10) {
-    alert("Mohon berikan alasan yang lebih jelas (minimal 10 karakter).");
-    return;
-  }
-
-  // Simpan Log
-  studentLogs.push({
-    peristiwa: events[currentIndex].title,
-    pilihan: tempChoice,
-    alasan: reasonText,
-    waktu: new Date().toLocaleString()
-  });
-  localStorage.setItem('sejarahLogs', JSON.stringify(studentLogs));
-
-  currentIndex++;
-  showEvent();
-}
-
-function updateStats() {
-  document.getElementById('moral').innerText = stats.moral;
-  document.getElementById('logistik').innerText = stats.logistik;
-  document.getElementById('support').innerText = stats.support;
+  state.currentEv++;
+  loadEvent();
 }
 
 function finishGame() {
-  document.getElementById('eventTitle').innerText = "Simulasi Berakhir!";
-  document.getElementById('eventDesc').innerText = `Selamat! Kamu telah mengarungi sejarah Indonesia. Moral akhir: ${stats.moral}, Logistik: ${stats.logistik}, Dukungan: ${stats.support}.`;
-  document.getElementById('options').innerHTML = `<button onclick="backHome()">Kembali ke Menu Utama</button>`;
-  document.getElementById('reflection').classList.add('hidden');
+  document.getElementById('evTitle').innerText = "🏁 Perjuangan Selesai";
+  document.getElementById('evDesc').innerText = `Tim ${state.team.toUpperCase()} telah menyelesaikan simulasi. Bagaimana nasib Indonesia di tanganmu?`;
+  document.getElementById('optionsArea').innerHTML = `<button onclick="location.reload()">Main Lagi</button>`;
 }
 
-// --- LOGIKA ADMIN ---
-function openAdmin() {
-  document.getElementById('home').classList.add('hidden');
-  document.getElementById('admin').classList.remove('hidden');
-  const dataDiv = document.getElementById('adminData');
-  
-  if (studentLogs.length === 0) {
-    dataDiv.innerHTML = "<p>Belum ada data murid yang masuk.</p>";
+// --- ADMIN ---
+function promptAdmin() {
+  const pw = prompt("Masukkan Kata Sandi Guru:");
+  if (pw === "Sejarah123") {
+    document.getElementById('home').classList.add('hidden');
+    document.getElementById('adminPanel').classList.remove('hidden');
+    renderAdmin();
   } else {
-    dataDiv.innerHTML = studentLogs.map(log => `
-      <div class="log-item">
-        <strong>${log.peristiwa}</strong> (${log.waktu})<br>
-        <span style="color:#166534">Pilihan: ${log.pilihan}</span><br>
-        <small>Alasan: ${log.alasan}</small>
-      </div>
-    `).reverse().join('');
+    alert("Sandi Salah!");
   }
 }
 
-function backHome() {
-  document.getElementById('student').classList.add('hidden');
-  document.getElementById('admin').classList.add('hidden');
-  document.getElementById('home').classList.remove('hidden');
+function renderAdmin() {
+  const data = JSON.parse(localStorage.getItem('ruangSejarah_db') || "[]");
+  const cont = document.getElementById('adminContent');
+  if(data.length === 0) return cont.innerHTML = "Belum ada data.";
+  
+  cont.innerHTML = data.map((d, i) => `
+    <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px; border-radius:10px;">
+      <strong>Murid #${i+1} - Tim: ${d.team}</strong>
+      <ul>
+        ${d.logs.map(l => `<li>${l.ev}: <i>${l.choice}</i><br><small>${l.ref}</small></li>`).join('')}
+      </ul>
+    </div>
+  `).join('');
 }
-</script>
 
+updateStatsUI();
+</script>
 </body>
 </html>
