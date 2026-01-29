@@ -6,81 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Crimson+Text:wght@400;700&display=swap');
-        :root { --ink: #003049; --paper: #fdf0d5; --gold: #c1121f; --danger: #d62828; --forest: #2d6a4f; --active-player: #4CAF50; --inactive-player: #b0c4de; }
+        :root { --ink: #003049; --paper: #fdf0d5; --gold: #c1121f; --danger: #d62828; --forest: #2d6a4f; --ussr: #cc0000; --usa: #002244; }
         * { box-sizing: border-box; }
-        body { margin: 0; font-family: 'Crimson Text', serif; background: #121212; color: var(--ink); }
-        header { background: var(--ink); color: white; padding: 1rem; text-align: center; font-family: 'Special Elite'; border-bottom: 4px solid var(--gold); }
-        main { max-width: 900px; margin: 0 auto; padding: 1rem; }
-        .card { background: var(--paper); padding: 1.5rem; border: 3px solid var(--ink); box-shadow: 8px 8px 0 var(--gold); border-radius: 4px; margin-bottom: 2rem; }
+        body { margin: 0; font-family: 'Crimson Text', serif; background: #121212; color: var(--ink); line-height: 1.4; }
+        header { background: var(--ink); color: white; padding: 0.8rem; text-align: center; font-family: 'Special Elite'; border-bottom: 4px solid var(--gold); }
+        main { max-width: 800px; margin: 0 auto; padding: 10px; }
+        .card { background: var(--paper); padding: 1.2rem; border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--gold); border-radius: 4px; margin-bottom: 1rem; }
         .hidden { display: none !important; }
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1rem; }
-        .stat-box { background: rgba(255,255,255,0.7); padding: 0.8rem; text-align: center; border: 2px solid var(--ink); border-radius: 4px; }
-        .stat-box b { font-size: 1.4rem; color: var(--gold); font-family: 'Special Elite'; }
-        button { padding: 12px; background: var(--ink); color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.2s; }
-        button:active { transform: scale(0.98); }
-        input, textarea { width: 100%; padding: 12px; margin: 5px 0; border: 2px solid var(--ink); border-radius: 4px; font-family: inherit; }
-        .admin-section { border-top: 2px dashed var(--ink); margin-top: 20px; padding-top: 10px; }
-        table { width: 100%; border-collapse: collapse; background: white; font-size: 0.85rem; margin-top: 10px; }
-        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-        th { background: var(--ink); color: white; }
-        .btn-small { width: auto; padding: 5px 10px; font-size: 0.7rem; margin: 2px; }
+        
+        /* Stats Bar */
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 1rem; }
+        .stat-box { background: rgba(255,255,255,0.8); padding: 0.5rem; text-align: center; border: 2px solid var(--ink); border-radius: 4px; font-size: 0.9rem; }
+        .stat-box b { display: block; font-size: 1.2rem; color: var(--gold); font-family: 'Special Elite'; }
 
-        /* --- WAITING ROOM STYLES --- */
-        .waiting-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); /* Adaptif 60px per tentara */
-            gap: 10px;
-            margin-top: 20px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .player-slot {
-            width: 60px;
-            height: 60px;
-            background: var(--inactive-player);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            color: var(--ink);
-            font-weight: bold;
-            text-align: center;
-            overflow: hidden;
-            position: relative;
-            border: 2px solid var(--ink);
-        }
-        .player-slot.active {
-            background: var(--active-player);
-            color: white;
-            border-color: #000;
-        }
-        .player-slot:before { /* Icon tentara */
-            content: '👤'; 
-            font-size: 1.5rem;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0.3;
-        }
-        .player-slot.active:before {
-            content: ''; /* Hilangkan ikon saat aktif */
-        }
-        .player-name-display {
-            position: relative;
-            z-index: 1; /* Pastikan nama di atas ikon */
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            padding: 0 5px;
-            box-sizing: border-box;
-            max-width: 100%;
-        }
+        /* Army Grid */
+        .army-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px; margin: 15px 0; }
+        .soldier { width: 100%; aspect-ratio: 1; background: #bdc3c7; border-radius: 50%; border: 1px solid var(--ink); display: flex; align-items: center; justify-content: center; font-size: 0.5rem; transition: 0.3s; }
+        .soldier.active { background: var(--forest); color: white; }
+        .soldier.me { border: 3px solid var(--gold); transform: scale(1.1); box-shadow: 0 0 10px var(--gold); }
 
-        @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
-        .waiting-icon { animation: pulse 1.5s infinite; }
+        /* UI Elements */
+        .opt-btn { background: white; color: var(--ink); text-align: left; border: 2px solid var(--ink); margin-bottom: 6px; padding: 10px; font-size: 0.9rem; cursor: pointer; display: block; width: 100%; border-radius: 4px; font-weight: 600; }
+        button { padding: 12px; background: var(--ink); color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; width: 100%; }
+        textarea { width: 100%; padding: 10px; border: 2px solid var(--ink); border-radius: 4px; font-size: 1rem; }
+        
+        .intervention-overlay { background: rgba(0,0,0,0.85); position: fixed; top:0; left:0; width:100%; height:100%; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
     </style>
 </head>
 <body>
@@ -89,20 +39,24 @@
 
 <main>
     <div id="scr-login" class="card">
-        <h2 style="text-align:center;">Registrasi Komandan</h2>
+        <h2 style="text-align:center;">Registrasi Divisi</h2>
         <input type="text" id="in-name" placeholder="Nama Lengkap..." autocomplete="off">
-        <button id="btn-reg">MASUK SIMULASI ⮕</button>
-        <p style="text-align:center;"><a href="#" id="link-admin" style="color:var(--gold); font-size:0.8rem; text-decoration:none;">Mode Guru</a></p>
+        <button id="btn-reg">MASUK OPERASI ⮕</button>
+        <p style="text-align:center;"><a href="#" id="link-admin" style="color:var(--gold); font-size:0.8rem; text-decoration:none;">Otoritas Guru</a></p>
     </div>
 
     <div id="scr-wait" class="card hidden">
-        <h2 style="text-align:center;">RUANG TUNGGU KOMANDO</h2>
-        <div style="text-align:center; font-size: 3rem;" class="waiting-icon">📡</div>
-        <p style="text-align:center;">Unit <b id="lbl-myname"></b> menunggu instruksi awal.</p>
-        <p id="wait-msg" style="text-align:center; color: var(--gold);">Harap tunggu Komandan lain...</p>
-        
-        <div class="waiting-grid" id="player-slots-container">
-            </div>
+        <h3 style="text-align:center;">MENUJU MEDAN TEMPUR</h3>
+        <div class="army-grid" id="army-container"></div>
+        <p style="text-align:center;">Unit <b><span id="lbl-myname"></span></b> Menunggu Komando...</p>
+    </div>
+
+    <div id="scr-intervene" class="intervention-overlay hidden">
+        <div class="card" style="max-width: 400px; text-align: center;">
+            <h2 id="int-title" style="color:var(--gold)"></h2>
+            <p id="int-body"></p>
+            <button id="btn-int-ok">TERIMA INSTRUKSI</button>
+        </div>
     </div>
 
     <div id="scr-game" class="card hidden">
@@ -111,52 +65,29 @@
             <div class="stat-box">SUPLAI<br><b id="v-l">50</b></div>
             <div class="stat-box">DUKUNGAN<br><b id="v-s">50</b></div>
         </div>
-        <h3 id="ev-title" style="color:var(--gold); font-family:'Special Elite';"></h3>
-        <p id="ev-desc"></p>
+        <h3 id="ev-title" style="color:var(--gold); font-family:'Special Elite'; margin-top:0;"></h3>
+        <p id="ev-desc" style="margin-bottom:15px;"></p>
         <div id="opt-container"></div>
+        
         <div id="ref-box" class="hidden">
-            <hr><p><b>Alasan Strategis:</b></p>
-            <textarea id="ref-input" rows="3" placeholder="Mengapa tim Anda memilih langkah ini?"></textarea>
-            <button id="btn-submit-turn">KIRIM LAPORAN ⮕</button>
+            <hr>
+            <p><b>Justifikasi Strategis:</b></p>
+            <textarea id="ref-input" rows="2" placeholder="Tulis alasan singkat..."></textarea>
+            <button id="btn-submit-turn" style="margin-top:10px;">LAPOR ⮕</button>
         </div>
     </div>
 
     <div id="scr-admin" class="card hidden">
-        <h2>Dashboard Guru</h2>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-            <button id="btn-start-global" style="background:var(--forest);">MULAI SESI</button>
-            <button id="btn-reset-global" style="background:var(--danger);">RESET TOTAL</button>
-        </div>
-        <button id="btn-inject" style="background:#555; margin-top:10px;">AKTIFKAN 18 MISI TEMPLATE</button>
+        <h2>Pusat Komando</h2>
+        <button id="btn-start-global" style="background:var(--forest);">MULAI GAME</button>
+        <button id="btn-reset-global" style="background:var(--danger); margin-top:5px;">RESET TOTAL</button>
+        <button id="btn-inject-25" style="background:#555; margin-top:5px;">AKTIFKAN 25 MISI UTAMA</button>
 
-        <div class="admin-section">
-            <h3>Architect: Tambah Misi (Expansion)</h3>
-            <input type="text" id="ex-year" placeholder="Tahun (cth: 2024)">
-            <input type="text" id="ex-title" placeholder="Judul Peristiwa">
-            <textarea id="ex-desc" placeholder="Deskripsi peristiwa..."></textarea>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-                <input type="text" id="ex-o1" placeholder="Opsi 1">
-                <input type="number" id="ex-m1" placeholder="M" value="10">
-                <input type="number" id="ex-l1" placeholder="L" value="-5">
-                <input type="number" id="ex-s1" placeholder="S" value="10">
-            </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px; margin-top:5px;">
-                <input type="text" id="ex-o2" placeholder="Opsi 2">
-                <input type="number" id="ex-m2" placeholder="M" value="-5">
-                <input type="number" id="ex-l2" placeholder="L" value="10">
-                <input type="number" id="ex-s2" placeholder="S" value="0">
-            </div>
-            <button id="btn-add-mission" style="background:var(--gold);">TAMBAH KE DATABASE ➕</button>
-        </div>
-
-        <div class="admin-section">
-            <h3>Monitor Murid (<span id="count-player">0</span>/40)</h3>
-            <div style="overflow-x:auto;">
-                <table>
-                    <thead><tr><th>Nama</th><th>Misi</th><th>Stat</th><th>Aksi</th></tr></thead>
-                    <tbody id="monitor-body"></tbody>
-                </table>
-            </div>
+        <div style="margin-top:15px; overflow-x:auto;">
+            <table style="width:100%; font-size:0.75rem; border-collapse:collapse;">
+                <thead style="background:#ddd;"><tr><th>Nama</th><th>Misi</th><th>M/L/S</th><th>Ideologi</th><th>Aksi</th></tr></thead>
+                <tbody id="monitor-body"></tbody>
+            </table>
         </div>
     </div>
 </main>
@@ -175,12 +106,11 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    let pData = { id:"", name:"", m:50, l:50, s:50, cur:0 };
+    let pData = { id:"", name:"", m:50, l:50, s:50, cur:0, r_count:0, m_count:0, ideology: "Netral" };
     let missions = [];
-    const MAX_PLAYERS = 40; // Batas maksimum pemain yang divisualisasikan
 
     const showScreen = (id) => {
-        document.querySelectorAll('.card').forEach(s => s.classList.add('hidden'));
+        document.querySelectorAll('main > div').forEach(s => s.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
     };
 
@@ -188,189 +118,145 @@
     document.getElementById('btn-reg').onclick = () => {
         const n = document.getElementById('in-name').value.trim();
         if(!n) return;
-        pData.id = n.replace(/\s+/g, '_');
+        pData.id = n.replace(/\s+/g, '_') + '_' + Math.floor(Math.random()*1000);
         pData.name = n;
-        set(ref(db, 'players/' + pData.id), { name: pData.name, m:50, l:50, s:50, cur:0, status: 'ALIVE' });
+        set(ref(db, 'players/' + pData.id), { ...pData, status: 'ALIVE' });
         document.getElementById('lbl-myname').innerText = pData.name;
         showScreen('scr-wait');
-        generatePlayerSlots(); // Generate slots saat pertama masuk waiting room
+    };
+
+    const checkKarma = () => {
+        // Intervensi Random & Ideologi (Mulai Misi 8+)
+        if (pData.cur > 7 && Math.random() > 0.7) {
+            let title = "", body = "";
+            
+            if (pData.r_count >= 4) {
+                title = "DUKUNGAN RAKYAT";
+                body = "Rakyat mengingat jasa Anda. Mereka mengirimkan perbekalan rahasia.";
+                pData.l += 15;
+            } else if (pData.m_count >= 4) {
+                title = "SUPREMASI MILITER";
+                body = "Jenderal-jenderal loyal kepada Anda. Moral pasukan meningkat pesat.";
+                pData.m += 15;
+            } else if (pData.l < 15) {
+                title = "BANTUAN AS";
+                body = "Paman Sam mengirim Suplai, tapi minta pangkalan militer dibangun.";
+                pData.l += 20; pData.s -= 10;
+            }
+
+            if (title) {
+                document.getElementById('int-title').innerText = title;
+                document.getElementById('int-body').innerText = body;
+                document.getElementById('scr-intervene').classList.remove('hidden');
+                return true;
+            }
+        }
+        return false;
     };
 
     const renderTurn = () => {
-        if(pData.cur >= missions.length) {
-            document.getElementById('scr-game').innerHTML = "<h2>MISI SELESAI</h2><p>Semua peristiwa sejarah telah Anda lalui.</p>";
-            return;
+        if(pData.m <= 0 || pData.l <= 0 || pData.s <= 0) {
+            alert("NEGARA RUNTUH! Statistik Anda menyentuh 0.");
+            location.reload(); return;
         }
+        if(pData.cur >= missions.length) {
+            alert("MISI SELESAI! Anda berhasil memandu bangsa.");
+            location.reload(); return;
+        }
+
         const ev = missions[pData.cur];
         document.getElementById('ev-title').innerText = `${ev.t}: ${ev.title}`;
         document.getElementById('ev-desc').innerText = ev.desc;
         const cont = document.getElementById('opt-container');
         cont.innerHTML = "";
+
         ev.options.forEach(o => {
             const b = document.createElement('button');
-            b.className = 'opt-btn'; 
-            b.innerHTML = `${o.text} <span style="font-size:0.8em; color:#666;"> (M:${o.m} L:${o.l} S:${o.s})</span>`;
-            b.style = "background:white; color:black; text-align:left; border:2px solid var(--ink); margin-bottom:10px; width:100%; font-weight:normal; padding:10px;";
+            b.className = 'opt-btn';
+            b.innerText = o.text;
             b.onclick = () => {
-                pData.m += parseInt(o.m || 0); pData.l += parseInt(o.l || 0); pData.s += parseInt(o.s || 0);
+                pData.m += o.m; pData.l += o.l; pData.s += o.s;
                 ['v-m','v-l','v-s'].forEach((id,i) => document.getElementById(id).innerText = [pData.m,pData.l,pData.s][i]);
-                cont.innerHTML = "";
-                document.getElementById('ref-box').classList.remove('hidden');
+                cont.innerHTML = ""; document.getElementById('ref-box').classList.remove('hidden');
             };
             cont.appendChild(b);
         });
     };
 
     document.getElementById('btn-submit-turn').onclick = () => {
+        const reason = document.getElementById('ref-input').value.toLowerCase();
+        // NLP Counter
+        if(reason.includes("rakyat") || reason.includes("desa") || reason.includes("warga")) pData.r_count++;
+        if(reason.includes("militer") || reason.includes("senjata") || reason.includes("serang")) pData.m_count++;
+        
+        // Update Ideology Status
+        if(pData.r_count >= 4) pData.ideology = "Pro-Rakyat";
+        if(pData.m_count >= 4) pData.ideology = "Pro-Militer";
+
         pData.cur++;
-        update(ref(db, 'players/' + pData.id), { m: pData.m, l: pData.l, s: pData.s, cur: pData.cur });
+        update(ref(db, 'players/' + pData.id), { 
+            m: pData.m, l: pData.l, s: pData.s, cur: pData.cur, 
+            ideology: pData.ideology, r_count: pData.r_count, m_count: pData.m_count 
+        });
+
+        document.getElementById('ref-input').value = "";
         document.getElementById('ref-box').classList.add('hidden');
+        if (!checkKarma()) renderTurn();
+    };
+
+    document.getElementById('btn-int-ok').onclick = () => {
+        document.getElementById('scr-intervene').classList.add('hidden');
         renderTurn();
     };
 
-    // --- LOGIKA ADMIN ---
-    document.getElementById('link-admin').onclick = (e) => {
-        e.preventDefault();
-        if(prompt("Sandi:") === "GuruSejarah") showScreen('scr-admin');
-    };
-
+    // --- ADMIN ---
+    document.getElementById('link-admin').onclick = () => { if(prompt("Sandi:") === "GuruSejarah") showScreen('scr-admin'); };
     document.getElementById('btn-start-global').onclick = () => update(ref(db, '/'), { gameStatus: 'PLAYING' });
-    document.getElementById('btn-reset-global').onclick = () => {
-        if(confirm("Hapus semua data murid?")) set(ref(db, 'players'), {});
-    };
-
-    document.getElementById('btn-add-mission').onclick = () => {
-        const newM = {
-            t: document.getElementById('ex-year').value,
-            title: document.getElementById('ex-title').value,
-            desc: document.getElementById('ex-desc').value,
-            options: [
-                { text: document.getElementById('ex-o1').value, m:parseInt(document.getElementById('ex-m1').value), l:parseInt(document.getElementById('ex-l1').value), s:parseInt(document.getElementById('ex-s1').value) },
-                { text: document.getElementById('ex-o2').value, m:parseInt(document.getElementById('ex-m2').value), l:parseInt(document.getElementById('ex-l2').value), s:parseInt(document.getElementById('ex-s2').value) }
-            ]
-        };
-        // Validasi minimal
-        if (!newM.title || !newM.desc || !newM.options[0].text || !newM.options[1].text) {
-            alert("Harap lengkapi semua kolom misi!");
-            return;
+    document.getElementById('btn-reset-global').onclick = () => { if(confirm("Hapus semua?")) set(ref(db, '/'), { gameStatus: 'WAITING', players: {}, missions: [] }); };
+    
+    document.getElementById('btn-inject-25').onclick = () => {
+        const t = [];
+        for(let i=1; i<=25; i++) {
+            t.push({
+                t: 1945 + i, title: `Peristiwa Sejarah ${i}`,
+                desc: `Deskripsi singkat kejadian strategis ke-${i} untuk pengambilan keputusan cepat.`,
+                options: [
+                    {text: "Opsi Rakyat", m:10, l:-5, s:10}, {text: "Opsi Militer", m:5, l:10, s:-5},
+                    {text: "Opsi Diplomasi", m:5, l:5, s:15}, {text: "Opsi Sabotase", m:20, l:-20, s:0}
+                ]
+            });
         }
-        
-        const nextIdx = missions.length;
-        set(ref(db, 'missions/' + nextIdx), newM);
-        alert("Misi Berhasil Ditambahkan!");
-        ['ex-year','ex-title','ex-desc','ex-o1','ex-m1','ex-l1','ex-s1','ex-o2','ex-m2','ex-l2','ex-s2'].forEach(id => document.getElementById(id).value = "");
+        set(ref(db, 'missions'), t); alert("25 Misi Utama Siap!");
     };
-
-    document.getElementById('btn-inject').onclick = () => {
-        const template = [
-            {t:"1808", title:"Jalan Raya Pos", desc:"Daendels memaksa pembangunan Anyer-Panarukan.", options:[{text:"Sabotase",m:10,l:-10,s:5},{text:"Patuh",m:-5,l:10,s:0}]},
-            {t:"1830", title:"Tanam Paksa", desc:"VandenBosch mewajibkan tanam ekspor.", options:[{text:"Lawan",m:20,l:-20,s:10},{text:"Ikuti",m:-5,l:15,s:0}]},
-            {t:"1908", title:"Budi Utomo", desc:"Organisasi pelajar STOVIA berdiri.", options:[{text:"Gabung",m:15,l:0,s:20},{text:"Netral",m:5,l:0,s:0}]},
-            {t:"1928", title:"Sumpah Pemuda", desc:"Kongres Pemuda II merumuskan ikrar.", options:[{text:"Ikrar",m:30,l:0,s:30},{text:"Hadir",m:10,l:0,s:10}]},
-            {t:"1942", title:"Jepang Masuk", desc:"Belanda menyerah tanpa syarat.", options:[{text:"Sambas",m:10,l:10,s:-10},{text:"Waspada",m:15,l:-5,s:10}]},
-            {t:"1945", title:"Rengasdengklok", desc:"Penculikan Soekarno-Hatta.", options:[{text:"Dukung Muda",m:20,l:0,s:15},{text:"Ikut Tua",m:-10,l:5,s:5}]},
-            {t:"1945", title:"Proklamasi", desc:"17 Agustus Indonesia Merdeka.", options:[{text:"Merdeka!",m:40,l:0,s:40},{text:"Diplomasi",m:10,l:10,s:20}]},
-            {t:"1946", title:"Bandung Lautan Api", desc:"Kota harus dibakar agar tak dikuasai.", options:[{text:"Bakar",m:30,l:-30,s:25},{text:"Bertahan",m:-10,l:10,s:-15}]},
-            {t:"1948", title:"Gerilya Sudirman", desc:"Yogyakarta jatuh, TNI masuk hutan.", options:[{text:"Ikut Gerilya",m:30,l:-20,s:25},{text:"Bertahan",m:-5,l:10,s:-5}]},
-            {t:"1949", title:"KMB", desc:"Belanda akui kedaulatan RI.", options:[{text:"Terima",m:10,l:10,s:20},{text:"Tolak",m:15,l:-10,s:-10}]},
-            {t:"1955", title:"Pemilu I", desc:"Pesta demokrasi pertama.", options:[{text:"Pilih",m:20,l:0,s:20},{text:"Golput",m:-10,l:0,s:-10}]},
-            {t:"1966", title:"Supersemar", desc:"Perpindahan kekuasaan Orde Baru.", options:[{text:"Dukung",m:10,l:20,s:5},{text:"Lawan",m:15,l:-15,s:-10}]},
-            {t:"1974", title:"Malari", desc:"Protes modal asing masuk.", options:[{text:"Demo",m:20,l:-10,s:20},{text:"Diam",m:-5,l:15,s:5}]},
-            {t:"1980", title:"Pembangunan", desc:"Repelita dijalankan masif.", options:[{text:"Investasi",m:5,l:30,s:10},{text:"Kritis",m:15,l:-5,s:15}]},
-            {t:"1998", title:"Krisis Moneter", desc:"Rupiah anjlok, rakyat kesulitan.", options:[{text:"Hemat",m:-10,l:30,s:5},{text:"Bantu",m:10,l:-10,s:20}]},
-            {t:"1998", title:"Reformasi", desc:"Soeharto diminta mundur.", options:[{text:"Turun Jalan",m:30,l:-5,s:35},{text:"Pantau",m:5,l:10,s:5}]},
-            {t:"1999", title:"Demokrasi Baru", desc:"Kebebasan pers dibuka lebar.", options:[{text:"Vokal",m:20,l:0,s:25},{text:"Waspada",m:5,l:5,s:5}]},
-            {t:"2000", title:"Millenium", desc:"Indonesia menatap masa depan.", options:[{text:"Maju!",m:30,l:20,s:30},{text:"Bertahan",m:10,l:10,s:10}]}
-        ];
-        set(ref(db, 'missions'), template);
-        alert("18 Misi Berhasil Diaktifkan di Database!");
-    };
-
-    window.editPlayer = (id) => { const n = prompt("Nama Baru:", id); if(n) update(ref(db, 'players/'+id), {name:n}); };
-    window.kickPlayer = (id) => { if(confirm("Kick?")) update(ref(db, 'players/'+id), {status:'KICKED'}); };
-
-    // --- GENERATE PLAYER SLOTS IN WAITING ROOM ---
-    function generatePlayerSlots() {
-        const container = document.getElementById('player-slots-container');
-        container.innerHTML = ''; // Clear existing slots
-        for (let i = 0; i < MAX_PLAYERS; i++) {
-            const slot = document.createElement('div');
-            slot.className = 'player-slot';
-            slot.id = `player-slot-${i}`;
-            const nameDisplay = document.createElement('div');
-            nameDisplay.className = 'player-name-display';
-            nameDisplay.textContent = `Slot ${i + 1}`;
-            slot.appendChild(nameDisplay);
-            container.appendChild(slot);
-        }
-    }
 
     // --- SYNC ---
-    onValue(ref(db, 'missions'), snap => { if(snap.exists()) missions = snap.val(); });
+    onValue(ref(db, 'missions'), snap => { missions = snap.val() || []; });
     onValue(ref(db, 'gameStatus'), snap => {
         if(snap.val() === 'PLAYING' && !document.getElementById('scr-wait').classList.contains('hidden')) {
             showScreen('scr-game'); renderTurn();
         }
     });
     onValue(ref(db, 'players'), snap => {
-        const players = snap.val();
-        const activePlayers = players ? Object.values(players).filter(p => p.status !== 'KICKED') : [];
-        document.getElementById('count-player').innerText = `${activePlayers.length}/${MAX_PLAYERS}`;
-
-        // Update waiting room slots
-        const slotContainer = document.getElementById('player-slots-container');
-        if (slotContainer && slotContainer.innerHTML === '') { // Hanya generate jika kosong
-            generatePlayerSlots();
+        const players = snap.val() || {};
+        const container = document.getElementById('army-container');
+        container.innerHTML = "";
+        const ids = Object.keys(players);
+        for(let i=0; i<40; i++) {
+            const div = document.createElement('div'); div.className = 'soldier';
+            if(ids[i]) { div.classList.add('active'); div.innerText = players[ids[i]].name.substring(0,2); if(ids[i] === pData.id) div.classList.add('me'); }
+            else { div.innerText = i+1; }
+            container.appendChild(div);
         }
-        
-        const playerIds = players ? Object.keys(players).filter(id => players[id].status !== 'KICKED') : [];
-        for (let i = 0; i < MAX_PLAYERS; i++) {
-            const slot = document.getElementById(`player-slot-${i}`);
-            if (!slot) continue;
-
-            const nameDisplay = slot.querySelector('.player-name-display');
-            if (i < playerIds.length) {
-                const playerId = playerIds[i];
-                const player = players[playerId];
-                slot.classList.add('active');
-                nameDisplay.textContent = player.name;
-                // Highlight slot murid yang sedang melihat waiting room
-                if (pData.id === playerId) {
-                    slot.style.border = '3px solid gold';
-                    slot.style.boxShadow = '0 0 10px gold';
-                } else {
-                     slot.style.border = '2px solid #000';
-                     slot.style.boxShadow = 'none';
-                }
-            } else {
-                slot.classList.remove('active');
-                nameDisplay.textContent = `Slot ${i + 1}`;
-                slot.style.border = '2px solid var(--ink)';
-                slot.style.boxShadow = 'none';
-            }
-        }
-
-        // Update current player's own data (name change from admin)
-        if(pData.id && players && players[pData.id]) {
-            if(players[pData.id].status === 'KICKED') showScreen('scr-game'); // Redirect to game for kicked message
-            document.getElementById('lbl-myname').innerText = players[pData.id].name;
-        }
-
-        // Admin table update
         const tbody = document.getElementById('monitor-body');
-        tbody.innerHTML = Object.keys(players || {}).map(id => {
-            const p = players[id];
-            return `<tr>
-                        <td>${p.name}</td>
-                        <td>Misi ${p.cur}</td>
-                        <td>${p.m}/${p.l}/${p.s}</td>
-                        <td>
-                            <button class="btn-small" style="background:#f39c12" onclick="window.editPlayer('${id}')">Edit</button>
-                            <button class="btn-small" style="background:#d62828" onclick="window.kickPlayer('${id}')">Kick</button>
-                        </td>
-                    </tr>`;
-        }).join('');
+        if(tbody) {
+            tbody.innerHTML = Object.keys(players).map(id => `
+                <tr><td>${players[id].name}</td><td>${players[id].cur}</td><td>${players[id].m}/${players[id].l}/${players[id].s}</td>
+                <td style="color:${players[id].ideology==='Pro-Rakyat'?'green':'red'}">${players[id].ideology}</td>
+                <td><button onclick="window.kickPlayer('${id}')" style="background:red; font-size:9px; padding:2px">Kick</button></td></tr>
+            `).join('');
+        }
     });
+    window.kickPlayer = (id) => update(ref(db, 'players/'+id), {status:'KICKED'});
 </script>
 </body>
 </html>
