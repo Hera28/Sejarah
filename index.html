@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>RuangSejarah</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+      background: linear-gradient(135deg,#fefce8,#dcfce7);
+      color:#1f2937;
+    }
+    header{
+      padding:20px;
+      text-align:center;
+      background:#14532d;
+      color:white;
+    }
+    main{
+      padding:20px;
+      max-width:900px;
+      margin:auto;
+    }
+    .card{
+      background:white;
+      padding:20px;
+      border-radius:12px;
+      margin-bottom:20px;
+      box-shadow:0 10px 25px rgba(0,0,0,.08);
+    }
+    button{
+      padding:10px 16px;
+      border:none;
+      border-radius:8px;
+      background:#166534;
+      color:white;
+      cursor:pointer;
+      margin-top:10px;
+    }
+    button.secondary{
+      background:#4b5563;
+    }
+    textarea, input, select{
+      width:100%;
+      padding:10px;
+      margin-top:6px;
+      border-radius:8px;
+      border:1px solid #d1d5db;
+      box-sizing:border-box;
+    }
+    .hidden{ display:none; }
+    .scenario{
+      padding:15px;
+      border-left:4px solid #166534;
+      background:#f0fdf4;
+      margin-bottom:15px;
+      border-radius:8px;
+    }
+    small{ color:#6b7280; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🏛️ RuangSejarah</h1>
+  <p>Pembelajaran Sejarah Indonesia (1800–2000)</p>
+</header>
+
+<main>
+
+  <!-- PILIH MODE -->
+  <div class="card" id="home">
+    <h2>Pilih Peran</h2>
+    <button onclick="openAdmin()">👩‍🏫 Guru Sejarah</button>
+    <button class="secondary" onclick="openStudent()">🧑‍🎓 Murid</button>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="card hidden" id="admin">
+    <h2>Mode Guru (Admin)</h2>
+
+    <label>Rentang Tahun</label>
+    <select id="yearRange">
+      <option>1800–1850</option>
+      <option>1851–1900</option>
+      <option>1901–1945</option>
+      <option>1946–1965</option>
+      <option>1966–1998</option>
+      <option>1999–2000</option>
+    </select>
+
+    <label>Judul Skenario</label>
+    <input id="title" placeholder="Contoh: Agresi Militer Belanda II">
+
+    <label>Deskripsi Skenario</label>
+    <textarea id="desc" rows="4" placeholder="Ceritakan situasi sejarahnya..."></textarea>
+
+    <label>Pertanyaan Reflektif</label>
+    <textarea id="question" rows="3" placeholder="Apa sikapmu dan alasannya?"></textarea>
+
+    <label>Minimal Jumlah Kata</label>
+    <input type="number" id="minWords" value="50">
+
+    <button onclick="saveScenario()">💾 Simpan Skenario</button>
+    <button class="secondary" onclick="backHome()">⬅ Kembali</button>
+
+    <p><small>* Data tersimpan di browser (localStorage)</small></p>
+  </div>
+
+  <!-- STUDENT -->
+  <div class="card hidden" id="student">
+    <h2>Mode Murid</h2>
+    <p><strong>Petunjuk:</strong> Jawablah dengan pemikiran sendiri. Hindari jawaban umum.</p>
+
+    <div id="scenarioList"></div>
+
+    <button class="secondary" onclick="backHome()">⬅ Kembali</button>
+  </div>
+
+</main>
+
+<script>
+  const home = document.getElementById('home');
+  const admin = document.getElementById('admin');
+  const student = document.getElementById('student');
+  const scenarioList = document.getElementById('scenarioList');
+
+  function openAdmin(){
+    home.classList.add('hidden');
+    admin.classList.remove('hidden');
+  }
+
+  function openStudent(){
+    home.classList.add('hidden');
+    student.classList.remove('hidden');
+    loadScenarios();
+  }
+
+  function backHome(){
+    admin.classList.add('hidden');
+    student.classList.add('hidden');
+    home.classList.remove('hidden');
+  }
+
+  function saveScenario(){
+    const data = {
+      year: yearRange.value,
+      title: title.value,
+      desc: desc.value,
+      question: question.value,
+      minWords: minWords.value
+    };
+
+    let scenarios = JSON.parse(localStorage.getItem('ruangsejarah')) || [];
+    scenarios.push(data);
+    localStorage.setItem('ruangsejarah', JSON.stringify(scenarios));
+
+    alert("Skenario berhasil disimpan!");
+    title.value = desc.value = question.value = "";
+  }
+
+  function loadScenarios(){
+    scenarioList.innerHTML = "";
+    let scenarios = JSON.parse(localStorage.getItem('ruangsejarah')) || [];
+
+    if(scenarios.length === 0){
+      scenarioList.innerHTML = "<p><em>Belum ada skenario dari guru.</em></p>";
+      return;
+    }
+
+    scenarios.forEach((s, i) => {
+      const div = document.createElement('div');
+      div.className = "scenario";
+      div.innerHTML = `
+        <strong>${s.title}</strong><br>
+        <small>${s.year}</small>
+        <p>${s.desc}</p>
+        <p><em>${s.question}</em></p>
+        <textarea rows="4" placeholder="Jawabanmu... (min ${s.minWords} kata)"></textarea>
+      `;
+      scenarioList.appendChild(div);
+    });
+  }
+</script>
+
+</body>
+</html>
