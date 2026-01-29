@@ -2,250 +2,438 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>RuangSejarah RPG v5 - Revolusi Strategi</title>
+  <title>RuangSejarah RPG v6 - Arsip Perjuangan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&family=Special+Elite&display=swap');
+
     :root {
-      --primary: #1b4332; --paper: #fdfaf1; --accent: #bc4749;
-      --gold: #b79111; --water: #a8dadc; --land: #79a37d;
+      --paper: #f4e4bc;
+      --ink: #2c1e14;
+      --old-green: #2d4d2d;
+      --blood: #8b0000;
+      --gold: #b8860b;
+      --water: #9ab7b0;
     }
-    body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f0f2f0; color: #333; }
-    header { background: var(--primary); color: white; padding: 15px; text-align: center; border-bottom: 5px solid var(--gold); }
-    main { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
-    .card { background: var(--paper); border-radius: 15px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #ddd; }
-    
-    /* MAP STYLING - Sesuai Gambar */
-    .map-box { 
-      width: 100%; height: 320px; background: var(--water); border: 3px solid #444; 
-      position: relative; border-radius: 12px; overflow: hidden; margin-bottom: 20px;
-    }
-    .island { position: absolute; background: var(--land); border: 3px solid #386641; border-radius: 40% 60% 50% 50%; }
-    .sumatera { width: 110px; height: 180px; top: 15%; left: 8%; transform: rotate(-15deg); }
-    .jawa { width: 280px; height: 70px; top: 68%; left: 20%; border-radius: 50px; }
-    .sulawesi { width: 90px; height: 110px; top: 35%; left: 72%; border-radius: 30% 70%; }
-    
-    .marker { 
-      position: absolute; width: 14px; height: 14px; background: #333; border: 2px solid white; 
-      border-radius: 50%; cursor: pointer; z-index: 10; transition: 0.3s;
-    }
-    .marker.active { background: var(--accent); transform: scale(1.4); box-shadow: 0 0 15px var(--accent); }
 
-    /* STATS & UI */
-    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
-    .stat-card { background: white; padding: 15px; text-align: center; border-radius: 10px; border-bottom: 4px solid var(--primary); }
-    .stat-card b { font-size: 22px; color: var(--primary); }
-    
-    .option-btn { 
-      display: block; width: 100%; text-align: left; padding: 15px; margin: 10px 0;
-      background: #fff; border: 2px solid #ddd; border-radius: 8px; cursor: pointer;
-      font-weight: 600; color: black !important; /* Huruf Hitam Sesuai Request */
+    body {
+      margin: 0;
+      font-family: 'Crimson Text', serif;
+      background: #1a1a1a;
+      color: var(--ink);
+      background-image: url('https://www.transparenttextures.com/patterns/dark-leather.png');
     }
-    .option-btn:hover { background: #f0fdf4; border-color: var(--primary); }
 
-    #intervene-card { 
-      background: #fff3cd; padding: 15px; border-radius: 10px; border-left: 8px solid #ffc107;
-      margin-bottom: 20px; font-weight: bold; animation: slideIn 0.5s;
+    /* LANDING PAGE DECOR */
+    .landing-decor {
+      border: 4px double var(--gold);
+      padding: 10px;
+      margin-bottom: 20px;
+      display: inline-block;
     }
+
+    header {
+      background: var(--old-green);
+      color: var(--paper);
+      padding: 30px;
+      text-align: center;
+      border-bottom: 8px solid var(--gold);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+
+    header h1 { font-family: 'Special Elite', cursive; margin: 0; letter-spacing: 3px; }
+
+    main { max-width: 1100px; margin: 30px auto; padding: 0 15px; }
+
+    .card {
+      background: var(--paper);
+      background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+      border-radius: 5px;
+      padding: 40px;
+      box-shadow: 20px 20px 60px rgba(0,0,0,0.5);
+      border: 1px solid #d2b48c;
+      position: relative;
+    }
+
+    /* MAP V6 - STYLIZED */
+    .map-box {
+      width: 100%; height: 350px;
+      background: var(--water);
+      border: 10px inset #8b7355;
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: inset 0 0 50px rgba(0,0,0,0.3);
+    }
+
+    .island { position: absolute; background: #6b8e23; border: 2px solid #3d5218; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); }
+    .sumatera { width: 120px; height: 220px; top: 10%; left: 10%; transform: rotate(-20deg); border-radius: 40% 60%; }
+    .jawa { width: 320px; height: 60px; top: 70%; left: 25%; border-radius: 50px; }
+    .sulawesi { width: 100px; height: 130px; top: 30%; left: 75%; border-radius: 20% 80%; }
+
+    .marker {
+      position: absolute; width: 16px; height: 16px; background: #333;
+      border: 2px solid #fff; border-radius: 50%; cursor: pointer; z-index: 20;
+      transition: 0.4s;
+    }
+    .marker:hover { transform: scale(1.5); background: var(--blood); }
+    .marker.active { background: var(--blood); box-shadow: 0 0 15px var(--blood); border-color: var(--gold); }
+
+    /* STATS SEPIA */
+    .stats-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+    .stat-box {
+      background: rgba(255,255,255,0.3);
+      border: 1px solid var(--ink);
+      padding: 15px;
+      text-align: center;
+      font-family: 'Special Elite', cursive;
+    }
+    .stat-box b { font-size: 28px; display: block; color: var(--blood); }
+
+    /* OPTIONS - BLACK TEXT */
+    .option-btn {
+      display: block; width: 100%; text-align: left;
+      padding: 20px; margin: 15px 0;
+      background: rgba(255,255,255,0.6);
+      border: 2px solid var(--ink);
+      color: #000 !important; /* Huruf Hitam Pekat */
+      font-size: 18px; font-weight: bold;
+      cursor: pointer; transition: 0.3s;
+      font-family: 'Crimson Text', serif;
+    }
+    .option-btn:hover { background: var(--ink); color: var(--paper) !important; transform: translateX(10px); }
+
+    /* INTERVENTION POPUP */
+    #intervene-alert {
+      background: var(--blood); color: #fff;
+      padding: 15px; margin-bottom: 20px;
+      border: 3px double var(--gold);
+      font-family: 'Special Elite', cursive;
+      display: none;
+      animation: flash 1s infinite alternate;
+    }
+    @keyframes flash { from { opacity: 0.8; } to { opacity: 1; } }
+
     .hidden { display: none; }
-    @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    input[type="text"] { 
+      background: transparent; border: none; border-bottom: 2px solid var(--ink);
+      font-size: 20px; width: 100%; font-family: 'Special Elite', cursive;
+    }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>🏛️ RUANGSEJARAH RPG v5</h1>
-  <p>Strategi Perjalanan Bangsa (1800–2000)</p>
+  <h1>🏛️ RUANGSEJARAH RPG: ARSIP NASIONAL</h1>
+  <p>Simulasi Strategi Perjalanan Bangsa Indonesia (1800–2000)</p>
 </header>
 
 <main>
-  <div id="login-screen" class="card">
-    <h2>Registrasi Komandan</h2>
-    <input type="text" id="student-name" placeholder="Nama Lengkap..." style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; border:1px solid #ccc;">
-    <button onclick="startApp()" style="background:var(--primary); color:white; padding:12px 25px; border:none; border-radius:8px; cursor:pointer;">Masuk Simulasi</button>
-    <button onclick="authAdmin()" style="background:#666; color:white; padding:12px 20px; border:none; border-radius:8px; margin-left:10px;">Guru</button>
+  <div id="login-screen" class="card" style="text-align: center;">
+    <div class="landing-decor">
+      <img src="https://img.icons8.com/ios-filled/100/2c1e14/fountain-pen-tip.png" alt="Pen"><br>
+      <h2 style="font-family: 'Special Elite';">Buku Registrasi Komandan</h2>
+    </div>
+    <div style="max-width: 400px; margin: 0 auto;">
+      <p>Tuliskan nama Anda untuk membuka berkas sejarah:</p>
+      <input type="text" id="student-name" placeholder="Nama Lengkap..." autocomplete="off"><br><br>
+      <button onclick="toTeamSelection()" style="padding: 15px 40px; background: var(--old-green); color: #fff; border:none; border-radius: 4px; cursor: pointer; font-weight: bold;">BUKA ARSIP ⮕</button>
+      <br><br>
+      <button onclick="authAdmin()" style="background: none; border: none; color: var(--blood); cursor: pointer; text-decoration: underline;">Akses Panel Guru</button>
+    </div>
   </div>
 
   <div id="team-screen" class="card hidden">
-    <h3>Pilih Wilayah Perjuangan</h3>
-    <p>Halo <b id="user-display"></b>, tentukan basis tim Anda di peta:</p>
-    <div class="map-box" id="map-select">
-      <div class="island sumatera"></div><div class="island jawa"></div><div class="island sulawesi"></div>
+    <h2 style="font-family: 'Special Elite'; border-bottom: 2px solid var(--ink);">Pilih Wilayah Basis Perjuangan</h2>
+    <p>Klik pada lokasi di peta untuk menentukan markas besar tim Anda:</p>
+    <div class="map-box" id="selection-map">
+      <div class="island sumatera"></div>
+      <div class="island jawa"></div>
+      <div class="island sulawesi"></div>
     </div>
-    <div id="team-info" style="font-weight:bold; color:var(--accent); min-height:20px;"></div>
-    <button id="confirm-btn" class="hidden" onclick="startGame()" style="margin-top:15px; background:var(--primary); color:white; padding:12px 20px; border:none; border-radius:8px;">Konfirmasi Wilayah ⮕</button>
+    <div id="team-info" style="margin: 20px 0; font-size: 22px; font-weight: bold; color: var(--blood); text-align: center;"></div>
+    <div style="text-align: right;">
+      <button id="confirm-btn" class="hidden" onclick="startSim()" style="padding: 15px 30px; background: var(--old-green); color: #fff; border:none; cursor: pointer;">MULAI SIMULASI ⮕</button>
+    </div>
   </div>
 
   <div id="game-screen" class="card hidden">
-    <div id="intervene-card" class="hidden"></div>
-    <div class="stats-row">
-      <div class="stat-card">🧠 Moral<br><b id="st-m">50</b></div>
-      <div class="stat-card">📦 Logistik<br><b id="st-l">50</b></div>
-      <div class="stat-card">🌍 Dukungan<br><b id="st-s">50</b></div>
+    <div id="intervene-alert"></div>
+    
+    <div class="stats-container">
+      <div class="stat-box">🧠 MORAL<br><b id="st-m">50</b></div>
+      <div class="stat-box">📦 LOGISTIK<br><b id="st-l">50</b></div>
+      <div class="stat-box">🌍 DUKUNGAN<br><b id="st-s">50</b></div>
     </div>
-    <div id="event-area">
-      <h3 id="ev-title"></h3>
-      <p id="ev-desc"></p>
+
+    <div id="event-content">
+      <h3 id="ev-title" style="font-family: 'Special Elite'; color: var(--blood); font-size: 26px;"></h3>
+      <p id="ev-desc" style="font-size: 20px; line-height: 1.6;"></p>
       <div id="options-box"></div>
     </div>
+
     <div id="ref-box" class="hidden">
-      <textarea id="ref-text" placeholder="Tulis alasan strategimu..." style="width:100%; height:60px; margin-top:10px; border-radius:8px; padding:10px;"></textarea>
-      <button onclick="nextTurn()" style="margin-top:10px; background:var(--primary); color:white; padding:10px 20px; border:none; border-radius:8px;">Lanjut ⮕</button>
+      <hr style="border: 1px dashed var(--ink);">
+      <p><i><b>Catatan Strategis:</b> Tuliskan alasan dibalik keputusan ini...</i></p>
+      <textarea id="ref-text" style="width: 100%; height: 80px; background: rgba(255,255,255,0.5); border: 1px solid var(--ink); padding: 10px; font-family: serif; font-size: 18px;"></textarea>
+      <button onclick="nextTurn()" style="margin-top: 15px; padding: 10px 25px; background: var(--old-green); color: #fff; border: none; cursor: pointer;">CATAT & LANJUTKAN ⮕</button>
     </div>
   </div>
 
   <div id="admin-screen" class="card hidden">
-    <h2>DASHBOARD GURU</h2>
-    <div id="admin-summary" style="background:#e8f5e9; padding:15px; border-radius:10px; margin-bottom:15px;"></div>
-    <div id="admin-list" style="max-height:300px; overflow-y:auto;"></div>
-    <button onclick="location.reload()" style="margin-top:15px;">Keluar</button>
+    <h2 style="font-family: 'Special Elite';">Laporan Hasil Akhir Kelas</h2>
+    <div id="admin-summary" style="display: flex; justify-content: space-around; background: #fff; padding: 20px; border: 2px solid var(--gold); margin-bottom: 20px;"></div>
+    <div id="admin-list"></div>
+    <button onclick="location.reload()" style="margin-top: 20px;">KEMBALI KE BERANDA</button>
   </div>
 </main>
 
 <script>
-// --- DATA 18 PERISTIWA ---
+// --- DATABASE PERISTIWA (18 ITEM) ---
 const timeline = [
-  { t:"1808", title:"Jalan Raya Pos", desc:"Daendels memaksa pembangunan jalan 1000km. Bagaimana reaksi tim Anda?", options:[{text:"Protes & Sabotase",m:15,l:-10,s:0},{text:"Ikut Bekerja demi Keamanan",m:-10,l:10,s:5},{text:"Melarikan diri ke hutan",m:5,l:-5,s:-5}]},
-  { t:"1825", title:"Perang Jawa", desc:"Patok jalan Belanda melintasi makam leluhur.", options:[{text:"Perang Gerilya",m:20,l:-15,s:5},{text:"Diplomasi Keraton",m:-5,l:5,s:15},{text:"Tunggu bantuan daerah lain",m:5,l:-5,s:0}]},
-  { t:"1830", title:"Tanam Paksa", desc:"Belanda mewajibkan tanaman ekspor.", options:[{text:"Sembunyikan hasil panen",m:10,l:5,s:-5},{text:"Ajukan protes ke parlemen",m:-5,l:0,s:20},{text:"Fokus pada padi saja",m:5,l:-10,s:0}]},
-  { t:"1873", title:"Perang Aceh", desc:"Belanda menyatakan perang terhadap Kesultanan Aceh.", options:[{text:"Kirim bantuan logistik",m:10,l:-10,s:5},{text:"Bertahan di wilayah sendiri",m:-5,l:10,s:-5},{text:"Serukan jihad nasional",m:20,l:-5,s:0}]},
-  { t:"1901", title:"Politik Etis", desc:"Edukasi mulai dibuka untuk pribumi.", options:[{text:"Kirim pemuda sekolah",m:10,l:-5,s:15},{text:"Curigai agenda Belanda",m:5,l:0,s:-10},{text:"Minta akses ekonomi juga",m:0,l:15,s:5}]},
-  { t:"1908", title:"Budi Utomo", desc:"Kesadaran nasional tumbuh.", options:[{text:"Dukung organisasi",m:15,l:0,s:10},{text:"Fokus pada suku sendiri",m:-5,l:5,s:-5},{text:"Jadikan gerakan politik",m:10,l:-5,s:5}]},
-  { t:"1928", title:"Sumpah Pemuda", desc:"Kongres pemuda menyatakan satu bangsa.", options:[{text:"Ikrarkan kesetiaan",m:25,l:0,s:10},{text:"Minta otonomi daerah",m:5,l:5,s:-5},{text:"Fokus gerakan ekonomi",m:0,l:15,s:0}]},
-  { t:"1942", title:"Jepang Datang", desc:"Belanda menyerah tanpa syarat.", options:[{text:"Sambut sebagai saudara",m:10,l:10,s:-10},{text:"Waspadai militer Jepang",m:5,l:-5,s:5},{text:"Siapkan perlawanan diam-diam",m:15,l:-10,s:0}]},
-  { t:"1943", title:"Romusha", desc:"Jepang meminta tenaga kerja untuk perang.", options:[{text:"Lindungi pemuda desa",m:20,l:-10,s:0},{text:"Kirim tenaga sukarela",m:-15,l:15,s:-5},{text:"Ganti dengan hasil bumi",m:-5,l:5,s:5}]},
-  { t:"1945", title:"Proklamasi", desc:"Jepang kalah, Sekutu belum datang.", options:[{text:"Proklamasi SEGERA",m:30,l:-5,s:15},{text:"Rundingkan dengan Jepang",m:-10,l:10,s:5},{text:"Tunggu komando Sekutu",m:-20,l:5,s:10}]},
-  { t:"1945", title:"Pertempuran Surabaya", desc:"Sekutu memberi ultimatum penyerahan senjata.", options:[{text:"Lawan sampai mati!",m:25,l:-20,s:10},{text:"Negosiasi damai",m:-10,l:10,s:15},{text:"Mundur dan gerilya",m:10,l:5,s:-5}]},
-  { t:"1948", title:"Agresi Militer II", desc:"Ibukota Yogyakarta jatuh ke tangan Belanda.", options:[{text:"Gerilya Sudirman",m:20,l:-15,s:10},{text:"Diplomasi Luar Negeri",m:5,l:5,s:25},{text:"Menyerah untuk sementara",m:-20,l:10,s:0}]},
-  { t:"1949", title:"KMB", desc:"Pengakuan kedaulatan dengan hutang besar.", options:[{text:"Terima demi kedaulatan",m:10,l:-20,s:20},{text:"Tolak dan lanjut perang",m:15,l:-25,s:-10},{text:"Minta keringanan hutang",m:5,l:-5,s:5}]},
-  { t:"1955", title:"Konferensi Asia Afrika", desc:"Indonesia menggalang kekuatan negara selatan.", options:[{text:"Pimpin Blok Non-Blok",m:20,l:0,s:30},{text:"Fokus masalah dalam negeri",m:-5,l:10,s:-5},{text:"Cari hutang pembangunan",m:-10,l:20,s:10}]},
-  { t:"1962", title:"Trikora", desc:"Pembebasan Irian Barat dari Belanda.", options:[{text:"Operasi Militer Besar",m:20,l:-20,s:5},{text:"Diplomasi lewat PBB",m:5,l:0,s:25},{text:"Minta bantuan Uni Soviet",m:10,l:15,s:-10}]},
-  { t:"1965", title:"G30S", desc:"Gejolak politik hebat melanda Jakarta.", options:[{text:"Amankan wilayah tim",m:10,l:5,s:-10},{text:"Ikuti instruksi pusat",m:-5,l:10,s:5},{text:"Minta penjelasan hukum",m:15,l:0,s:5}]},
-  { t:"1980", title:"Orde Baru", desc:"Fokus pembangunan ekonomi lewat Pelita.", options:[{text:"Dukung stabilitas",m:5,l:25,s:10},{text:"Kritik pembatasan pers",m:15,l:-10,s:10},{text:"Fokus ekonomi desa",m:10,l:15,s:0}]},
-  { t:"1998", title:"Reformasi", desc:"Mahasiswa menuntut perubahan total.", options:[{text:"Dukung reformasi",m:25,l:-10,s:20},{text:"Jaga ketertiban kota",m:5,l:15,s:-10},{text:"Dialog lintas golongan",m:15,l:5,s:15}]}
+  { t:"1808", title:"Proyek Jalan Raya Pos", desc:"Daendels memerintahkan pembangunan jalan Anyer-Panarukan. Rakyat dipaksa bekerja tanpa upah.", options:[
+    {text:"Mobilisasi Perlawanan Desa", m:20, l:-15, s:0, res:"Rakyat bangga, tapi pembangunan terhenti dan patroli Belanda makin ketat."},
+    {text:"Ikuti demi Keamanan Pangan", m:-15, l:20, s:5, res:"Jalan selesai, logistik lancar, tapi moral rakyat hancur karena kelelahan."},
+    {text:"Sabotase Tersembunyi", m:5, l:-5, s:10, res:"Pembangunan lambat, Belanda curiga, tapi semangat juang tetap terjaga."}
+  ]},
+  { t:"1825", title:"Pecahnya Perang Jawa", desc:"Belanda memasang patok di tanah leluhur Diponegoro. Situasi memanas.", options:[
+    {text:"Serangan Gerilya Hutan", m:25, l:-20, s:10, res:"Belanda kewalahan di medan asing, tapi persediaan makanan menipis."},
+    {text:"Perundingan Diplomatik", m:-10, l:10, s:20, res:"Pertumpahan darah tertunda, tapi rakyat menganggap tim Anda lemah."},
+    {text:"Bertahan di Benteng Desa", m:10, l:-5, s:-10, res:"Desa aman sementara, namun inisiatif perang direbut Belanda."}
+  ]},
+  { t:"1830", title:"Cultuurstelsel (Tanam Paksa)", desc:"Rakyat diwajibkan menanam tanaman ekspor untuk melunasi hutang Belanda.", options:[
+    {text:"Manipulasi Luas Lahan", m:15, l:10, s:-5, res:"Rakyat bisa makan lebih banyak, tapi denda kolonial membayangi."},
+    {text:"Kirim Petisi ke Kaum Liberal Eropa", m:-5, l:0, s:30, res:"Dunia mulai mengecam Belanda, tekanan internasional menguat."},
+    {text:"Fokus Produksi Kopi & Gula", m:-20, l:30, s:10, res:"Logistik melimpah, tim Anda kaya, tapi rakyat menderita kelaparan."}
+  ]},
+  { t:"1873", title:"Maklumat Perang Aceh", desc:"Belanda menyerang Kesultanan Aceh. Perlawanan fisik besar-besaran.", options:[
+    {text:"Serukan Perang Sabil", m:30, l:-10, s:-5, res:"Semangat juang membara, Belanda terjebak dalam perang berlarut."},
+    {text:"Jalin Hubungan dengan Turki Usmani", m:5, l:5, s:25, res:"Dukungan dunia Islam meningkat, senjata rahasia masuk."},
+    {text:"Taktik Mundur ke Pegunungan", m:10, l:10, s:-10, res:"Pasukan aman, tapi kendali kota-kota pesisir hilang."}
+  ]},
+  { t:"1901", title:"Fajar Politik Etis", desc:"Belanda membuka akses pendidikan terbatas bagi pribumi. Peluang atau jebakan?", options:[
+    {text:"Kirim Pemuda Sekolah ke Belanda", m:10, l:-5, s:20, res:"Lahir golongan intelektual baru yang akan melawan lewat pena."},
+    {text:"Bangun Sekolah Desa Mandiri", m:20, l:5, s:-5, res:"Literasi rakyat meningkat pesat tanpa campur tangan kolonial."},
+    {text:"Tolak Pendidikan Barat", m:5, l:10, s:-15, res:"Tradisi terjaga, tapi tim Anda buta akan strategi modern."}
+  ]},
+  { t:"1908", title:"Lahirnya Budi Utomo", desc:"Organisasi modern pertama lahir. Pergerakan mulai terorganisir.", options:[
+    {text:"Fokus Pendidikan & Budaya", m:15, l:5, s:10, res:"Kesadaran nasional tumbuh perlahan namun pasti."},
+    {text:"Ubah Jadi Gerakan Politik Massa", m:25, l:-5, s:5, res:"Massa bergerak, tapi pemimpin segera diasingkan Belanda."},
+    {text:"Bangun Serikat Dagang Islam", m:10, l:25, s:0, res:"Kekuatan ekonomi tim Anda menguat, mandiri dari pedagang asing."}
+  ]},
+  { t:"1928", title:"Sumpah Pemuda", desc:"Kongres Pemuda II. Identitas 'Indonesia' resmi dideklarasikan.", options:[
+    {text:"Satu Bangsa, Satu Bahasa", m:35, l:0, s:15, res:"Persatuan meledak! Identitas nasional menjadi senjata terkuat."},
+    {text:"Fokus Kebebasan Wilayah Masing-masing", m:5, l:10, s:-10, res:"Kekuatan lokal kuat, tapi persatuan nasional rapuh."},
+    {text:"Gunakan Media Cetak untuk Propaganda", m:10, l:5, s:20, res:"Gagasan merdeka tersebar hingga pelosok negeri."}
+  ]},
+  { t:"1942", title:"Kedatangan Balatentara Jepang", desc:"Belanda menyerah. Jepang mengklaim diri sebagai 'Saudara Tua'.", options:[
+    {text:"Kerja Sama untuk Pelatihan Militer", m:-10, l:25, s:-15, res:"Pemuda tim Anda terlatih perang, tapi rakyat jadi Romusha."},
+    {text:"Gerakan Bawah Tanah Anti-Fasis", m:20, l:-10, s:10, res:"Informasi intelijen kuat, tapi nyawa pemimpin terancam."},
+    {text:"Manfaatkan Organisasi Bentukan Jepang", m:5, l:15, s:5, res:"Panggung politik didapat, meski harus berpura-idsetia."}
+  ]},
+  { t:"1945", title:"Rengasdengklok & Proklamasi", desc:"Jepang kalah. Golongan muda mendesak proklamasi segera.", options:[
+    {text:"Proklamasi Secepatnya", m:40, l:-5, s:15, res:"Indonesia Merdeka! Rakyat bersorak, namun militer Jepang marah."},
+    {text:"Tunggu Janji Kemerdekaan Jepang", m:-20, l:15, s:5, res:"Kemerdekaan dianggap pemberian, wibawa negara rendah di mata dunia."},
+    {text:"Siapkan Barisan Pelopor Rebut Senjata", m:20, l:25, s:-5, res:"Kekuatan militer siap, namun situasi menjadi sangat berdarah."}
+  ]},
+  { t:"1945", title:"Pertempuran Surabaya", desc:"Inggris memberi ultimatum penyerahan senjata. Rakyat marah.", options:[
+    {text:"Lawan Sampai Titik Darah Terakhir", m:30, l:-25, s:15, res:"Surabaya hancur, tapi keberanian Indonesia mengguncang dunia."},
+    {text:"Negosiasi Lewat Jalur Diplomasi PBB", m:-10, l:10, s:30, res:"Dunia menekan Inggris, namun moral pejuang di lapangan jatuh."},
+    {text:"Taktik Gerilya Kota", m:15, l:5, s:5, res:"Kerugian pasukan minim, Inggris frustasi menguasai kota."}
+  ]},
+  { t:"1947", title:"Agresi Militer Belanda I", desc:"Belanda melanggar perjanjian Linggarjati dan menyerang pusat ekonomi.", options:[
+    {text:"Bumi Hangus Kota Strategis", m:20, l:-30, s:5, res:"Belanda tidak mendapat apa-apa, tapi pengungsi kelaparan."},
+    {text:"Bawa Masalah ke Dewan Keamanan PBB", m:5, l:0, s:35, res:"Belanda dicap agresor oleh dunia, tekanan global menguat."},
+    {text:"Serangan Balik ke Perkebunan Belanda", m:15, l:15, s:-10, res:"Suplai logistik didapat, Belanda mengalami kerugian finansial."}
+  ]},
+  { t:"1948", title:"Agresi Militer II & PDRI", desc:"Ibukota Yogyakarta jatuh. Presiden ditawan.", options:[
+    {text:"Bentuk Pemerintah Darurat di Sumatera", m:25, l:10, s:20, res:"Eksistensi RI tetap terjaga meski ibukota jatuh."},
+    {text:"Perang Gerilya Jenderal Sudirman", m:35, l:-15, s:5, res:"Belanda tak pernah merasa aman di tanah jajahan."},
+    {text:"Menyerah demi Keselamatan Rakyat", m:-40, l:20, s:0, res:"Pertumpahan darah berhenti, tapi perjuangan dianggap tamat."}
+  ]},
+  { t:"1949", title:"Konferensi Meja Bundar", desc:"Belanda akhirnya mengakui kedaulatan, tapi RI harus bayar hutang.", options:[
+    {text:"Terima Demi Pengakuan Dunia", m:10, l:-25, s:30, res:"Kedaulatan penuh diraih, meski ekonomi terbebani hutang lama."},
+    {text:"Tolak & Lanjutkan Perang Total", m:20, l:-40, s:-15, res:"Kebanggaan terjaga, tapi negara terancam bangkrut dan hancur."},
+    {text:"Negosiasi Pengurangan Hutang Warisan", m:5, l:5, s:15, res:"Hasil tengah-tengah, kedaulatan diakui dengan syarat berat."}
+  ]},
+  { t:"1955", title:"Konferensi Asia Afrika", desc:"Indonesia memimpin negara-negara baru merdeka melawan kolonialisme.", options:[
+    {text:"Pimpin Gerakan Non-Blok", m:20, l:5, s:35, res:"Indonesia menjadi mercusuar bagi bangsa-bangsa terjajah."},
+    {text:"Fokus Cari Bantuan Ekonomi Negara Maju", m:-5, l:30, s:10, res:"Ekonomi membaik, tapi wibawa politik internasional menurun."},
+    {text:"Gunakan KAA untuk Rebut Irian Barat", m:15, l:0, s:25, res:"Dukungan internasional untuk wilayah timur mengalir deras."}
+  ]},
+  { t:"1962", title:"Operasi Trikora", desc:"Konfrontasi militer dan diplomasi untuk membebaskan Irian Barat.", options:[
+    {text:"Mobilisasi Pasukan Komando", m:25, l:-25, s:5, res:"Belanda terdesak secara militer di Papua."},
+    {text:"Gunakan Bantuan Alutsista Uni Soviet", m:15, l:20, s:-15, res:"Kekuatan tempur hebat, tapi Amerika mulai curiga."},
+    {text:"Jalur Diplomasi Bunker (AS)", m:5, l:5, s:30, res:"Belanda dipaksa mundur oleh Amerika demi stabilitas kawasan."}
+  ]},
+  { t:"1966", title:"Transisi Orde Baru", desc:"Gejolak politik besar pasca G30S. Fokus beralih ke stabilitas.", options:[
+    {text:"Fokus Pembangunan Ekonomi (Pelita)", m:5, l:35, s:15, res:"Swasembada pangan tercapai, negara mulai stabil."},
+    {text:"Perkuat Kebebasan Demokrasi", m:25, l:-10, s:20, res:"Rakyat bebas bersuara, namun rawan konflik internal."},
+    {text:"Sentralisasi Kekuatan Militer", m:10, l:15, s:-10, res:"Keamanan terjamin, namun kontrol negara sangat ketat."}
+  ]},
+  { t:"1980", title:"Era Integrasi & Pembangunan", desc:"Pembangunan infrastruktur masif ke pelosok daerah.", options:[
+    {text:"Bangun Sekolah & Puskesmas Desa", m:20, l:20, s:10, res:"Kualitas hidup rakyat meningkat secara nyata."},
+    {text:"Fokus Industri Strategis (Dirgantara)", m:10, l:5, s:25, res:"Indonesia disegani karena teknologi, meski biaya sangat mahal."},
+    {text:"Jaga Stabilitas Harga Pangan", m:5, l:30, s:5, res:"Logistik aman, rakyat tenang, ekonomi berputar lancar."}
+  ]},
+  { t:"1998", title:"Gelombang Reformasi", desc:"Krisis moneter memicu tuntutan perubahan total sistem negara.", options:[
+    {text:"Dukung Tuntutan Reformasi Total", m:35, l:-15, s:25, res:"Demokrasi baru lahir! Kebebasan kembali ke tangan rakyat."},
+    {text:"Dialog Damai Lintas Tokoh Bangsa", m:20, l:5, s:20, res:"Transisi kekuasaan berjalan tertib tanpa kerusuhan besar."},
+    {text:"Pertahankan Status Quo demi Keamanan", m:-30, l:20, s:-20, res:"Stabilitas terjaga sementara, namun amarah rakyat meledak."}
+  ]}
 ];
 
 // --- APP LOGIC ---
 let state = { name:"", team:"", m:50, l:50, s:50, cur:0, logs:[] };
-const markers = [
-  {id:'medan', x:18, y:35, name:'Medan'}, {id:'batavia', x:28, y:68, name:'Batavia'}, 
-  {id:'bandung', x:32, y:72, name:'Bandung'}, {id:'yogya', x:40, y:75, name:'Yogyakarta'}, 
-  {id:'surabaya', x:48, y:75, name:'Surabaya'}, {id:'manado', x:78, y:42, name:'Manado'}
-];
 
-function startApp() {
+function toTeamSelection() {
   const n = document.getElementById('student-name').value;
-  if(n.length < 3) return alert("Isi nama dulu!");
+  if(!n) return alert("Komandan harus punya nama!");
   state.name = n;
   document.getElementById('login-screen').classList.add('hidden');
   document.getElementById('team-screen').classList.remove('hidden');
-  document.getElementById('user-display').innerText = n;
-  renderMarkers();
+  renderSelectionMap();
 }
 
-function renderMarkers() {
-  const map = document.getElementById('map-select');
-  markers.forEach(m => {
+function renderSelectionMap() {
+  const map = document.getElementById('selection-map');
+  const cities = [
+    {id:'medan', x:18, y:30, n:'Medan'}, {id:'batavia', x:28, y:68, n:'Batavia'}, 
+    {id:'bandung', x:32, y:72, n:'Bandung'}, {id:'yogya', x:42, y:75, n:'Yogyakarta'}, 
+    {id:'surabaya', x:50, y:75, n:'Surabaya'}, {id:'manado', x:78, y:38, n:'Manado'}
+  ];
+  cities.forEach(c => {
     const d = document.createElement('div');
-    d.className = 'marker'; d.style.left = m.x + "%"; d.style.top = m.y + "%";
+    d.className = 'marker'; d.style.left = c.x+'%'; d.style.top = c.y+'%';
     d.onclick = () => {
-      document.querySelectorAll('.marker').forEach(x => x.classList.remove('active'));
-      d.classList.add('active'); state.team = m.id;
-      document.getElementById('team-info').innerText = "Tim Terpilih: " + m.name;
+      document.querySelectorAll('.marker').forEach(m => m.classList.remove('active'));
+      d.classList.add('active'); state.team = c.id;
+      document.getElementById('team-info').innerText = "MARKAS BESAR: TIM "+c.n.toUpperCase();
       document.getElementById('confirm-btn').classList.remove('hidden');
     };
     map.appendChild(d);
   });
 }
 
-function startGame() {
+function startSim() {
   document.getElementById('team-screen').classList.add('hidden');
   document.getElementById('game-screen').classList.remove('hidden');
   loadEvent();
 }
 
 function loadEvent() {
-  if(state.cur >= timeline.length) return finish();
-  
-  // Random Intervention Card (Negara Besar)
-  const intervene = document.getElementById('intervene-card');
-  intervene.classList.add('hidden');
+  if(state.cur >= timeline.length) return finishSim();
+
+  // INTERVENTION LOGIC (Positif/Negatif Acak)
+  const alertBox = document.getElementById('intervene-alert');
+  alertBox.style.display = 'none';
   if(Math.random() > 0.7) {
-    const powers = [
-      {p:"BELANDA", t:"mengambil paksa suplai makanan!", m:-10, l:-15, s:0},
-      {p:"JEPANG", t:"memaksa pemuda tim Anda menjadi Seinendan.", m:-5, l:15, s:-10},
-      {p:"AMERIKA", t:"mengirimkan bantuan Marshall Plan.", m:10, l:20, s:15},
-      {p:"INGGRIS", t:"menjadi penengah diplomasi wilayah Anda.", m:5, l:0, s:15},
-      {p:"USSR", t:"mengirimkan bantuan alutsista rahasia.", m:15, l:15, s:-15}
+    const inter = [
+      {p:"EROPA", t:"memberikan tekanan ekonomi pada kolonial.", m:10, l:0, s:15, c:"Positive"},
+      {p:"AMERIKA", t:"mengirimkan bantuan logistik medis.", m:5, l:20, s:5, c:"Positive"},
+      {p:"JEPANG", t:"mengambil paksa hasil tani rakyat.", m:-10, l:-20, s:0, c:"Negative"},
+      {p:"BELANDA", t:"melakukan blokade laut di wilayah Anda.", m:-5, l:-15, s:-10, c:"Negative"},
+      {p:"UNI SOVIET", t:"memberikan bantuan pelatihan militer.", m:15, l:10, s:-15, c:"Neutral"}
     ];
-    const pick = powers[Math.floor(Math.random()*powers.length)];
+    const pick = inter[Math.floor(Math.random()*inter.length)];
     state.m += pick.m; state.l += pick.l; state.s += pick.s;
-    intervene.innerHTML = `⚠️ INTERVENSI ${pick.p}: ${pick.t}`;
-    intervene.classList.remove('hidden');
+    alertBox.innerHTML = `⚠️ BERITA DUNIA: Intervensi ${pick.p} - ${pick.t}`;
+    alertBox.style.display = 'block';
   }
 
   const ev = timeline[state.cur];
   document.getElementById('ev-title').innerText = `${ev.t}: ${ev.title}`;
   document.getElementById('ev-desc').innerText = ev.desc;
-  const box = document.getElementById('options-box'); box.innerHTML = '';
+  
+  const box = document.getElementById('options-box');
+  box.innerHTML = '';
   ev.options.forEach(o => {
-    const b = document.createElement('button'); b.className = 'option-btn';
-    b.innerText = o.text; b.onclick = () => { 
-      state.m += o.m; state.l += o.l; state.s += o.s; 
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerText = o.text;
+    btn.onclick = () => {
+      state.m += o.m; state.l += o.l; state.s += o.s;
       state.lastChoice = o.text;
-      box.innerHTML = ''; document.getElementById('ref-box').classList.remove('hidden');
+      document.getElementById('ev-desc').innerHTML = `💡 <b>HASIL:</b> ${o.res}`;
+      box.innerHTML = '';
+      document.getElementById('ref-box').classList.remove('hidden');
     };
-    box.appendChild(b);
+    box.appendChild(btn);
   });
-  updateStats();
+  updateUI();
 }
 
 function nextTurn() {
   const ref = document.getElementById('ref-text').value;
-  if(ref.length < 5) return alert("Tulis alasanmu!");
-  state.logs.push({ev: timeline[state.cur].title, ch: state.lastChoice, ref: ref});
-  state.cur++; document.getElementById('ref-text').value = '';
+  if(ref.length < 5) return alert("Komandan, tuliskan alasan strategimu!");
+  
+  state.logs.push({ ev: timeline[state.cur].title, ch: state.lastChoice, ref: ref });
+  state.cur++;
+  document.getElementById('ref-text').value = '';
   document.getElementById('ref-box').classList.add('hidden');
   loadEvent();
 }
 
-function updateStats() {
+function updateUI() {
   document.getElementById('st-m').innerText = state.m;
   document.getElementById('st-l').innerText = state.l;
   document.getElementById('st-s').innerText = state.s;
 }
 
-function finish() {
-  document.getElementById('event-area').innerHTML = `<h2>🎉 SIMULASI SELESAI!</h2><p>Komandan ${state.name}, tim ${state.team} berhasil mengarungi sejarah.</p>`;
-  let db = JSON.parse(localStorage.getItem('rsh_v5') || "[]");
-  db.push(state); localStorage.setItem('rsh_v5', JSON.stringify(db));
+function finishSim() {
+  document.getElementById('game-screen').innerHTML = `
+    <div style="text-align:center;">
+      <h2 style="font-family:'Special Elite'; color:var(--blood);">ARSIP SELESAI</h2>
+      <p>Komandan <b>${state.name}</b> dari Tim <b>${state.team.toUpperCase()}</b> telah menyelesaikan 200 tahun sejarah.</p>
+      <div class="stats-container">
+        <div class="stat-box">🧠 ${state.m}</div>
+        <div class="stat-box">📦 ${state.l}</div>
+        <div class="stat-box">🌍 ${state.s}</div>
+      </div>
+      <button onclick="location.reload()" style="padding:15px 30px; background:var(--blood); color:#fff; border:none; cursor:pointer;">ULANGI SEJARAH</button>
+    </div>
+  `;
+  let db = JSON.parse(localStorage.getItem('ruangsejarah_v6') || "[]");
+  db.push(state);
+  localStorage.setItem('ruangsejarah_v6', JSON.stringify(db));
 }
 
+// --- ADMIN ---
 function authAdmin() {
   const p = prompt("Sandi Guru:");
   if(p === "Sejarah123") {
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('admin-screen').classList.remove('hidden');
     renderAdmin();
-  }
+  } else { alert("Sandi Salah!"); }
 }
 
 function renderAdmin() {
-  const db = JSON.parse(localStorage.getItem('rsh_v5') || "[]");
+  const db = JSON.parse(localStorage.getItem('ruangsejarah_v6') || "[]");
   const list = document.getElementById('admin-list');
   const sum = document.getElementById('admin-summary');
-  if(db.length === 0) return list.innerText = "Belum ada data.";
+  
+  if(db.length === 0) return list.innerHTML = "<p>Belum ada murid yang mengerjakan.</p>";
   
   let avgM = 0, avgL = 0, avgS = 0;
-  db.forEach(x => { avgM += x.m; avgL += x.l; avgS += x.s; });
-  sum.innerHTML = `<b>RATA-RATA KELAS:</b><br>Moral: ${Math.round(avgM/db.length)} | Logistik: ${Math.round(avgL/db.length)} | Dukungan: ${Math.round(avgS/db.length)}`;
-  
-  list.innerHTML = db.reverse().map(x => `
-    <div style="border-bottom:1px solid #ccc; padding:10px;">
-      <b>${x.name} (${x.team})</b> - M:${x.m} L:${x.l} S:${x.s}
-      <details><summary>Lihat Jawaban</summary>${x.logs.map(l => `<small><b>${l.ev}:</b> ${l.ch} (Ref: ${l.ref})</small><br>`).join('')}</details>
+  db.forEach(m => { avgM += m.m; avgL += m.l; avgS += m.s; });
+  sum.innerHTML = `
+    <div><b>AVG MORAL:</b> ${Math.round(avgM/db.length)}</div>
+    <div><b>AVG LOGISTIK:</b> ${Math.round(avgL/db.length)}</div>
+    <div><b>AVG DUKUNGAN:</b> ${Math.round(avgS/db.length)}</div>
+  `;
+
+  list.innerHTML = db.reverse().map((m, i) => `
+    <div style="background:rgba(0,0,0,0.05); padding:15px; margin-bottom:10px; border-left: 5px solid var(--old-green);">
+      <b>${m.name}</b> (Tim: ${m.team.toUpperCase()}) | M:${m.m} L:${m.l} S:${m.s}
+      <details>
+        <summary>Lihat 18 Jawaban</summary>
+        ${m.logs.map(l => `<p style="font-size:14px; margin:5px 0;">• <b>${l.ev}:</b> ${l.ch}<br><i>Ref: ${l.ref}</i></p>`).join('')}
+      </details>
     </div>
   `).join('');
 }
 </script>
+
 </body>
 </html>
