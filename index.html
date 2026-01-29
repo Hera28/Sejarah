@@ -2,95 +2,22 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>RuangSejarah RPG v10</title>
+    <title>RUANGSEJARAH RPG v10 - Final Fixed</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
-      import { getDatabase, ref, set, onValue, update, push } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
-
-      // KONFIGURASI KAMU
-      const firebaseConfig = {
-        apiKey: "AIzaSyAclyNf8Dy69UD0X9IwuNo4QH3BfAzmfZY",
-        authDomain: "sejarah-game.firebaseapp.com",
-        projectId: "sejarah-game",
-        databaseURL: "https://sejarah-game-default-rtdb.asia-southeast1.firebasedatabase.app"
-        storageBucket: "sejarah-game.firebasestorage.app",
-        messagingSenderId: "1045111080150",
-        appId: "1:1045111080150:web:5c065dec17c5902c03f577"
-      };
-
-      const app = initializeApp(firebaseConfig);
-      const db = getDatabase(app);
-
-      // --- ENGINE RUANGSEJARAH ---
-      window.registerMurid = function() {
-        const name = document.getElementById('in-name').value;
-        const kelas = document.getElementById('in-class').value;
-        if(!name || !kelas) return alert("Lengkapi data!");
-
-        const playerRef = ref(db, 'players/' + name);
-        set(playerRef, {
-          name: name,
-          kelas: kelas,
-          moral: 50,
-          logistik: 50,
-          support: 50,
-          status: 'waiting',
-          currentEvent: 0
-        });
-
-        localStorage.setItem('rs_username', name);
-        showScreen('scr-wait');
-      };
-
-      // Listener Status Game (Tunggu Guru)
-      onValue(ref(db, 'game_status'), (snapshot) => {
-        const status = snapshot.val();
-        const myName = localStorage.getItem('rs_username');
-        if(status === 'START' && myName) {
-            showScreen('scr-map');
-        } else if(status === 'RESET') {
-            location.reload();
-        }
-      });
-
-      // Fungsi Guru (Admin)
-      window.publishStart = () => set(ref(db, 'game_status'), 'START');
-      window.publishReset = () => set(ref(db, 'game_status'), 'RESET');
-
-      // Update Live Monitoring untuk Guru
-      onValue(ref(db, 'players'), (snapshot) => {
-        const data = snapshot.val();
-        const monitorBody = document.getElementById('monitor-body');
-        if(monitorBody && data) {
-            monitorBody.innerHTML = Object.values(data).map(p => `
-                <tr>
-                    <td>${p.name}</td>
-                    <td>${p.kelas}</td>
-                    <td>${p.moral}</td>
-                    <td>${p.logistik}</td>
-                    <td>Event: ${p.currentEvent}</td>
-                </tr>
-            `).join('');
-        }
-      });
-    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Crimson+Text:wght@400;700&display=swap');
-        :root { --ink: #003049; --paper: #fdf0d5; --gold: #c1121f; --military: #333d29; }
+        :root { --ink: #003049; --paper: #fdf0d5; --gold: #c1121f; }
         body { margin: 0; font-family: 'Crimson Text', serif; background: #1a1a1a; color: var(--ink); }
-        .card { max-width: 800px; margin: 40px auto; background: var(--paper); padding: 30px; border: 4px solid var(--ink); box-shadow: 10px 10px 0px var(--gold); }
+        .card { max-width: 800px; margin: 40px auto; background: var(--paper); padding: 30px; border: 4px solid var(--ink); box-shadow: 10px 10px 0px var(--gold); position: relative; }
         header { background: var(--ink); color: white; padding: 20px; text-align: center; font-family: 'Special Elite'; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid var(--ink); box-sizing: border-box; }
-        button { padding: 15px 30px; background: var(--ink); color: white; border: none; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid var(--ink); box-sizing: border-box; font-size: 1.1em; }
+        button { padding: 15px 30px; background: var(--ink); color: white; border: none; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; font-size: 1em; }
         button:hover { background: var(--gold); }
-        .hidden { display: none; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
-        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        .hidden { display: none !important; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; font-size: 0.9em; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
         .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
         .stat-box { background: #eee; padding: 10px; text-align: center; border: 2px solid var(--ink); }
-        .critical { background: #ffadad; animation: shake 0.3s infinite; }
-        @keyframes shake { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, -1px); } 100% { transform: translate(1px, 1px); } }
     </style>
 </head>
 <body>
@@ -100,58 +27,164 @@
     <div>Pusat Komando Strategi Nasional</div>
 </header>
 
-<main>
+<main id="app-container">
     <div id="scr-login" class="card">
-        <h2 style="font-family:'Special Elite'; text-align:center;">Registrasi Pasukan</h2>
-        <input type="text" id="in-name" placeholder="Nama Lengkap Murid">
-        <input type="text" id="in-class" placeholder="Kelas">
-        <button onclick="registerMurid()">MASUK WAITING ROOM ⮕</button>
-        <p style="text-align:center;"><a href="#" onclick="showAdmin()">Panel Guru (Admin)</a></p>
+        <h2 style="font-family:'Special Elite'; text-align:center;">Buku Registrasi Komandan</h2>
+        <input type="text" id="in-name" placeholder="Nama Lengkap Anda...">
+        <input type="text" id="in-class" placeholder="Kelas (Contoh: XI IPS 1)">
+        <button id="btn-reg">BUKA ARSIP & MASUK ⮕</button>
+        <p style="text-align:center; margin-top:20px;">
+            <a href="#" id="link-admin" style="color:var(--gold); font-size:0.8em;">Akses Panel Guru</a>
+        </p>
     </div>
 
     <div id="scr-wait" class="card hidden">
-        <h2 style="text-align:center;">Menunggu Komando Guru...</h2>
-        <p style="text-align:center;">Status: <b>Tersambung ke Server</b></p>
-        <div style="font-size: 50px; text-align:center;">📡</div>
-        <p style="text-align:center; color: var(--gold);">Harap jangan tutup halaman ini sampai simulasi dimulai.</p>
+        <h2 style="text-align:center; font-family:'Special Elite';">MENUNGGU KOMANDO</h2>
+        <div style="text-align:center; padding:40px;">
+            <div style="font-size: 60px; animation: pulse 2s infinite;">📡</div>
+            <p>Halo, Komandan <b id="lbl-myname"></b>.</p>
+            <p>Anda sudah terhubung. Harap menunggu instruksi dari Guru untuk memulai simulasi serentak.</p>
+        </div>
+    </div>
+
+    <div id="scr-game" class="card hidden">
+        <h2 id="ev-title">Misi Dimulai</h2>
+        <div class="stat-grid">
+            <div class="stat-box">MORAL<br><b id="v-m">50</b></div>
+            <div class="stat-box">SUPLAI<br><b id="v-l">50</b></div>
+            <div class="stat-box">DUKUNGAN<br><b id="v-s">50</b></div>
+        </div>
+        <p id="ev-desc">Sedang memuat narasi sejarah...</p>
+        <div id="opt-container"></div>
     </div>
 
     <div id="scr-admin" class="card hidden">
-        <h2 style="font-family:'Special Elite';">Dashboard Kontrol Guru</h2>
-        <button onclick="publishStart()" style="background:green;">MULAI SIMULASI (BROADCAST)</button>
-        <button onclick="publishReset()" style="background:var(--gold);">RESET SEMUA SESI</button>
-        
-        <h3>Monitoring Murid Live</h3>
+        <h2 style="font-family:'Special Elite';">COMMAND CENTER</h2>
+        <div style="border: 2px dashed var(--gold); padding: 15px; margin-bottom: 20px;">
+            <button id="btn-start-global" style="background:green;">MULAI SESI (SEMUA MURID)</button>
+            <button id="btn-reset-global" style="background:#555;">RESET DATABASE</button>
+        </div>
+        <h3>Monitoring Murid (Live)</h3>
         <table>
             <thead>
-                <tr><th>Nama</th><th>Kelas</th><th>Moral</th><th>Suplai</th><th>Progress</th></tr>
+                <tr><th>Nama</th><th>Kelas</th><th>Stat (M/L/S)</th><th>Progress</th></tr>
             </thead>
             <tbody id="monitor-body"></tbody>
         </table>
-        <button onclick="location.reload()" style="background:#555;">Log Out</button>
+        <button onclick="location.reload()" style="margin-top:20px; background:black;">KELUAR PANEL</button>
     </div>
-
-    <div id="scr-map" class="card hidden">
-        <h2>Simulasi Dimulai!</h2>
-        <div class="stat-grid">
-            <div class="stat-box">MORAL<br><b>50</b></div>
-            <div class="stat-box" id="l-box">SUPLAI<br><b>50</b></div>
-            <div class="stat-box">DUKUNGAN<br><b>50</b></div>
-        </div>
-        <p><i>Konten sejarah v10 sedang memuat dari database...</i></p>
-        </div>
 </main>
 
-<script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+    import { getDatabase, ref, set, update, onValue } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
+
+    // Konfigurasi Database Sesuai Milikmu
+    const firebaseConfig = {
+        apiKey: "AIzaSyAclyNf8Dy69UD0X9IwuNo4QH3BfAzmfZY",
+        authDomain: "sejarah-game.firebaseapp.com",
+        projectId: "sejarah-game",
+        databaseURL: "https://sejarah-game-default-rtdb.asia-southeast1.firebasedatabase.app",
+        storageBucket: "sejarah-game.firebasestorage.app",
+        messagingSenderId: "1045111080150",
+        appId: "1:1045111080150:web:5c065dec17c5902c03f577"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // --- DOM ELEMENTS ---
+    const scrLogin = document.getElementById('scr-login');
+    const scrWait = document.getElementById('scr-wait');
+    const scrGame = document.getElementById('scr-game');
+    const scrAdmin = document.getElementById('scr-admin');
+
+    // --- PLAYER STATE ---
+    let myName = "";
+
+    // --- FUNGSI PINDAH LAYAR ---
     function showScreen(id) {
-        document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
-        document.getElementById(id).classList.remove('hidden');
+        [scrLogin, scrWait, scrGame, scrAdmin].forEach(s => s.classList.add('hidden'));
+        id.classList.remove('hidden');
     }
 
-    function showAdmin() {
-        if(prompt("Sandi Admin:") === "GuruSejarah") showScreen('scr-admin');
-    }
+    // --- REGISTER MURID ---
+    document.getElementById('btn-reg').onclick = () => {
+        const nameInput = document.getElementById('in-name').value.trim();
+        const classInput = document.getElementById('in-class').value.trim();
+
+        if(!nameInput || !classInput) return alert("Isi nama dan kelas!");
+
+        myName = nameInput;
+        document.getElementById('lbl-myname').innerText = myName;
+
+        // Simpan ke Firebase
+        set(ref(db, 'players/' + myName), {
+            name: myName,
+            kelas: classInput,
+            m: 50, l: 50, s: 50,
+            step: 0,
+            lastSeen: Date.now()
+        });
+
+        showScreen(scrWait);
+    };
+
+    // --- ADMIN ACCESS ---
+    document.getElementById('link-admin').onclick = (e) => {
+        e.preventDefault();
+        if(prompt("Sandi Guru:") === "GuruSejarah") {
+            showScreen(scrAdmin);
+        }
+    };
+
+    // --- ADMIN COMMANDS ---
+    document.getElementById('btn-start-global').onclick = () => {
+        update(ref(db, '/'), { gameStatus: 'PLAYING' });
+    };
+
+    document.getElementById('btn-reset-global').onclick = () => {
+        if(confirm("Hapus semua data murid?")) {
+            set(ref(db, '/'), { gameStatus: 'WAITING', players: {} });
+            location.reload();
+        }
+    };
+
+    // --- REALTIME LISTENERS (INTI GAME) ---
+
+    // 1. Dengerin Status Game dari Guru
+    onValue(ref(db, 'gameStatus'), (snap) => {
+        const status = snap.val();
+        // Kalau Guru klik START dan murid sedang di Waiting Room, pindahkan ke Game
+        if(status === 'PLAYING' && !scrWait.classList.contains('hidden')) {
+            showScreen(scrGame);
+        }
+    });
+
+    // 2. Monitoring untuk Guru (Live Table)
+    onValue(ref(db, 'players'), (snap) => {
+        const players = snap.val();
+        const tbody = document.getElementById('monitor-body');
+        if(!tbody || !players) return;
+
+        tbody.innerHTML = "";
+        Object.values(players).forEach(p => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${p.name}</td>
+                <td>${p.kelas}</td>
+                <td>${p.m}/${p.l}/${p.s}</td>
+                <td>Misi ${p.step + 1}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    });
+
 </script>
+
+<style>
+    @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+</style>
 
 </body>
 </html>
