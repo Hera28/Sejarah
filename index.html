@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUANGSEJARAH - War Room & Misi Sejarah Alternatif</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Oswald:wght@600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    <h1>RUANGSEJARAH</h1>
+    <div class="subtitle">KOMANDO STRATEGI NASIONAL — 1800–2000</div>
+</header>
+
+<main>
+    <!-- Login / Registrasi -->
+    <section id="scr-login" class="card">
+        <h3>REGISTRASI KOMANDAN</h3>
+        <input type="text" id="in-name" placeholder="NAMA LENGKAP (kelas & nomor absen)">
+        <button id="btn-reg">MASUK KE WAR ROOM →</button>
+        <p><a href="#" id="link-admin">OTORITAS GURU</a></p>
+    </section>
+
+    <!-- Waiting Room (War Room) -->
+    <section id="scr-wait" class="card hidden">
+        <h3>BARAK PERANG / WAR ROOM (max 40 komandan)</h3>
+        <div class="map-bg"></div>
+        <div class="army-container" id="army-grid"></div>
+        <p class="status-text">Menunggu perintah Pusat Komando Guru...</p>
+    </section>
+
+    <!-- Game Screen -->
+    <section id="scr-game" class="card hidden">
+        <div class="stat-grid">
+            <div class="stat-box"><small>MORAL RAKYAT</small><b id="v-m">50</b></div>
+            <div class="stat-box"><small>SUPLAI LOGISTIK</small><b id="v-l">50</b></div>
+            <div class="stat-box"><small>DUKUNGAN INTERNASIONAL</small><b id="v-s">50</b></div>
+        </div>
+        <div id="intervention-area"></div>
+        <h4 id="ev-title"></h4>
+        <p id="ev-desc"></p>
+        <div id="opt-container"></div>
+        <div id="ref-box" class="hidden">
+            <textarea id="ref-input" rows="4" placeholder="Jelaskan alasan strategis & pemikiranmu secara detail..."></textarea>
+            <button id="btn-submit-turn">KIRIM KE MARKAS (Submit Jawaban)</button>
+        </div>
+    </section>
+
+    <!-- Admin Panel -->
+    <section id="scr-admin" class="card hidden">
+        <h3>KOMANDO GURU — KONTROL TOTAL</h3>
+        <div class="admin-buttons">
+            <button id="btn-start">MULAI 30 MISI</button>
+            <button id="btn-reset" class="danger">RESET SEMUA DATA</button>
+        </div>
+        <div class="admin-monitor">
+            <table id="admin-table">
+                <thead>
+                    <tr><th>Nama</th><th>Progres</th><th>Stabilitas</th><th>Jawaban Terakhir</th></tr>
+                </thead>
+                <tbody id="monitor-body"></tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<aside class="side-panel">
+    <h3>🏆 PERINGKAT STABILITAS NASIONAL</h3>
+    <div id="leaderboard-list">Memuat peringkat...</div>
+</aside>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
