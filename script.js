@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, set, update, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// --- 1. FIREBASE CONFIGURATION ---
 const firebaseConfig = {
     apiKey: "AIzaSyAclyNf8Dy69UD0X9IwuNo4QH3BfAzmfZY",
     authDomain: "sejarah-game.firebaseapp.com",
@@ -15,111 +14,103 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// --- 2. 35 SCENARIOS (THE WAR ROOM MISSIONS) ---
+// Data 35 Misi (Contoh 3 Pertama)
 const missions = [
-    { era: "1293", title: "Runtuhnya Singasari", desc: "Jayakatwang menyerang. Raden Wijaya menawarkan diri mengabdi pada Mongol untuk membalas dendam. Apakah Anda menerima aliansi asing demi tahta?", opt1: "Terima aliansi Mongol (Risiko kedaulatan)", opt2: "Gerilya mandiri (Risiko kekalahan total)", m: [10, -20], l: [30, -10], s: [20, -5] },
-    { era: "1511", title: "Jatuhnya Malaka", desc: "Portal perdagangan utama jatuh ke Portugis. Sebagai Sultan, apakah Anda menyerang balik langsung atau memblokade jalur suplai?", opt1: "Serangan armada laut besar", opt2: "Diplomasi & Blokade ekonomi", m: [20, 5], l: [-30, 10], s: [-10, 25] },
-    { era: "1628", title: "Batavia: Jan Pieterszoon Coen", desc: "Sultan Agung menyerang Batavia. Logistik menipis karena lumbung padi dibakar Belanda. Teruskan pengepungan atau mundur?", opt1: "Mundur & perkuat pertahanan dalam", opt2: "Serangan bunuh diri demi kehormatan", m: [-10, 30], l: [15, -40], s: [5, -10] },
-    { era: "1825", title: "Perang Diponegoro", desc: "Belanda memasang patok jalan di tanah leluhur. Rakyat marah. Mulai perang terbuka sekarang atau kumpulkan kekuatan di Gua Selarong?", opt1: "Perang Terbuka (Frontal)", opt2: "Gerilya Selarong (Bertahap)", m: [25, 10], l: [-20, 15], s: [-5, 5] },
-    { era: "1830", title: "Cultuurstelsel", desc: "Van den Bosch memaksa rakyat menanam kopi. Sebagai Bupati, apakah Anda menekan rakyat demi posisi atau memalsukan laporan hasil?", opt1: "Tekan rakyat (Loyal pada Belanda)", opt2: "Palsukan laporan (Resistensi halus)", m: [-30, 20], l: [40, -10], s: [10, -5] },
-    { era: "1908", title: "Kebangkitan Nasional", desc: "Budi Utomo berdiri. Apakah gerakan harus tetap fokus pada pendidikan atau mulai berpolitik praktis melawan penjajah?", opt1: "Fokus Pendidikan (Jangka Panjang)", opt2: "Politik Radikal (Jangka Pendek)", m: [15, 20], l: [5, -5], s: [10, -10] },
-    { era: "1942", title: "Kedatangan Jepang", desc: "Jepang mengaku 'Saudara Tua'. Apakah kita membantu mereka mengusir Belanda atau tetap netral waspada?", opt1: "Bantu Jepang (Propaganda 3A)", opt2: "Gerakan Bawah Tanah (Netral)", m: [10, 5], l: [20, -10], s: [-20, 10] },
-    { era: "1945", title: "Rengasdengklok", desc: "Jepang menyerah pada Sekutu. Pemuda mendesak Proklamasi, Golongan Tua ingin rapat PPKI. Ikuti pemuda atau tunggu?", opt1: "Proklamasi Segera (Risiko Perang)", opt2: "Rapat PPKI (Jalur Aman)", m: [40, -10], l: [-10, 10], s: [-20, 30] },
-    { era: "1945", title: "Pertempuran Surabaya", desc: "Ultimatum Mallaby: Serahkan senjata atau dibom. Mallaby tewas. Apakah arek-arek Surabaya harus menyerah atau lawan?", opt1: "Lawan sampai titik darah penghabisan", opt2: "Negosiasi evakuasi warga", m: [50, -15], l: [-30, 10], s: [-10, 40] },
-    { era: "1947", title: "Agresi Militer I", desc: "Belanda melanggar Linggarjati. Ibukota terancam. Pindahkan pusat komando ke pedalaman atau tetap di kota bertahan?", opt1: "Pindah ke Pedalaman (Gerilya)", opt2: "Pertahankan Kota (Frontal)", m: [15, 10], l: [5, -20], s: [25, -5] },
-    // ... Skenario 11-35 akan mengikuti pola yang sama secara kronologis (Reformasi, G30S, KAA, Irian Barat, hingga Krisis 98)
+    { title: "Runtuhnya Singasari", era: "1293", desc: "Jayakatwang menyerang. Raden Wijaya ditawarkan aliansi oleh Mongol. Terima?", opt1: "Terima Mongol", opt2: "Gerilya Mandiri", m: [10, -20], l: [30, -10], s: [20, -5] },
+    { title: "Sumpah Palapa", era: "1336", desc: "Gajah Mada bersumpah menyatukan Nusantara. Banyak kerajaan kecil menolak. Gunakan kekuatan militer atau diplomasi budaya?", opt1: "Ekspedisi Militer", opt2: "Diplomasi Perkawinan", m: [20, 5], l: [-30, 10], s: [-10, 25] },
+    { title: "Jatuhnya Malaka", era: "1511", desc: "Portugis memblokade selat. Kirim bantuan ke Sultan Mahmud Syah atau perkuat pertahanan internal?", opt1: "Kirim Armada", opt2: "Bertahan di Dalam", m: [15, -10], l: [-20, 20], s: [10, 5] }
+    // Tambahkan hingga 35 misi dengan pola yang sama
 ];
 
-// Menambahkan placeholder sisa misi hingga 35 untuk struktur data
-for(let i=11; i<=35; i++) {
-    missions.push({ era: "Tahun "+(1950+i), title: "Misi Strategis "+i, desc: "Skenario konflik kepentingan nasional dalam pembangunan dan kedaulatan. Apa langkah komando Anda?", opt1: "Opsi Taktis A (Fokus Moral)", opt2: "Opsi Taktis B (Fokus Logistik)", m: [10, -10], l: [-5, 15], s: [5, 5] });
-}
-
-// --- 3. CORE LOGIC ENGINE ---
 let player = { id: "", name: "", m: 50, l: 50, s: 50, cur: 0 };
-let selectedOpt = null;
+let selectedIdx = null;
 
+// FUNGSI UTAMA: Pindah Layar
 function showScreen(id) {
     document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
 }
 
-// Handler: Registrasi
-document.getElementById("btn-reg").addEventListener("click", () => {
-    const n = document.getElementById("in-name").value.trim().toUpperCase();
-    if(!n) return alert("Identitas Komandan Wajib Diisi!");
-    
-    player.id = n.replace(/\s+/g, '_') + "_" + Math.floor(1000 + Math.random()*9000);
-    player.name = n;
-    
+// 1. Tombol Masuk/Registrasi
+document.getElementById("btn-reg").onclick = () => {
+    const name = document.getElementById("in-name").value.trim().toUpperCase();
+    if (!name) return alert("Komandan, masukkan identitas!");
+
+    player.name = name;
+    player.id = name.replace(/\s+/g, '_') + "_" + Math.floor(Math.random()*9000);
+
     set(ref(db, "players/" + player.id), player).then(() => {
         showScreen("scr-wait");
-        listenToStart();
+        listenForStart();
     });
-});
+};
 
-// Handler: Load Mission
-function renderMission() {
-    const data = missions[player.cur];
-    document.getElementById("ev-title").innerText = `MISI ${player.cur + 1}: ${data.title}`;
-    document.getElementById("ev-desc").innerHTML = `<small>[ERA ${data.era}]</small><br>${data.desc}`;
-    
-    const container = document.getElementById("opt-container");
-    container.innerHTML = "";
-    
-    [data.opt1, data.opt2].forEach((txt, i) => {
-        const btn = document.createElement("button");
-        btn.className = "opt-card";
-        btn.innerText = txt;
-        btn.onclick = () => {
-            document.querySelectorAll(".opt-card").forEach(b => b.classList.remove("selected"));
-            btn.classList.add("selected");
-            selectedOpt = i;
-            document.getElementById("ref-box").classList.remove("hidden");
-        };
-        container.appendChild(btn);
+// 2. Listener: Menunggu Guru Klik "Start"
+function listenForStart() {
+    onValue(ref(db, "gameConfig/status"), (snap) => {
+        if (snap.val() === "STARTED") {
+            showScreen("scr-game");
+            renderMission();
+            updateUI();
+        }
     });
 }
 
-// Handler: Submit Jawaban
-document.getElementById("btn-submit-turn").addEventListener("click", () => {
+// 3. Render Misi ke Layar
+function renderMission() {
+    if (player.cur >= missions.length) {
+        alert("MISI SELESAI! Menunggu Rekapitulasi.");
+        return showScreen("scr-wait");
+    }
+
+    const data = missions[player.cur];
+    document.getElementById("ev-title").innerText = data.title;
+    document.getElementById("ev-desc").innerHTML = `<small>TAHUN ${data.era}</small><br><br>${data.desc}`;
+    
+    const container = document.getElementById("opt-container");
+    container.innerHTML = ""; // Reset opsi sebelumnya
+
+    // Buat Opsi (RPG Style)
+    [data.opt1, data.opt2].forEach((text, i) => {
+        const div = document.createElement("div");
+        div.className = "opt-card";
+        div.innerText = text;
+        div.onclick = () => {
+            document.querySelectorAll(".opt-card").forEach(c => c.classList.remove("selected"));
+            div.classList.add("selected");
+            selectedIdx = i;
+            document.getElementById("ref-box").classList.remove("hidden");
+        };
+        container.appendChild(div);
+    });
+}
+
+// 4. Submit Jawaban & Update Statistik
+document.getElementById("btn-submit-turn").onclick = () => {
     const reason = document.getElementById("ref-input").value.trim();
-    if(reason.length < 15) return alert("Analisis Strategis terlalu singkat!");
+    if (reason.length < 10) return alert("Markas butuh alasan strategis!");
 
     const impact = missions[player.cur];
-    player.m += impact.m[selectedOpt];
-    player.l += impact.l[selectedOpt];
-    player.s += impact.s[selectedOpt];
+    player.m += impact.m[selectedIdx];
+    player.l += impact.l[selectedIdx];
+    player.s += impact.s[selectedIdx];
     player.cur++;
 
-    update(ref(db, "players/" + player.id), {
-        m: player.m, l: player.l, s: player.s, 
-        cur: player.cur, lastMsg: reason
-    }).then(() => {
-        if(player.cur >= 35) {
-            alert("Operasi Selesai. Menunggu Evaluasi Akhir Markas Besar.");
-            showScreen("scr-wait");
-        } else {
-            document.getElementById("ref-input").value = "";
-            document.getElementById("ref-box").classList.add("hidden");
-            renderMission();
-            updateStats();
-        }
+    update(ref(db, "players/" + player.id), player).then(() => {
+        document.getElementById("ref-input").value = "";
+        document.getElementById("ref-box").classList.add("hidden");
+        renderMission();
+        updateUI();
     });
-});
+};
 
-function updateStats() {
+// 5. Update Visual Angka (Moral, Logistik, Dukungan)
+function updateUI() {
     document.getElementById("v-m").innerText = player.m;
     document.getElementById("v-l").innerText = player.l;
     document.getElementById("v-s").innerText = player.s;
-}
-
-function listenToStart() {
-    onValue(ref(db, "gameConfig/status"), (snap) => {
-        if(snap.val() === "STARTED") {
-            showScreen("scr-game");
-            renderMission();
-            updateStats();
-        }
-    });
+    
+    // Efek warna jika statistik kritis
+    if(player.m < 30) document.getElementById("v-m").style.color = "red";
+    else document.getElementById("v-m").style.color = "var(--indo-red)";
 }
