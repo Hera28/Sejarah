@@ -1,162 +1,45 @@
-/* ROOT VARIABLES - Tema Nusantara Vintage */
-:root {
-    --vintage-paper: #e8dcc4; /* Warna kertas lama */
-    --wood-brown: #5d4037;   /* Warna bingkai kayu */
-    --indo-red: #b71c1c;     /* Merah bendera */
-    --gold-accent: #c5a059;  /* Aksen emas/kuning tua */
-    --text-dark: #2d241e;
-    --card-shadow: inset 0 0 50px rgba(0,0,0,0.1), 0 5px 15px rgba(0,0,0,0.3);
-}
-
-* { box-sizing: border-box; }
-
 body {
-    background-color: #2b2118; /* Background luar gelap agar kartu kontras */
-    /* Opsional: Tambahkan gambar pola batik transparan sebagai background body */
+    background-color: #2b2118;
     background-image: url('https://www.transparenttextures.com/patterns/batik-fractal.png');
     color: var(--text-dark);
     font-family: 'Courier Prime', monospace;
     margin: 0;
-    display: flex;
-    justify-content: center;
     padding: 20px;
-}
-
-/* CONTAINER UTAMA (KARTU RPG) */
-.card {
-    background-color: var(--vintage-paper);
-    border: 12px solid var(--wood-brown);
-    border-radius: 15px;
-    padding: 30px;
-    max-width: 900px;
-    width: 100%;
-    box-shadow: var(--card-shadow);
-    position: relative;
-    background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
-}
-
-/* HEADER & JUDUL */
-h1, h3 {
-    font-family: 'Oswald', sans-serif;
-    text-align: center;
-    text-transform: uppercase;
-    color: var(--wood-brown);
-    letter-spacing: 2px;
-    margin-top: 0;
-}
-
-.subtitle {
-    text-align: center;
-    border-bottom: 3px double var(--indo-red);
-    margin-bottom: 25px;
-    padding-bottom: 10px;
-    font-weight: bold;
-}
-
-/* STATISTIK (MORAL, LOGISTIK, DLL) */
-.stat-grid {
-    display: flex;
-    justify-content: space-around;
-    gap: 15px;
-    margin-bottom: 30px;
-}
-
-.stat-box {
-    background: rgba(93, 64, 55, 0.1);
-    border: 2px solid var(--wood-brown);
-    border-radius: 8px;
-    padding: 15px;
-    text-align: center;
-    flex: 1;
-}
-
-.stat-box b {
-    display: block;
-    font-size: 2rem;
-    color: var(--indo-red);
-}
-
-/* OPSI PILIHAN RPG (OPT-CARD) */
-#opt-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: grid; /* Gunakan Grid agar lebih rapi */
+    grid-template-columns: 1fr 350px; /* Main di kiri, Sidebar di kanan */
+    grid-template-rows: auto 1fr;
     gap: 20px;
-    margin: 20px 0;
+    min-height: 100vh;
 }
 
-.opt-card {
-    background: #f4eee1;
-    border: 2px solid var(--gold-accent);
-    padding: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border-radius: 5px;
-    font-weight: bold;
-    color: var(--wood-brown);
-}
-
-.opt-card:hover {
-    background: var(--gold-accent);
-    color: white;
-    transform: scale(1.02);
-}
-
-.opt-card.selected {
-    background: var(--wood-brown);
-    color: #fff;
-    border-color: var(--indo-red);
-}
-
-/* TEXTAREA & INPUT */
-textarea {
-    width: 100%;
-    background: rgba(255,255,255,0.5);
-    border: 1px solid var(--wood-brown);
-    padding: 15px;
-    font-family: 'Courier Prime', sans-serif;
-    border-radius: 5px;
-    margin-top: 10px;
-}
-
-/* TOMBOL AKSI */
-button#btn-reg, button#btn-submit-turn, button#btn-start {
-    width: 100%;
-    background-color: var(--indo-red);
-    color: white;
-    border: none;
-    padding: 15px;
-    font-family: 'Oswald', sans-serif;
-    font-size: 1.2rem;
-    cursor: pointer;
-    margin-top: 20px;
-    border-radius: 5px;
-    box-shadow: 0 4px 0 #7f1414;
-}
-
-button:active {
-    transform: translateY(4px);
-    box-shadow: none;
-}
-
-/* ADMIN MONITOR TABLE */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background: rgba(255,255,255,0.3);
-}
-
-th {
-    background: var(--wood-brown);
-    color: white;
+header {
+    grid-column: 1 / span 2; /* Header memanjang full ke kanan */
+    background: rgba(43, 33, 24, 0.9);
     padding: 10px;
+    border: 2px solid var(--gold-accent);
+    margin-bottom: 10px;
 }
 
-td {
-    border: 1px solid var(--wood-brown);
-    padding: 8px;
-    font-size: 0.9rem;
+main {
+    grid-column: 1; /* Area konten utama */
 }
 
-/* HELPER */
-.hidden { display: none; }
+.side-panel {
+    grid-column: 2; /* Area leaderboard */
+    background: var(--vintage-paper);
+    border: 5px solid var(--wood-brown);
+    padding: 20px;
+    background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+    height: fit-content;
+}
+
+/* Tambahkan ini agar input teks terlihat vintage juga */
+input[type="text"] {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: rgba(255,255,255,0.7);
+    border: 2px solid var(--wood-brown);
+    font-family: 'Courier Prime', monospace;
+    font-size: 1rem;
+}
